@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Home | U-Tracksis</title>
+
+  <!-- Bootstrap 5 -->
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/home.css">
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-expand-lg">
+    <div class="container">
+
+      <a class="navbar-brand" href="index.html">
+        <img src="assets/images/placeholder.png" alt="U-Tracksis Logo" />
+        U-Tracksis
+      </a>
+
+      <!-- Mobile toggle -->
+      <button class="navbar-toggler custom-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="toggler-icon"></span>
+        <span class="toggler-icon"></span>
+        <span class="toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarContent">
+        <ul class="navbar-nav navbar-nav-center mx-auto">
+          <li class="nav-item"><a class="nav-link" href="#problem">Problem</a></li>
+          <li class="nav-item"><a class="nav-link" href="#how">How it works</a></li>
+          <li class="nav-item"><a class="nav-link" href="#flow">Flow</a></li>
+        </ul>
+
+        <ul class="navbar-nav navbar-nav-auth">
+          <li class="nav-item">
+            <a class="btn-nav-outline" href="auth.html#login-section">LOGIN</a>
+          </li>
+          <li class="nav-item">
+            <a class="btn-nav-primary" href="auth.html#register-section">REGISTER</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO CAROUSEL -->
+  <div class="carousel-wrapper">
+    <div id="heroCarousel" class="carousel slide hero-carousel" data-bs-ride="carousel" data-bs-interval="5000">
+
+      <div class="carousel-inner">
+        <div class="carousel-item active">
+          <div class="hero-slide hero-slide-1"></div>
+        </div>
+        <div class="carousel-item">
+          <div class="hero-slide hero-slide-2"></div>
+        </div>
+        <div class="carousel-item">
+          <div class="hero-slide hero-slide-3"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

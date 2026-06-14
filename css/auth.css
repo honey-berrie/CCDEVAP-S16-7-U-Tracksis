@@ -1,0 +1,217 @@
+/* ====== CSS Variables ====== */
+:root {
+  --primary: #006936;
+  --primary-dark: #004D3A;
+  --white: #FFFFFF;
+  --gray: #E0E0E0;
+  --light-gray: #F5F5F5;
+  --text: #1A1A1A;
+  --text-light: #666666;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  min-height: 100vh;
+  background: radial-gradient(circle at center, var(--primary) 0%, var(--primary-dark) 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1.25rem;
+  font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* card */
+.auth-card {
+  background: var(--white);
+  width: 100%;
+  max-width: 420px;
+  padding: 1.75rem 2rem 1.75rem;
+  border-radius: 14px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+}
+
+/* headings */
+.auth-card h1 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 0.25rem;
+}
+
+.auth-subtitle {
+  color: var(--text-light);
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  margin-bottom: 1.1rem;
+}
+
+/* login & register */
+.auth-section {
+  padding-top: 1.5rem;
+}
+
+.auth-section:first-of-type {
+  padding-top: 0;
+  border-top: none;
+  margin-top: 0;
+}
+
+.auth-card label {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 0.3rem;
+}
+
+.auth-card .form-control {
+  height: 40px;
+  font-size: 0.875rem;
+  border: 1px solid var(--gray);
+  border-radius: 8px;
+  padding: 0 0.875rem;
+  color: var(--text);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.auth-card .form-control:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 0.2rem rgba(0, 105, 54, 0.15);
+}
+
+.auth-card .form-control::placeholder {
+  color: #b5b5b5;
+}
+
+/* google btn */
+.btn-google {
+  width: 100%;
+  height: 40px;
+  background: var(--white);
+  border: 1px solid var(--gray);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  font-size: 0.875rem;
+  color: var(--text);
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.2s;
+  margin-bottom: 1rem;
+}
+
+.btn-google:hover {
+  background: var(--light-gray);
+}
+
+.btn-google img {
+  width: 18px;
+  height: 18px;
+}
+
+.auth-divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: var(--text-light);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  margin: 0.25rem 0 1rem;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid var(--gray);
+}
+
+.auth-divider span {
+  padding: 0 0.75rem;
+}
+
+.btn-omnitrace {
+  width: 100%;
+  height: 44px;
+  background: var(--primary);
+  color: var(--white);
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  transition: background 0.2s, transform 0.05s;
+}
+
+.btn-omnitrace:hover {
+  background: var(--primary-dark);
+  color: var(--white);
+}
+
+.btn-omnitrace:active {
+  transform: translateY(1px);
+}
+
+.role-group {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.btn-role {
+  flex: 1;
+  height: 40px;
+  background: var(--white);
+  border: 1px solid var(--gray);
+  border-radius: 8px;
+  font-size: 0.875rem;
+  color: var(--text);
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.btn-role:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.btn-role.active {
+  background: var(--primary);
+  color: var(--white);
+  border-color: var(--primary);
+}
+
+.footer-text {
+  text-align: center;
+  font-size: 0.8125rem;
+  color: var(--text-light);
+  margin-top: 1rem;
+}
+
+.footer-text a {
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.footer-text a:hover {
+  text-decoration: underline;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* responsive */
+@media (max-width: 480px) {
+  .auth-card {
+    padding: 1.5rem 1.25rem;
+  }
+}
