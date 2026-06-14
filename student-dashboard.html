@@ -1,0 +1,154 @@
+<!-- nothing here really works just a placeholder thank you for understanding -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Dashboard | U-Tracksis</title>
+    <!-- Bootstrap 5  VV -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/home.css">
+    <link rel="stylesheet" href="css/student.css">
+</head>
+<body>
+
+    <!-- navbar  -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="student-dashboard.html">
+                <img src="assets/images/placeholder.png" alt="U-Tracksis Logo" />
+                U-Tracksis
+            </a>
+            <button class="navbar-toggler custom-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="toggler-icon"></span>
+                <span class="toggler-icon"></span>
+                <span class="toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <ul class="navbar-nav navbar-nav-center mx-auto">
+                    <li class="nav-item"><a class="nav-link active" href="student-dashboard.html">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="student-consultation.html">Consultations</a></li>
+                </ul>
+                <ul class="navbar-nav navbar-nav-auth">
+                    <li class="nav-item">
+                        <span class="nav-link text-white">Hi, X </span>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn-nav-outline" href="auth.html">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- main content -->
+    <div class="container py-4">
+        <div class="row">
+            <!-- L column -->
+            <div class="col-lg-8">
+                <!-- Thesis info card -->
+                <div class="student-card">
+                    <h5>Thesis Information</h5>
+                    <p class="mb-2"><strong>Group Name:</strong> Team Alpha</p>
+                    <p class="mb-2"><strong>Thesis Title:</strong> AI-Based Traffic Management System</p>
+                    <p class="mb-3"><strong>Adviser:</strong> Prof. Juan Dela Cruz</p>
+                    
+                    <div class="mt-3">
+                        <label class="form-label" style="font-size: 0.875rem; font-weight: 600;">Overall Progress</label>
+                        <div class="progress">
+                            <div class="progress-bar" role="progressbar" style="width: 45%;" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100">
+                                45% Complete
+                            </div>
+                        </div>
+                        <small class="text-muted" style="font-size: 0.8rem;">6 of 13 milestones completed</small>
+                    </div>
+                </div>
+
+                <!-- recent feedback card -->
+                <div class="student-card">
+                    <h5>Recent Feedback</h5>
+                    
+                    <div class="deadline-item">
+                        <div>
+                            <strong>Chapter 2: Review of Related Literature</strong><br>
+                            <small>"Please update citations to APA 7th edition format. Good sources overall."</small>
+                        </div>
+                        <span class="badge-status badge-pending">Needs Revision</span>
+                    </div>
+
+                    <div class="deadline-item">
+                        <div>
+                            <strong>Chapter 1: Introduction</strong><br>
+                            <small>"Excellent background of the study. Approved for final submission."</small>
+                        </div>
+                        <span class="badge-status badge-approved">Approved</span>
+                    </div>
+
+                    <div class="deadline-item">
+                        <div>
+                            <strong>Thesis Proposal</strong><br>
+                            <small>"Methodology needs more detail on data collection."</small>
+                        </div>
+                        <span class="badge-status badge-review">Under Review</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- R column -->
+            <div class="col-lg-4">
+                <!-- Upcoming Deadlines -->
+                <div class="student-card">
+                    <h5>Upcoming Deadlines</h5>
+                    
+                    <div class="deadline-item">
+                        <div>
+                            <strong>Chapter 3</strong><br>
+                            <small>Theoretical Framework</small>
+                        </div>
+                        <small style="color: #DC3545; font-weight: 600;">Jun 15</small>
+                    </div>
+
+                    <div class="deadline-item">
+                        <div>
+                            <strong>Chapter 4</strong><br>
+                            <small>Methodology</small>
+                        </div>
+                        <small class="text-muted">Jun 22</small>
+                    </div>
+
+                    <div class="deadline-item">
+                        <div>
+                            <strong>Chapter 5</strong><br>
+                            <small>Findings & Analysis</small>
+                        </div>
+                        <small class="text-muted">Jun 29</small>
+                    </div>
+
+                    <div class="deadline-item">
+                        <div>
+                            <strong>Proposal Defense</strong><br>
+                            <small>Final Presentation</small>
+                        </div>
+                        <small class="text-muted">Jul 01</small>
+                    </div>
+                </div>
+
+                <!-- quick actions tab -->
+                <div class="student-card">
+                    <h5>Quick Actions</h5>
+                    <a href="student-consultation.html" class="btn-submit" style="margin-top: 0.5rem;">
+                        Request Consultation
+                    </a>
+                    <a href="#" class="btn-submit" style="margin-top: 0.5rem; background: var(--white); color: var(--primary); border: 1.5px solid var(--primary);">
+                        Upload Document
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+<!-- nothing here really works just a placeholder thank you for understanding -->
