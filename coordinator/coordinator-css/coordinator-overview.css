@@ -1,0 +1,30 @@
+.navigationBar-Header {
+    background-color: #0C1A32 !important;
+}
+
+.active {
+    background-color: #182e58 !important;
+}
+
+.form-control::placeholder {
+  color: #fbfaf6 !important;
+  opacity: 1;
+}
+
+#sidebarMenu h6,
+#sidebarMenu small {
+  color: #cbd5e1 !important;
+}
+
+#sidebarMenu .nav-link {
+  color: #cbd5e1 !important;
+}
+
+#sidebarMenu .nav-link:hover {
+  color: #fff !important;
+}
+
+#sidebarMenu .text-muted {
+  color: #cbd5e1 !important;
+}
+
