@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consultations - Adviser</title>
+    <link rel="stylesheet" href="../advisercss/adviser-overview.css">
+</head>
+<body>
+
+    <div class="app-layout">
+
+      <header class="mobile-header">
+        <button class="hamburger-btn" aria-label="Open Menu">&#9776;</button>
+        <div class="search-bar-mobile">
+          <input type="text" placeholder="Search Groups, Submissions...">
+        </div>
+        <img src="../assets/images/logo.png" alt="U-Tracksis Logo" class="mobile-logo">
+      </header>
+
+      <aside class="sidebar">
+        <div class="logo-container">
+          <img src="../assets/images/logo.png" alt="U-Tracksis Logo" class="sidebar-logo">
+        </div>
+        <nav class="workspace-nav">
+          <ul>
+            <li><a href="thesis-adviser-overview.html">Overview</a></li>
+            <li><a href="thesis-adviser-groups.html">Thesis Groups</a></li>
+            <li><a href="thesis-milestone.html">Milestones</a></li>
+            <li><a href="thesis-adviser-submissions.html">Submissions</a></li>
+            <li><a href="thesis-adviser-consultations.html" class="active">Consultations</a></li>
+            <li><a href="thesis-group-notifications.html">Notifications</a></li>
+          </ul>
+        </nav>
+      </aside>
+
+      <main class="main-content">
+
+        <div class="top-bar desktop-only">
+          <input type="text" placeholder="Search Groups, Submissions, Students">
+          <img src="../assets/images/logo.png" alt="Profile" class="top-right-logo">
+        </div>
+
+        <header class="page-header consultation-header">
+          <div>
+            <h2>Consultations</h2>
+            <p class="subtitle">Schedule sessions and review consultation history</p>
+          </div>
+          <button class="btn-outline" data-action="schedule-consultation">+ Schedule consultation</button>
+        </header>
+
+        <section class="consultation-section">
+          <h3>Upcoming</h3>
+
+          <div class="consultation-list">
+            <article class="consultation-card upcoming-card">
+              <div class="consultation-date">
+                <span>May</span>
+                <strong>22</strong>
+              </div>
+              <div class="consultation-details">
+                <h4>Review of chapter 4 results</h4>
+                <p>Group 1</p>
+                <p>10:45-12:00 AM</p>
+                <p>Via Zoom</p>
+              </div>
+              <div class="consultation-actions">
+                <button class="btn-secondary" data-action="reschedule-consultation">Reschedule</button>
+                <button class="btn-outline compact" data-action="join-consultation">Join</button>
+              </div>
+            </article>
+
+            <article class="consultation-card upcoming-card">
+              <div class="consultation-date">
+                <span>May</span>
+                <strong>26</strong>
+              </div>
+              <div class="consultation-details">
+                <h4>Revision on chapter 3</h4>
+                <p>Group 2</p>
+                <p>10:45-12:00 AM</p>
+                <p>Via Zoom</p>
+              </div>
+              <div class="consultation-actions">
+                <button class="btn-secondary" data-action="reschedule-consultation">Reschedule</button>
+                <button class="btn-outline compact" data-action="join-consultation">Join</button>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="consultation-section">
+          <h3>History</h3>
+
+          <div class="history-panel">
+            <article class="history-card">
+              <div class="avatar-placeholder"></div>
+              <div class="history-meta">
+                <h4>Consultation</h4>
+                <p>Group 4</p>
+                <p>10:45-12:00 AM</p>
+                <p>Via Zoom</p>
+              </div>
+              <div class="comment-box">
+                <span>Comments</span>
+                <p>Review the citations and revise these sections before the next submission.</p>
+              </div>
+              <button class="btn-secondary" data-action="edit-comment">Edit comment</button>
+            </article>
+
+            <article class="history-card">
+              <div class="avatar-placeholder"></div>
+              <div class="history-meta">
+                <h4>Consultation</h4>
+                <p>Group 3</p>
+                <p>2:00-3:30 PM</p>
+                <p>Via Zoom</p>
+              </div>
+              <div class="comment-box">
+                <span>Comments</span>
+                <p>Clarify the research instruments and upload the revised survey questions.</p>
+              </div>
+              <button class="btn-secondary" data-action="edit-comment">Edit comment</button>
+            </article>
+          </div>
+        </section>
+
+      </main>
+    </div>
+    <script src="adviser-interactions.js"></script>
+</body>
+</html>

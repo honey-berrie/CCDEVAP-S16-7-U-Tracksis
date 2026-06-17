@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notifications - Adviser</title>
+    <link rel="stylesheet" href="../advisercss/adviser-overview.css">
+</head>
+<body>
+
+    <div class="app-layout">
+      
+      <header class="mobile-header">
+        <button class="hamburger-btn" aria-label="Open Menu">☰</button>
+        <div class="search-bar-mobile">
+          <input type="text" placeholder="Search Groups, Submissions...">
+        </div>
+        <img src="../assets/images/logo.png" alt="U-Tracksis Logo" class="top-right-logo">
+      </header>
+
+      <aside class="sidebar">
+        <div class="logo-container">
+          <img src="../assets/images/logo.png" alt="U-Tracksis Logo" class="sidebar-logo">
+        </div>
+        <nav class="workspace-nav">
+          <ul>
+            <li><a href="thesis-adviser-overview.html">Overview</a></li>
+            <li><a href="thesis-adviser-groups.html">Thesis Groups</a></li>
+            <li><a href="thesis-milestone.html">Milestones</a></li>
+            <li><a href="thesis-adviser-submissions.html">Submissions</a></li>
+            <li><a href="thesis-adviser-consultations.html">Consultations</a></li>
+            <li><a href="thesis-group-notifications.html" class="active">Notifications</a></li>
+          </ul>
+        </nav>
+      </aside>
+
+      <main class="main-content">
+        
+        <div class="top-bar desktop-only">
+          <input type="text" placeholder="Search Groups, Submissions, Students">
+          <img src="../assets/images/logo.png" alt="Profile" class="top-right-logo">
+        </div>
+
+        <div class="page-header">
+            <h2>Notifications</h2>
+            <p class="subtitle">3 Unread, 3 pending</p>
+        </div>
+
+        <div class="notifications-controls">
+            <button class="filter-pill active">All (6)</button>
+            <button class="btn-text">Mark all as read</button>
+        </div>
+
+        <section class="notifications-list">
+            
+            <div class="notification-card unread">
+                <div class="avatar-placeholder"></div>
+                <div class="notification-content">
+                    <div class="notification-title">
+                        <strong>Chapter 4</strong> <span class="sub-text">Results & Discussion</span>
+                    </div>
+                    <div class="notification-group">Group 3</div>
+                </div>
+                <div class="notification-time">2 hours ago</div>
+            </div>
+
+            <div class="notification-card unread">
+                <div class="avatar-placeholder"></div>
+                <div class="notification-content">
+                    <div class="notification-title">
+                        <strong>Methodology Revision</strong>
+                    </div>
+                    <div class="notification-group">Group 1</div>
+                </div>
+                <div class="notification-time">2 hours ago</div>
+            </div>
+
+            <div class="notification-card">
+                <div class="avatar-placeholder"></div>
+                <div class="notification-content">
+                    <div class="notification-title">
+                        <strong>User testing & Reporting</strong>
+                    </div>
+                    <div class="notification-group">Group 2</div>
+                </div>
+                <div class="notification-time">5 hours ago</div>
+            </div>
+
+        </section>
+
+      </main>
+    </div>
+    <script src="adviser-interactions.js"></script>
+</body>
+</html>

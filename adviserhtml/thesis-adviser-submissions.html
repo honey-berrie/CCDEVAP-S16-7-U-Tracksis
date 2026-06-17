@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submissions - Adviser</title>
+    <link rel="stylesheet" href="../advisercss/adviser-overview.css">
+</head>
+<body>
+
+    <div class="app-layout">
+
+      <header class="mobile-header">
+        <button class="hamburger-btn" aria-label="Open Menu">&#9776;</button>
+        <div class="search-bar-mobile">
+          <input type="text" placeholder="Search Groups, Submissions...">
+        </div>
+        <img src="../assets/images/logo.png" alt="U-Tracksis Logo" class="mobile-logo">
+      </header>
+
+      <aside class="sidebar">
+        <div class="logo-container">
+          <img src="../assets/images/logo.png" alt="U-Tracksis Logo" class="sidebar-logo">
+        </div>
+        <nav class="workspace-nav">
+          <ul>
+            <li><a href="thesis-adviser-overview.html">Overview</a></li>
+            <li><a href="thesis-adviser-groups.html">Thesis Groups</a></li>
+            <li><a href="thesis-milestone.html">Milestones</a></li>
+            <li><a href="thesis-adviser-submissions.html" class="active">Submissions</a></li>
+            <li><a href="thesis-adviser-consultations.html">Consultations</a></li>
+            <li><a href="thesis-group-notifications.html">Notifications</a></li>
+          </ul>
+        </nav>
+      </aside>
+
+      <main class="main-content">
+        <div class="top-bar desktop-only">
+          <input type="text" placeholder="Search Groups, Submissions, Students">
+          <img src="../assets/images/logo.png" alt="Profile" class="top-right-logo">
+        </div>
+
+        <header class="page-header submissions-header">
+          <h2>Submissions</h2>
+          <p class="subtitle">Review and act on documents uploaded by your groups</p>
+        </header>
+
+        <section class="submission-filters" aria-label="Submission filters">
+          <button class="filter-chip active" data-action="filter-submissions" data-filter="all">All (4)</button>
+          <button class="filter-chip" data-action="filter-submissions" data-filter="revision">Revision (1)</button>
+          <button class="filter-chip" data-action="filter-submissions" data-filter="pending">Pending (1)</button>
+          <button class="filter-chip" data-action="filter-submissions" data-filter="approved">Approved (1)</button>
+          <button class="filter-chip" data-action="filter-submissions" data-filter="rejected">Rejected (1)</button>
+        </section>
+
+        <section class="submission-list">
+          <article class="submission-card" data-status="approved">
+            <div class="avatar-placeholder"></div>
+            <div class="submission-main">
+              <div class="submission-title-row">
+                <h3>Chapter 4</h3>
+                <span>Results &amp; Discussion</span>
+                <span class="status-badge approved">Approved</span>
+              </div>
+              <p>Group 3</p>
+            </div>
+            <div class="submission-actions">
+              <button class="btn-secondary small" data-action="download-submission">Download</button>
+              <button class="btn-secondary small" data-action="revise-submission">Revise</button>
+              <button class="btn-secondary small" data-action="approve-submission">Approve</button>
+              <button class="btn-secondary small danger" data-action="reject-submission">Reject</button>
+            </div>
+          </article>
+
+          <article class="submission-card" data-status="revision">
+            <div class="avatar-placeholder"></div>
+            <div class="submission-main">
+              <div class="submission-title-row">
+                <h3>Methodology Revision</h3>
+                <span>Chapter 3</span>
+                <span class="status-badge revision">Revision</span>
+              </div>
+              <p>Group 1</p>
+            </div>
+            <div class="submission-actions">
+              <button class="btn-secondary small" data-action="download-submission">Download</button>
+              <button class="btn-secondary small" data-action="revise-submission">Revise</button>
+              <button class="btn-secondary small" data-action="approve-submission">Approve</button>
+              <button class="btn-secondary small danger" data-action="reject-submission">Reject</button>
+            </div>
+          </article>
+
+          <article class="submission-card" data-status="pending">
+            <div class="avatar-placeholder"></div>
+            <div class="submission-main">
+              <div class="submission-title-row">
+                <h3>User Testing &amp; Reporting</h3>
+                <span>Chapter 5</span>
+                <span class="status-badge pending-review">Pending</span>
+              </div>
+              <p>Group 2</p>
+            </div>
+            <div class="submission-actions">
+              <button class="btn-secondary small" data-action="download-submission">Download</button>
+              <button class="btn-secondary small" data-action="revise-submission">Revise</button>
+              <button class="btn-secondary small" data-action="approve-submission">Approve</button>
+              <button class="btn-secondary small danger" data-action="reject-submission">Reject</button>
+            </div>
+          </article>
+
+          <article class="submission-card" data-status="rejected">
+            <div class="avatar-placeholder"></div>
+            <div class="submission-main">
+              <div class="submission-title-row">
+                <h3>Chapter 4</h3>
+                <span>Results &amp; Discussion</span>
+                <span class="status-badge rejected">Rejected</span>
+              </div>
+              <p>Group 3</p>
+            </div>
+            <div class="submission-actions">
+              <button class="btn-secondary small" data-action="download-submission">Download</button>
+              <button class="btn-secondary small" data-action="revise-submission">Revise</button>
+              <button class="btn-secondary small" data-action="approve-submission">Approve</button>
+              <button class="btn-secondary small danger" data-action="reject-submission">Reject</button>
+            </div>
+          </article>
+        </section>
+      </main>
+    </div>
+    <script src="adviser-interactions.js"></script>
+</body>
+</html>
