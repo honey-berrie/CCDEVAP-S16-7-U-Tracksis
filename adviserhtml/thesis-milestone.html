@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Milestone Tracker - Adviser</title>
+    <link rel="stylesheet" href="../advisercss/adviser-overview.css">
+
+</head>
+<body>
+
+    <div class="app-layout">
+      
+      <header class="mobile-header">
+        <button class="hamburger-btn" aria-label="Open Menu">&#9776;</button>
+        <div class="search-bar-mobile">
+          <input type="text" placeholder="Search Groups, Submissions...">
+          </div>
+        <img src="../assets/utracksis_logo.png" alt="U-Tracksis Logo" class="mobile-logo">
+    
+      </header>
+
+      <aside class="sidebar">
+        <div class="logo-container">
+          <img src="../assets/utracksis_logo.png" alt="U-Tracksis Logo" class="sidebar-logo">
+        </div>
+        <nav class="workspace-nav">
+          <ul>
+            <li><a href="thesis-adviser-overview.html">Overview</a></li>
+            <li><a href="thesis-adviser-groups.html">Thesis Groups</a></li>
+            <li><a href="thesis-milestone.html" class="active">Milestones</a></li>
+            <li><a href="thesis-adviser-submissions.html">Submissions</a></li>
+            <li><a href="thesis-adviser-consultations.html">Consultations</a></li>
+            <li><a href="thesis-group-notifications.html">Notifications</a></li>
+          </ul>
+        </nav>
+      </aside>
+
+      <main class="main-content">
+        
+        <div class="top-bar desktop-only">
+          <input type="text" placeholder="Q Search Groups, Submissions, Students">
+          <img src="../assets/utracksis_logo.png" alt="Profile" class="top-right-logo">
+        </div>
+
+        <div class="page-header">
+            <h2>Milestone Tracker</h2>
+            <p class="subtitle">Cross-group milestone progress</p>
+        </div>
+
+        <section class="milestone-tracker-section">
+          
+          <div class="group-milestone-panel">
+            <div class="group-header">
+              <h3>Group A</h3>
+              <p class="project-title">Project Title</p>
+            </div>
+            
+            <div class="milestone-scroll-container">
+              
+              <div class="milestone-card" data-action="view-milestone" data-group="Group A" data-milestone="Proposal Defense" data-status="Completed" data-due-date="March 15, 2026" data-submitted="March 12, 2026" data-comments="Defense completed. Panel comments were addressed in the revised proposal.">
+                <h4>Proposal Defense</h4>
+                <span class="status-badge completed">Completed</span>
+              </div>
+              
+              <div class="milestone-card" data-action="view-milestone" data-group="Group A" data-milestone="Chapters 1-3" data-status="Completed" data-due-date="April 10, 2026" data-submitted="April 8, 2026" data-comments="Chapters 1 to 3 are complete. Minor grammar revisions were suggested.">
+                <h4>Chapters 1-3</h4>
+                <span class="status-badge completed">Completed</span>
+              </div>
+              
+              <div class="milestone-card" data-action="view-milestone" data-group="Group A" data-milestone="Data collection" data-status="Completed" data-due-date="May 5, 2026" data-submitted="May 4, 2026" data-comments="Data collection finished. Group should prepare analysis tables next.">
+                <h4>Data collection</h4>
+                <span class="status-badge completed">Completed</span>
+              </div>
+              
+              <div class="milestone-card" data-action="view-milestone" data-group="Group A" data-milestone="Chapter 4 Draft" data-status="In Progress" data-due-date="May 30, 2026" data-submitted="May 22, 2026" data-comments="Needs revision on the methodology connection and explanation of results.">
+                <h4>Chapter 4 Draft</h4>
+                <span class="status-badge in-progress">In progress</span>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="group-milestone-panel">
+            <div class="group-header">
+              <h3>Group B</h3>
+              <p class="project-title">Project Title</p>
+            </div>
+            
+            <div class="milestone-scroll-container">
+              
+              <div class="milestone-card" data-action="view-milestone" data-group="Group B" data-milestone="Proposal Defense" data-status="Completed" data-due-date="March 18, 2026" data-submitted="March 17, 2026" data-comments="Defense completed. Group was advised to narrow the project scope.">
+                <h4>Proposal Defense</h4>
+                <span class="status-badge completed">Completed</span>
+              </div>
+              
+              <div class="milestone-card" data-action="view-milestone" data-group="Group B" data-milestone="Chapters 1-3" data-status="In Progress" data-due-date="April 18, 2026" data-submitted="April 16, 2026" data-comments="Chapter 2 needs additional related studies and clearer synthesis.">
+                <h4>Chapters 1-3</h4>
+                <span class="status-badge in-progress">In progress</span>
+              </div>
+              
+              <div class="milestone-card" data-action="view-milestone" data-group="Group B" data-milestone="Data collection" data-status="Pending" data-due-date="May 20, 2026" data-submitted="Not yet submitted" data-comments="Waiting for completion of Chapters 1-3 before data collection can begin.">
+                <h4>Data collection</h4>
+                <span class="status-badge pending">Pending</span>
+              </div>
+
+            </div>
+          </div>
+
+        </section>
+
+      </main>
+    </div>
+    <script src="adviser-interactions.js"></script>
+</body>
+</html>
