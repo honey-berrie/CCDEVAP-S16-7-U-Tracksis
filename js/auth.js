@@ -17,17 +17,18 @@ function login() {
     } else if (email === 'admin@example.com' && password === 'admin123') {
         // redirect to admin dashboard
 
-        alert('(Admin Dashboard redirection not implemented yet)'); // remove after implementing
+        window.location.href = '../../adminhtml/admin-dashboard.html';
+
 
     } else if (email === 'coordinator@example.com' && password === 'coordinator123') {
         // redirect to coordinator dashboard
 
-        alert('(Coordinator Dashboard redirection not implemented yet)'); // remove after implementing
+        window.location.href = '../../coordinator/coordinator-html/coordinator-overview.html';
 
     } else if (email === 'adviser@example.com' && password === 'adviser123') {
         // redirect to adviser dashboard
 
-        alert('(Adviser Dashboard redirection not implemented yet)'); // remove after implementing
+        window.location.href = '../../adviserhtml/thesis-adviser-overview.html';
 
     } else {
         alert('Invalid email or password.');
