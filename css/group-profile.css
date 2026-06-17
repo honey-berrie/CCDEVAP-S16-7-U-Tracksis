@@ -239,13 +239,13 @@ body {
   border-radius: 999px;
 }
 
-/* milestones */
-.milestone-item {
+/* Group Details */
+.group-detaills {
   padding: 0.6rem 0;
   border-bottom: 1px dashed var(--border);
 }
 
-.milestone-item:last-child {
+.group-detials:last-child {
   border-bottom: none;
 }
 
