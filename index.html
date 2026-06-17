@@ -8,10 +8,16 @@
   <!-- Bootstrap 5 -->
   <link rel="stylesheet" href="css/bootstrap.min.css">
 
-  <!-- Styles -->
+  <!-- local bootstrap icons -->
+  <link rel="stylesheet" href="css/bootstrap-icons.css">
+
+  <!-- home css -->
   <link rel="stylesheet" href="css/home.css">
+
+  <!-- shared dashboard css for theme variables -->
+  <link rel="stylesheet" href="css/student/dashboard.css">
 </head>
-<body class="bg-light">
+<body>
 
   <!-- NAVBAR -->
   <nav class="navbar navbar-expand-lg sticky-top" data-bs-theme="dark">
@@ -19,7 +25,7 @@
 
       <a class="navbar-brand d-flex align-items-center gap-2 fw-bold text-white" href="index.html">
         <img src="assets/images/logo.png" alt="U-Tracksis Logo" width="36" height="36"
-             class=" rounded p-1" />
+             class="rounded p-1" />
         U-Tracksis
       </a>
 
@@ -32,12 +38,13 @@
         <ul class="navbar-nav mx-auto">
           <li class="nav-item"><a class="nav-link text-white" href="#problem">Problem</a></li>
           <li class="nav-item"><a class="nav-link text-white" href="#how">How it works</a></li>
-          <li class="nav-item"><a class="nav-link text-white" href="#flow">Flow</a></li>
+          <li class="nav-item"><a class="nav-link text-white" href="#roles">Roles</a></li>
+          <li class="nav-item"><a class="nav-link text-white" href="#features">Features</a></li>
         </ul>
 
-        <div class="d-flex justify-content-center gap-2 mt-2">
-          <a class="btn btn-outline-light btn-sm fw-semibold" href="/pages/auth/auth.html#login-section">LOGIN</a>
-          <a class="btn btn-outline-light btn-sm fw-semibold" href="/pages/auth/auth.html#register-section">REGISTER</a>
+        <div class="d-flex justify-content-center gap-2 mt-2 mt-lg-0">
+          <a class="btn btn-outline-light btn-sm fw-semibold" href="pages/auth/auth.html#login-section">LOGIN</a>
+          <a class="btn btn-outline-light btn-sm fw-semibold" href="pages/auth/auth.html#register-section">REGISTER</a>
         </div>
       </div>
     </div>
@@ -45,202 +52,246 @@
 
   <!-- HERO CAROUSEL -->
   <div class="container my-4">
-    <div id="heroCarousel" class="carousel slide hero-carousel" data-bs-ride="carousel" data-bs-interval="3000">
+    <div id="heroCarousel" class="carousel slide carousel-fade hero-carousel" data-bs-ride="carousel" data-bs-interval="3000">
       <div class="carousel-inner h-100">
         <div class="carousel-item active h-100">
-          <img src="assets/images/1.jpg" class="hero-slide hero-slide-1 w-100 h-100" alt="">
+          <img src="assets/images/1.jpg" class="hero-slide w-100 h-100" alt="Slide 1">
         </div>
         <div class="carousel-item h-100">
-          <img src="assets/images/2.jpg" class="hero-slide hero-slide-2 w-100 h-100" alt="">
+          <img src="assets/images/2.jpg" class="hero-slide w-100 h-100" alt="Slide 2">
         </div>
         <div class="carousel-item h-100">
-          <img src="assets/images/3.jpg" class="hero-slide hero-slide-3 w-100 h-100" alt="">
+          <img src="assets/images/3.jpg" class="hero-slide w-100 h-100" alt="Slide 3">
         </div>
         <div class="carousel-item h-100">
-          <img src="assets/images/4.jpg" class="hero-slide hero-slide-4 w-100 h-100" alt="">
+          <img src="assets/images/4.jpg" class="hero-slide w-100 h-100" alt="Slide 4">
         </div>
         <div class="carousel-item h-100">
-          <img src="assets/images/5.jpg" class="hero-slide hero-slide-5 w-100 h-100" alt="">
+          <img src="assets/images/5.jpg" class="hero-slide w-100 h-100" alt="Slide 5">
         </div>
         <div class="carousel-item h-100">
-          <img src="assets/images/6.jpg" class="hero-slide hero-slide-6 w-100 h-100" alt="">
+          <img src="assets/images/6.jpg" class="hero-slide w-100 h-100" alt="Slide 6">
         </div>
         <div class="carousel-item h-100">
-          <img src="assets/images/7.jpg" class="hero-slide hero-slide-7 w-100 h-100" alt="">
+          <img src="assets/images/7.jpg" class="hero-slide w-100 h-100" alt="Slide 7">
         </div>
       </div>
     </div>
   </div>
 
-  <!-- INTRO -->
-  <section class="container py-5 border-bottom" id="intro">
-    <div class="row align-items-center g-5">
-      <div class="col-lg-7">
-        <h2 class="fw-bold mb-3">U-Tracksis</h2>
-        <p class="fs-5 mb-0">
-          a centralized hub where advisers monitor milestones,
-          students upload revisions..
-        </p>
-      </div>
-      <div class="col-lg-5">
-        <div class="card border-2 border-dark text-center p-4">
-          <span class="display-5 fw-bold lh-1 mb-2">00</span>
-          <p class="small mb-0">Active thesis groups this term</p>
-        </div>
-      </div>
-    </div>
-  </section>
+  <main class="container home-main">
 
-  <!-- PROBLEM -->
-  <section class="container py-5 border-bottom text-center" id="problem">
-    <h2 class="h5 fw-bold text-uppercase mb-4 text-start" style="letter-spacing: 2px;">THE PROBLEM</h2>
-    <p class="mx-auto" style="max-width: 700px;">
-      Thesis advisers juggle lecture loads, laboratory classes, and
-      research - all while supervising multiple groups. Feedback gets
-      delayed. Revisions get lost in inboxes.
-    </p>
-    <p class="mx-auto mb-0" style="max-width: 700px;">
-      This site replaces manual communication and disorganized files
-      with one transparent system for monitoring, scheduling, and
-      documenting progress.
-    </p>
-  </section>
+    <!-- INTRO -->
+    <section class="home-section" id="intro">
+      <div class="row align-items-center g-4">
+        <div class="col-lg-7">
+          <p class="page-eyebrow">OVERVIEW</p>
+          <h1 class="home-title">U-Tracksis</h1>
+          <p class="home-lead">
+            a centralized hub where advisers monitor milestones,
+            students upload revisions..
+          </p>
+        </div>
+        <div class="col-lg-5">
+          <div class="box h-100 text-center">
+            <p class="box-label">Active Thesis Groups</p>
+            <div class="stat-value">67 </div>
+            <p class="stat-label-sm">enrolled this term</p>
+          </div>
+        </div>
+      </div>
+    </section>
 
-  <!-- HOW IT WORKS -->
-  <section class="container py-5 border-bottom" id="how">
-    <h2 class="h5 fw-bold text-uppercase mb-4" style="letter-spacing: 2px;">HOW IT WORKS</h2>
-    <div class="row g-3">
-      <div class="col-md-6 col-lg-3">
-        <div class="card border-2 border-dark h-100 p-4 text-center">
-          <span class="fs-3 fw-bold mb-3 d-block">01</span>
-          <p class="small mb-0 fw-bold">Set up your group</p>
-          <p class="small mb-0">Hello there, super human world!</p>
+    <!-- PROBLEM -->
+    <section class="home-section" id="problem">
+      <p class="page-eyebrow">THE PROBLEM</p>
+      <h2 class="home-section-title">Why U-Tracksis exists</h2>
+      <div class="row g-3 mt-1">
+        <div class="col-md-6">
+          <div class="box h-100">
+            <div class="problem-icon">
+              <img src="assets/icons/clock-history.svg" alt="" class="bi">
+            </div>
+            <p class="problem-text">
+              Thesis advisers juggle lecture loads, laboratory classes, and research
+              — all while supervising multiple groups.
+            </p>
+            <p class="problem-highlight">Feedback gets delayed. Revisions get lost in inboxes.</p>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="box h-100">
+            <div class="problem-icon">
+              <img src="assets/icons/folder.svg" alt="" class="bi">
+            </div>
+            <p class="problem-text">
+              This site replaces manual communication and disorganized files with
+              one transparent system for monitoring, scheduling, and documenting progress.
+            </p>
+            <p class="problem-highlight">All in one place. Accessible to your panel anytime.</p>
+          </div>
         </div>
       </div>
-      <div class="col-md-6 col-lg-3">
-        <div class="card border-2 border-dark h-100 p-4 text-center">
-          <span class="fs-3 fw-bold mb-3 d-block">02</span>
-          <p class="small mb-0">Hello there, super human world!</p>
-        </div>
-      </div>
-      <div class="col-md-6 col-lg-3">
-        <div class="card border-2 border-dark h-100 p-4 text-center">
-          <span class="fs-3 fw-bold mb-3 d-block">03</span>
-          <p class="small mb-0">Hello there, super human world!</p>
-        </div>
-      </div>
-      <div class="col-md-6 col-lg-3">
-        <div class="card border-2 border-dark h-100 p-4 text-center">
-          <span class="fs-3 fw-bold mb-3 d-block">04</span>
-          <p class="small mb-0">Hello there, super human world!</p>
-        </div>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- ROLES -->
-  <section class="container py-5 border-bottom" id="roles">
-    <h2 class="h5 fw-bold text-uppercase mb-4" style="letter-spacing: 2px;">ROLES</h2>
-    <div class="row g-4">
-      <div class="col-md-6">
-        <div class="card border-2 border-dark p-4 h-100">
-          <div class="d-flex align-items-center gap-3 mb-4">
-            <img src="assets/images/placeholder.png" alt="Thesis Adviser Icon" width="38" height="38"
-                 class="border border-2 rounded" />
-            <h3 class="h5 fw-semibold mb-0">Thesis Adviser</h3>
+    <!-- HOW IT WORKS -->
+    <section class="home-section" id="how">
+      <p class="page-eyebrow">HOW IT WORKS</p>
+      <h2 class="home-section-title">Four simple steps to a smoother thesis</h2>
+      <div class="row g-3 mt-1">
+        <div class="col-md-6 col-lg-3">
+          <div class="box h-100 step-card">
+            <div class="step-number">01</div>
+            <h3 class="step-title">Coordinators set milestones</h3>
+            <p class="step-text">Define the term's deliverables and deadlines once. Apply to every group</p>
           </div>
-          <ul class="mb-0">
-            <li>Hello there, super human world!</li>
-            <li>Hello there, super human world!</li>
-            <li>Hello there, super human world!</li>
-          </ul>
+        </div>
+        <div class="col-md-6 col-lg-3">
+          <div class="box h-100 step-card">
+            <div class="step-number">02</div>
+            <h3 class="step-title">Advisers are assigned</h3>
+            <p class="step-text">Admin matches advisers to group. Each advisers sees only their cohort</p>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+          <div class="box h-100 step-card">
+            <div class="step-number">03</div>
+            <h3 class="step-title">Students submit & iterate</h3>
+            <p class="step-text">Groups upload drafts, receive revisions, and update their progress bar.</p>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+          <div class="box h-100 step-card">
+            <div class="step-number">04</div>
+            <h3 class="step-title">Theses get approved</h3>
+            <p class="step-text">Finals approved are logged, archived and surfaced in analytics.</p>
+          </div>
         </div>
       </div>
-      <div class="col-md-6">
-        <div class="card border-2 border-dark p-4 h-100">
-          <div class="d-flex align-items-center gap-3 mb-4">
-            <img src="assets/images/placeholder.png" alt="Students Icon" width="38" height="38"
-                 class="border border-2 rounded" />
-            <h3 class="h5 fw-semibold mb-0">Students</h3>
-          </div>
-          <ul class="mb-0">
-            <li>Hello there, super human world!</li>
-            <li>Hello there, super human world!</li>
-            <li>Hello there, super human world!</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- PROJECT FEATURES -->
-  <section class="container py-5 border-bottom" id="features">
-    <h2 class="h5 fw-bold text-uppercase mb-4" style="letter-spacing: 2px;">PROJECT FEATURES</h2>
-    <div class="row g-3">
-      <!-- 6 feature cards -->
-      <div class="col-md-6">
-        <div class="card border-2 border-dark p-3 h-100 d-flex flex-row gap-3 align-items-start">
-          <img src="assets/images/placeholder.png" alt="Feature Icon" width="38" height="38"
-               class="border border-2 rounded flex-shrink-0" />
-          <div class="flex-grow-1">
-            <h3 class="h6 fw-semibold mb-2">Feature 1</h3>
-            <p class="small mb-0">This is a brief description of Feature 1.</p>
+    <!-- ROLES -->
+    <section class="home-section" id="roles">
+      <p class="page-eyebrow">ROLES</p>
+      <h2 class="home-section-title">Built for both sides of the desk</h2>
+      <div class="row g-3 mt-1">
+        <div class="col-md-6">
+          <div class="box h-100 role-card">
+            <div class="role-header">
+              <div class="role-icon-box">
+                <img src="assets/icons/person-badge.svg" alt="" class="bi">
+              </div>
+              <h3 class="role-title">Thesis Adviser</h3>
+            </div>
+            <ul class="role-list">
+              <li>Review documents & give revision feedback</li>
+              <li>View assigned thesis groups</li>
+              <li>Notifications for pending reviews</li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="box h-100 role-card">
+            <div class="role-header">
+              <div class="role-icon-box">
+                <img src="assets/icons/people-fill.svg" alt="" class="bi">
+              </div>
+              <h3 class="role-title">Students</h3>  
+            </div>
+            <ul class="role-list">
+              <li>Create and manage group profiles</li>
+              <li>Upload documents and revisions</li>
+              <li>Live progress percentage bar</li>
+            </ul>
           </div>
         </div>
       </div>
-      <div class="col-md-6">
-        <div class="card border-2 border-dark p-3 h-100 d-flex flex-row gap-3 align-items-start">
-          <img src="assets/images/placeholder.png" alt="Feature Icon" width="38" height="38"
-               class="border border-2 rounded flex-shrink-0" />
-          <div class="flex-grow-1">
-            <h3 class="h6 fw-semibold mb-2">Feature 2</h3>
-            <p class="small mb-0">This is a brief description of Feature 2.</p>
+    </section>
+
+    <!-- PROJECT FEATURES -->
+    <section class="home-section" id="features">
+      <p class="page-eyebrow">PROJECT FEATURES</p>
+      <h2 class="home-section-title">Everything your thesis needs</h2>
+      <div class="row g-3 mt-1">
+        <div class="col-md-6">
+          <div class="box h-100 feature-card">
+            <div class="feature-icon-box">
+              <img src="assets/icons/grid-1x2-fill.svg" alt="" class="bi">
+            </div>
+            <div>
+              <h3 class="feature-title">Milestone tracking</h3>
+              <p class="feature-text">Visual progress bars and cohort-wide dashboards keep every group on schedule.</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="box h-100 feature-card">
+            <div class="feature-icon-box">
+              <img src="assets/icons/grid-1x2-fill.svg" alt="" class="bi">
+            </div>
+            <div>
+              <h3 class="feature-title">Document revisions</h3>
+              <p class="feature-text">Versioned uploads with adviser remarks, approve/reject status, and full history.</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="box h-100 feature-card">
+            <div class="feature-icon-box">
+              <img src="assets/icons/grid-1x2-fill.svg" alt="" class="bi">
+            </div>
+            <div>
+              <h3 class="feature-title">Consultation scheduling</h3>
+              <p class="feature-text">Request, confirm, and log every consultation with timestamped records.</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="box h-100 feature-card">
+            <div class="feature-icon-box">
+              <img src="assets/icons/grid-1x2-fill.svg" alt="" class="bi">
+            </div>
+            <div>
+              <h3 class="feature-title">Structured feedback</h3>
+              <p class="feature-text">Comments tied to milestones and documents never lost in an email thread.</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="box h-100 feature-card">
+            <div class="feature-icon-box">
+              <img src="assets/icons/grid-1x2-fill.svg" alt="" class="bi">
+            </div>
+            <div>
+              <h3 class="feature-title">Deadline notifications</h3>
+              <p class="feature-text">Automatic reminders for students and pending review alerts for advisers.</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="box h-100 feature-card">
+            <div class="feature-icon-box">
+              <img src="assets/icons/grid-1x2-fill.svg" alt="" class="bi">
+            </div>
+            <div>
+              <h3 class="feature-title">Role-based access</h3>
+              <p class="feature-text">Admin, adviser, and student group views with the right permissions out of the box.</p>
+            </div>
           </div>
         </div>
       </div>
-      <div class="col-md-6">
-        <div class="card border-2 border-dark p-3 h-100 d-flex flex-row gap-3 align-items-start">
-          <img src="assets/images/placeholder.png" alt="Feature Icon" width="38" height="38"
-               class="border border-2 rounded flex-shrink-0" />
-          <div class="flex-grow-1">
-            <h3 class="h6 fw-semibold mb-2">Feature 3</h3>
-            <p class="small mb-0">This is a brief description of Feature 3.</p>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-6">
-        <div class="card border-2 border-dark p-3 h-100 d-flex flex-row gap-3 align-items-start">
-          <img src="assets/images/placeholder.png" alt="Feature Icon" width="38" height="38"
-               class="border border-2 rounded flex-shrink-0" />
-          <div class="flex-grow-1">
-            <h3 class="h6 fw-semibold mb-2">Feature 4</h3>
-            <p class="small mb-0">This is a brief description of Feature 4.</p>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-6">
-        <div class="card border-2 border-dark p-3 h-100 d-flex flex-row gap-3 align-items-start">
-          <img src="assets/images/placeholder.png" alt="Feature Icon" width="38" height="38"
-               class="border border-2 rounded flex-shrink-0" />
-          <div class="flex-grow-1">
-            <h3 class="h6 fw-semibold mb-2">Feature 5</h3>
-            <p class="small mb-0">This is a brief description of Feature 5.</p>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-6">
-        <div class="card border-2 border-dark p-3 h-100 d-flex flex-row gap-3 align-items-start">
-          <img src="assets/images/placeholder.png" alt="Feature Icon" width="38" height="38"
-               class="border border-2 rounded flex-shrink-0" />
-          <div class="flex-grow-1">
-            <h3 class="h6 fw-semibold mb-2">Feature 6</h3>
-            <p class="small mb-0">This is a brief description of Feature 6.</p>
-          </div>
-        </div>
-      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="home-footer">
+    <div class="container">
+      <p class="small text-muted mb-0">&copy; 2026 U-Tracksis. All rights reserved.</p>
     </div>
-  </section>
+  </footer>
 
   <script src="js/bootstrap.bundle.min.js"></script>
+  <script src="js/theme.js"></script>
 </body>
 </html>

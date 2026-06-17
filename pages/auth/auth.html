@@ -38,7 +38,7 @@
           <input type="password" class="form-control" id="login-password" name="password" placeholder="Enter your password" required>
         </div>
 
-        <button type="button" class="btn-omnitrace" onclick="goToStudentDashboard()">Sign in</button>
+        <button type="button" class="btn-omnitrace" onclick="login()">Sign in</button>
 
         <p class="footer-text">
           Don't have an account? <a href="#register-section">Register</a>
@@ -108,7 +108,9 @@
   </div>
 
   <!-- Bootstrap JS -->
-  <script src="js/bootstrap.bundle.min.js"></script>
+  <script src="../../js/bootstrap.bundle.min.js"></script>
+  
+  <script src="../../js/auth.js"></script>
 
   <script>
     // Toggle between login and register sections
@@ -138,23 +140,6 @@
         hiddenInput.value = btn.dataset.role;
       });
     });
-
-    //  Password confirmation logic
-    const registerForm = document.getElementById('registerForm');
-    const password = document.getElementById('register-password');
-    const confirm = document.getElementById('confirm');
-
-    registerForm.addEventListener('submit', e => {
-      if (password.value !== confirm.value) {
-        e.preventDefault();
-        alert('Passwords do not match.');
-      }
-    });
-
-
-    function goToStudentDashboard() {
-      window.location.href = '../../pages/student/dashboard.html';
-    }
   </script>
 </body>
 </html>
