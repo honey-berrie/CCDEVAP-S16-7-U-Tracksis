@@ -80,7 +80,7 @@
             </div>
         </div>
 
-      <!-- milestones box -->
+      <!-- Group Details box -->
       <div class="box mb-4">
         <p class="box-label">GROUP DETAILS</p>
 
@@ -98,11 +98,51 @@
               <label for="exampleFormControlTextarea1">Abstract</label>
               <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Enter your Thesis Abstract"></textarea>
             </div class>
-            <button type="button" class="btn btn-primary btn-lg p-1">Save Changes</button>
-            <button type="button" class="btn btn-secondary btn-lg p-1">Cancel</button>
+            <button type="button" class="btn btn-primary btn-lg p-1" onclick="alert('You can save your changes soon!')">Save Changes</button>
+            <button type="button" class="btn btn-secondary btn-lg p-1"onclick="alert('WORK IN PROGRESS')">Cancel</button>
           </form>
         </div>
         <!--  -->
+      </div>
+
+      <div class="box mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <p class="box-label">MEMBERS</p>
+          <button type="button" class="btn btn-dark d-flex p-1" onclick="alert('Add Member functionality coming soon!')">
+            <i class="bi bi-person-fill-add pe-1"></i>Add Member
+          </button>
+        </div>
+
+        <div class="group-detaills">
+          <div class="members">
+            <a class="nav-link p-1 bi bi-person-circle" href="#" onclick="alert('Are we going to add member profiles?')">
+              Member 1
+              <p class="fst-italic">Leader</p>
+            </a>
+            <a class="nav-link p-1 bi bi-person-circle" href="#" onclick="alert('Are we going to add member profiles?')">
+              Member 2
+              <p class="fst-italic">Member</p>
+            </a>
+            <a class="nav-link p-1 bi bi-person-circle" href="#" onclick="alert('Are we going to add member profiles?')">
+              Member 3
+              <p class="fst-italic">Member</p>
+            </a>
+            <a class="nav-link p-1 bi bi-person-circle" href="#" onclick="alert('Are we going to add member profiles?')">
+              Member 4
+              <p class="fst-italic">Member</p>
+            </a>
+          </div>
+          
+          <hr>
+          <p class="box-label">ADVISER</p>
+          <div class="thesisAdvisers">
+            <a class="nav-link p-1 bi bi-person-circle" href="#" onclick="alert('Are we going to add adviser profiles?')">
+              Faculty Member
+              <p class="fst-italic">Main Adviser</p>
+            </a>
+          </div>
+        </div>
+
       </div>
 
        </main>

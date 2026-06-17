@@ -242,11 +242,6 @@ body {
 /* Group Details */
 .group-detaills {
   padding: 0.6rem 0;
-  border-bottom: 1px dashed var(--border);
-}
-
-.group-detials:last-child {
-  border-bottom: none;
 }
 
 .milestone-name {
