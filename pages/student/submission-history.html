@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Group Profile | U-Tracksis</title>
+  <title>Submission History | U-Tracksis</title>
 
   <!-- Apply theme immediately -->
   <script>
@@ -20,11 +20,11 @@
   <!-- local bootstrap icons -->
   <link rel="stylesheet" href="../../css/bootstrap-icons.css">
 
-  <!-- custom css -->
+  <!-- dashboard css -->
   <link rel="stylesheet" href="../../css/student/dashboard.css">
 
-  <!-- group profile specific css -->
-  <link rel="stylesheet" href="../../css/student/group-profile.css">
+  <!-- submission history specific css -->
+  <link rel="stylesheet" href="../../css/student/submission-history.css">
 </head>
 <body>
 
@@ -44,7 +44,7 @@
         <a class="nav-link" href="dashboard.html">
           <img src="../../assets/icons/grid-1x2-fill.svg" alt="" class="bi"> Dashboard
         </a>
-        <a class="nav-link active" href="group-profile.html">
+        <a class="nav-link" href="group-profile.html">
           <img src="../../assets/icons/people-fill.svg" alt="" class="bi"> Group Profile
         </a>
         <a class="nav-link" href="milestones.html">
@@ -59,7 +59,7 @@
         <a class="nav-link" href="consultations.html">
           <img src="../../assets/icons/chat-dots-fill.svg" alt="" class="bi"> Consultations
         </a>
-        <a class="nav-link" href="submission-history.html">
+        <a class="nav-link active" href="submission-history.html">
           <img src="../../assets/icons/clock-history.svg" alt="" class="bi"> Submission History
         </a>
         <a class="nav-link" href="notifications.html">
@@ -103,7 +103,7 @@
             <span>New Submission</span>
           </button>
 
-          <button class="btn-logout" type="button" onclick="window.location.href='../auth/auth.html#login-section'">
+          <button class="btn-logout" type="button" onclick="window.location.href='../../pages/auth/auth.html#login-section'">
             <img src="../../assets/icons/box-arrow-left.svg" alt="" class="bi">
             <span>Logout</span>
           </button>
@@ -112,92 +112,79 @@
 
       <!-- page header -->
       <div class="page-header">
-        <p class="page-eyebrow">PROFILE</p>
-        <h1 class="page-title">Group Profile</h1>
-        <p class="page-subtitle">Manage your thesis group profile, members, and research scope</p>
+        <p class="page-eyebrow">ARCHIVE</p>
+        <h1 class="page-title">Submission History</h1>
+        <p class="page-subtitle">A complete record of every document version your group has submitted.</p>
       </div>
 
-      <!-- group details and members row -->
-      <div class="row g-3 mb-3">
-        <!-- group details box -->
-        <div class="col-lg-8">
-          <div class="box h-100">
-            <p class="box-label">Group Details</p>
-            <form id="groupDetailsForm">
-              <div class="mb-3">
-                <label class="form-label-sm">Group Name</label>
-                <input type="text" class="form-control" placeholder="Enter group name">
-              </div>
-              <div class="mb-3">
-                <label class="form-label-sm">Thesis Title</label>
-                <input type="text" class="form-control" placeholder="Enter thesis title">
-              </div>
-              <div class="mb-3">
-                <label class="form-label-sm">Abstract</label>
-                <textarea class="form-control abstract-textarea" rows="6" placeholder="Write your abstract here..."></textarea>
-              </div>
-              <div class="d-flex gap-2 justify-content-end">
-                <button type="submit" class="btn-action-primary">Save Changes</button>
-                <button type="reset" class="btn-action-secondary">Cancel</button>
-              </div>
-            </form>
+      <!-- history list -->
+      <div class="history-list">
+
+        <!-- history item 1 -->
+        <div class="history-row">
+          <div class="history-bullet"></div>
+          <div class="history-info">
+            <p class="history-name">Chapter <span>--</span></p>
+            <p class="history-date">Month Day, Year</p>
+          </div>
+          <div class="history-side">
+            <span class="badge-status badge-review">In Review</span>
+            <a href="#" class="history-download">Download</a>
           </div>
         </div>
 
-        <!-- members and adviser column -->
-        <div class="col-lg-4">
-          <div class="d-flex flex-column gap-3 h-100">
-            <!-- members box -->
-            <div class="box">
-              <div class="d-flex justify-content-between align-items-center mb-3">
-                <p class="box-label mb-0">Members</p>
-                <button class="btn-action-primary btn-add" type="button">
-                  <img src="../../assets/icons/plus-lg.svg" alt="" class="bi"> Add
-                </button>
-              </div>
-              <div class="member-item">
-                <img src="../../assets/icons/person-circle.svg" alt="" class="member-avatar">
-                <div class="member-info">
-                  <p class="member-name">Member 1</p>
-                  <p class="member-role">Role</p>
-                </div>
-              </div>
-              <div class="member-item">
-                <img src="../../assets/icons/person-circle.svg" alt="" class="member-avatar">
-                <div class="member-info">
-                  <p class="member-name">Member 2</p>
-                  <p class="member-role">Role</p>
-                </div>
-              </div>
-              <div class="member-item">
-                <img src="../../assets/icons/person-circle.svg" alt="" class="member-avatar">
-                <div class="member-info">
-                  <p class="member-name">Member 3</p>
-                  <p class="member-role">Role</p>
-                </div>
-              </div>
-              <div class="member-item">
-                <img src="../../assets/icons/person-circle.svg" alt="" class="member-avatar">
-                <div class="member-info">
-                  <p class="member-name">Member 4</p>
-                  <p class="member-role">Role</p>
-                </div>
-              </div>
-            </div>
-
-            <!-- adviser box -->
-            <div class="box">
-              <p class="box-label">Adviser</p>
-              <div class="member-item">
-                <img src="../../assets/icons/person-circle.svg" alt="" class="member-avatar">
-                <div class="member-info">
-                  <p class="member-name">Faculty</p>
-                  <p class="member-role">Main Adviser</p>
-                </div>
-              </div>
-            </div>
+        <!-- history item 2 -->
+        <div class="history-row">
+          <div class="history-bullet"></div>
+          <div class="history-info">
+            <p class="history-name">Chapter <span>--</span></p>
+            <p class="history-date">Month Day, Year</p>
+          </div>
+          <div class="history-side">
+            <span class="badge-status badge-approved">Approved</span>
+            <a href="#" class="history-download">Download</a>
           </div>
         </div>
+
+        <!-- history item 3 -->
+        <div class="history-row">
+          <div class="history-bullet"></div>
+          <div class="history-info">
+            <p class="history-name">Chapter <span>--</span></p>
+            <p class="history-date">Month Day, Year</p>
+          </div>
+          <div class="history-side">
+            <span class="badge-status badge-approved">Approved</span>
+            <a href="#" class="history-download">Download</a>
+          </div>
+        </div>
+
+        <!-- history item 4 -->
+        <div class="history-row">
+          <div class="history-bullet"></div>
+          <div class="history-info">
+            <p class="history-name">Title Proposal</p>
+            <p class="history-date">Month Day, Year</p>
+          </div>
+          <div class="history-side">
+            <span class="badge-status badge-pending">Pending</span>
+            <a href="#" class="history-download">Download</a>
+          </div>
+        </div>
+
+        <!-- history item 5 -->
+        <div class="history-row">
+          <div class="history-bullet"></div>
+          <div class="history-info">
+            <p class="history-name">Title Proposal</p>
+            <p class="history-date">Month Day, Year</p>
+          </div>
+          <div class="history-side">
+            <span class="badge-status badge-approved">Approved</span>
+            <a href="#" class="history-download">Download</a>
+          </div>
+        </div>
+
       </div>
 
     </main>

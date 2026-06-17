@@ -17,6 +17,17 @@
   --info: #3b82f6;
 }
 
+/* dark mode overrides */
+[data-theme="dark"] {
+  --bg-main: #0f1729;
+  --bg-box: #1a2540;
+  --navy-accent: #3b82f6;
+  --navy-accent-hover: #60a5fa;
+  --text: #e2e8f0;
+  --text-light: #94a3b8;
+  --border: #2a3a5c;
+}
+
 /* base */
 html, body {
   height: 100%;
@@ -25,6 +36,7 @@ html, body {
   font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
   color: var(--text);
   background: var(--bg-main);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 body {
@@ -200,6 +212,7 @@ body {
 .topbar-search .form-control {
   height: 38px;
   border: 1px solid var(--border);
+  color: var(--text);
   border-radius: 8px;
   padding-left: 2.25rem;
   font-size: 0.875rem;
@@ -210,6 +223,10 @@ body {
   background: var(--bg-box);
   border-color: var(--navy-accent);
   box-shadow: 0 0 0 0.2rem rgba(24, 46, 89, 0.12);
+}
+
+.topbar-search .form-control::placeholder {
+  color: var(--text-light);
 }
 
 .topbar-actions {

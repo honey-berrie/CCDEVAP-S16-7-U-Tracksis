@@ -5,6 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Milestones | U-Tracksis</title>
 
+  <!-- Apply theme immediately -->
+  <script>
+    (function() {
+      var t = localStorage.getItem('theme');
+      var d = t || (window.matchMedia('(prefers-color-scheme:dark)').matches ? 'dark' : 'light');
+      if (d === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+    })();
+  </script>
+
   <!-- bootstrap css -->
   <link rel="stylesheet" href="../../css/bootstrap.min.css">
 
@@ -44,24 +53,24 @@
         <a class="nav-link" href="submissions.html">
           <img src="../../assets/icons/cloud-upload-fill.svg" alt="" class="bi"> Submissions
         </a>
-        <a class="nav-link" href="#">
+        <a class="nav-link" href="feedback.html">
           <img src="../../assets/icons/chat-left-text-fill.svg" alt="" class="bi"> Adviser Feedback
         </a>
-        <a class="nav-link" href="#">
+        <a class="nav-link" href="consultations.html">
           <img src="../../assets/icons/chat-dots-fill.svg" alt="" class="bi"> Consultations
         </a>
-        <a class="nav-link" href="#">
+        <a class="nav-link" href="submission-history.html">
           <img src="../../assets/icons/clock-history.svg" alt="" class="bi"> Submission History
         </a>
-        <a class="nav-link" href="#">
+        <a class="nav-link" href="notifications.html">
           <img src="../../assets/icons/bell-fill.svg" alt="" class="bi"> Notifications
         </a>
       </nav>
 
       <div class="sidebar-footer">
         <span>Theme</span>
-        <button class="theme-toggle" type="button" title="Toggle theme">
-          <img src="../../assets/icons/moon-stars-fill.svg" alt="" class="bi">
+        <button class="theme-toggle" id="themeToggle" type="button" title="Toggle theme">
+          <img src="../../assets/icons/moon-stars-fill.svg" alt="" class="bi" id="themeIcon">
         </button>
       </div>
     </aside>
@@ -84,7 +93,7 @@
         </div>
 
         <div class="topbar-actions">
-          <button class="topbar-icon-btn" type="button" title="Notifications">
+          <button class="topbar-icon-btn" type="button" title="Notifications" onclick="window.location.href='notifications.html'">
             <img src="../../assets/icons/bell.svg" alt="" class="bi">
             <span class="notif-dot"></span>
           </button>
@@ -162,6 +171,7 @@
   </div>
 
   <script src="../../js/bootstrap.bundle.min.js"></script>
+  <script src="../../js/student/theme.js"></script>
 
   <script>
     /* sidebar toggle */

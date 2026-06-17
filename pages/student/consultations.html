@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Group Profile | U-Tracksis</title>
+  <title>Consultations | U-Tracksis</title>
 
   <!-- Apply theme immediately -->
   <script>
@@ -23,8 +23,8 @@
   <!-- custom css -->
   <link rel="stylesheet" href="../../css/student/dashboard.css">
 
-  <!-- group profile specific css -->
-  <link rel="stylesheet" href="../../css/student/group-profile.css">
+  <!-- consultations specific css -->
+  <link rel="stylesheet" href="../../css/student/consultations.css">
 </head>
 <body>
 
@@ -44,7 +44,7 @@
         <a class="nav-link" href="dashboard.html">
           <img src="../../assets/icons/grid-1x2-fill.svg" alt="" class="bi"> Dashboard
         </a>
-        <a class="nav-link active" href="group-profile.html">
+        <a class="nav-link" href="group-profile.html">
           <img src="../../assets/icons/people-fill.svg" alt="" class="bi"> Group Profile
         </a>
         <a class="nav-link" href="milestones.html">
@@ -56,7 +56,7 @@
         <a class="nav-link" href="feedback.html">
           <img src="../../assets/icons/chat-left-text-fill.svg" alt="" class="bi"> Adviser Feedback
         </a>
-        <a class="nav-link" href="consultations.html">
+        <a class="nav-link active" href="consultations.html">
           <img src="../../assets/icons/chat-dots-fill.svg" alt="" class="bi"> Consultations
         </a>
         <a class="nav-link" href="submission-history.html">
@@ -103,7 +103,7 @@
             <span>New Submission</span>
           </button>
 
-          <button class="btn-logout" type="button" onclick="window.location.href='../auth/auth.html#login-section'">
+          <button class="btn-logout" type="button" onclick="window.location.href='../../pages/auth/auth.html#login-section'">
             <img src="../../assets/icons/box-arrow-left.svg" alt="" class="bi">
             <span>Logout</span>
           </button>
@@ -112,92 +112,104 @@
 
       <!-- page header -->
       <div class="page-header">
-        <p class="page-eyebrow">PROFILE</p>
-        <h1 class="page-title">Group Profile</h1>
-        <p class="page-subtitle">Manage your thesis group profile, members, and research scope</p>
+        <p class="page-eyebrow">SCHEDULE</p>
+        <h1 class="page-title">Request a Consultation</h1>
+        <p class="page-subtitle">Comments and revisions from your adviser and panel members.</p>
       </div>
 
-      <!-- group details and members row -->
+      <!-- to field -->
+      <div class="to-field">
+        <label class="form-label-sm">To:</label>
+        <div class="to-input">
+          <img src="../../assets/icons/person-circle.svg" alt="" class="to-avatar bi">
+          <input type="text" class="form-control" placeholder="Select adviser or panel member">
+        </div>
+      </div>
+
+      <!-- slots and details row -->
       <div class="row g-3 mb-3">
-        <!-- group details box -->
-        <div class="col-lg-8">
+        <!-- available slots box -->
+        <div class="col-lg-6">
           <div class="box h-100">
-            <p class="box-label">Group Details</p>
-            <form id="groupDetailsForm">
+            <p class="box-label">Available Slots</p>
+            <div class="slots-grid">
+              <div class="slot-card">
+                <p class="slot-day">Day of the week</p>
+                <p class="slot-date">Month Day</p>
+                <p class="slot-time">Time</p>
+              </div>
+              <div class="slot-card">
+                <p class="slot-day">Day of the week</p>
+                <p class="slot-date">Month Day</p>
+                <p class="slot-time">Time</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- request details box -->
+        <div class="col-lg-6">
+          <div class="box h-100">
+            <p class="box-label">Request Details</p>
+            <form id="consultationForm">
               <div class="mb-3">
-                <label class="form-label-sm">Group Name</label>
-                <input type="text" class="form-control" placeholder="Enter group name">
+                <label class="form-label-sm">Topic</label>
+                <input type="text" class="form-control" placeholder="Enter consultation topic">
               </div>
               <div class="mb-3">
-                <label class="form-label-sm">Thesis Title</label>
-                <input type="text" class="form-control" placeholder="Enter thesis title">
+                <label class="form-label-sm">Agenda</label>
+                <textarea class="form-control agenda-textarea" rows="3" placeholder="List items to discuss..."></textarea>
               </div>
-              <div class="mb-3">
-                <label class="form-label-sm">Abstract</label>
-                <textarea class="form-control abstract-textarea" rows="6" placeholder="Write your abstract here..."></textarea>
-              </div>
-              <div class="d-flex gap-2 justify-content-end">
-                <button type="submit" class="btn-action-primary">Save Changes</button>
-                <button type="reset" class="btn-action-secondary">Cancel</button>
+              <div class="d-flex justify-content-end">
+                <button type="submit" class="btn-action-primary">Send Request</button>
               </div>
             </form>
           </div>
         </div>
+      </div>
 
-        <!-- members and adviser column -->
-        <div class="col-lg-4">
-          <div class="d-flex flex-column gap-3 h-100">
-            <!-- members box -->
-            <div class="box">
-              <div class="d-flex justify-content-between align-items-center mb-3">
-                <p class="box-label mb-0">Members</p>
-                <button class="btn-action-primary btn-add" type="button">
-                  <img src="../../assets/icons/plus-lg.svg" alt="" class="bi"> Add
-                </button>
-              </div>
-              <div class="member-item">
-                <img src="../../assets/icons/person-circle.svg" alt="" class="member-avatar">
-                <div class="member-info">
-                  <p class="member-name">Member 1</p>
-                  <p class="member-role">Role</p>
-                </div>
-              </div>
-              <div class="member-item">
-                <img src="../../assets/icons/person-circle.svg" alt="" class="member-avatar">
-                <div class="member-info">
-                  <p class="member-name">Member 2</p>
-                  <p class="member-role">Role</p>
-                </div>
-              </div>
-              <div class="member-item">
-                <img src="../../assets/icons/person-circle.svg" alt="" class="member-avatar">
-                <div class="member-info">
-                  <p class="member-name">Member 3</p>
-                  <p class="member-role">Role</p>
-                </div>
-              </div>
-              <div class="member-item">
-                <img src="../../assets/icons/person-circle.svg" alt="" class="member-avatar">
-                <div class="member-info">
-                  <p class="member-name">Member 4</p>
-                  <p class="member-role">Role</p>
-                </div>
-              </div>
-            </div>
+      <!-- consultation history box -->
+      <div class="box">
+        <p class="box-label">Consultation History</p>
 
-            <!-- adviser box -->
-            <div class="box">
-              <p class="box-label">Adviser</p>
-              <div class="member-item">
-                <img src="../../assets/icons/person-circle.svg" alt="" class="member-avatar">
-                <div class="member-info">
-                  <p class="member-name">Faculty</p>
-                  <p class="member-role">Main Adviser</p>
-                </div>
-              </div>
+        <!-- history item 1 -->
+        <div class="history-item">
+          <div class="history-date">
+            <p class="history-date-main">Month Day, Year</p>
+            <p class="history-date-sub">Time</p>
+          </div>
+          <div class="history-body">
+            <p class="history-chapter">Chapter <span>--</span></p>
+            <p class="history-comments">"Comments...."</p>
+            <div class="history-actions">
+              <button class="btn-link-action" type="button">Update</button>
+              <button class="btn-link-action" type="button">Send Revisions</button>
             </div>
           </div>
+          <div class="history-side">
+            <span class="badge-status badge-approved">Completed</span>
+          </div>
         </div>
+
+        <!-- history item 2 -->
+        <div class="history-item">
+          <div class="history-date">
+            <p class="history-date-main">Month Day, Year</p>
+            <p class="history-date-sub">Time</p>
+          </div>
+          <div class="history-body">
+            <p class="history-chapter">Chapter <span>--</span></p>
+            <p class="history-comments">"Comments...."</p>
+            <div class="history-actions">
+              <button class="btn-link-action" type="button">Update</button>
+              <button class="btn-link-action" type="button">Send Revisions</button>
+            </div>
+          </div>
+          <div class="history-side">
+            <span class="badge-status badge-approved">Completed</span>
+          </div>
+        </div>
+
       </div>
 
     </main>
@@ -205,7 +217,6 @@
 
   <script src="../../js/bootstrap.bundle.min.js"></script>
   <script src="../../js/student/theme.js"></script>
-
   <script>
     /* sidebar toggle */
     const sidebar = document.getElementById('sidebar');
@@ -224,6 +235,14 @@
     document.querySelectorAll('.sidebar-nav .nav-link').forEach(link => {
       link.addEventListener('click', () => {
         if (window.innerWidth < 992) toggleSidebar();
+      });
+    });
+
+    /* slot card selection */
+    document.querySelectorAll('.slot-card').forEach(card => {
+      card.addEventListener('click', () => {
+        document.querySelectorAll('.slot-card').forEach(c => c.classList.remove('selected'));
+        card.classList.add('selected');
       });
     });
   </script>
