@@ -28,7 +28,7 @@
 
       <ul class="nav nav-pills flex-column mb-auto gap-1">
         <li class="nav-item">
-          <a class="nav-link active d-flex align-items-center gap-2" aria-current="page" href="coordinator-overview.html">
+          <a class="nav-link d-flex align-items-center gap-2" aria-current="page" href="coordinator-overview.html">
             <i class="bi bi-binoculars-fill"></i> Overview
           </a>
         </li>
@@ -43,7 +43,7 @@
           </a>
         </li>
         <li>
-          <a class="nav-link link-dark d-flex align-items-center gap-2" href="coordinator-course-announcements.html">
+          <a class="nav-link active link-dark d-flex align-items-center gap-2" href="coordinator-course-announcements.html">
             <i class="bi bi-megaphone-fill"></i> Announcements
           </a>
         </li>
@@ -85,68 +85,53 @@
           <i class="bi bi-list fs-3"></i>
         </button>
         <div>
-          <h1 class="h3 fw-bold mb-0">Coordinator Overview</h1>
+          <h1 class="h3 fw-bold mb-0">Course Announcements</h1>
         </div>
       </div>
 
-      <!-- 4 cards layout, In a row when Big, 2x2 grid when small -->
-      <div class="row g-4 mb-4">
-
-        <!-- Handled Courses -->
-        <div class="col-lg-3 col-md-6">
-          <div class="card border-0 shadow-sm rounded-4 h-100">
-            <div class="card-body p-4">
-              <p class="text-muted fw-bold small text-uppercase mb-2">Handled Courses</p>
-              <h3 class="fw-bold mb-3">4</h3>
-            </div>
-          </div>
-        </div>
-
-        <!-- Active Groups -->
-        <div class="col-lg-3 col-md-6">
-          <div class="card border-0 shadow-sm rounded-4 h-100">
-            <div class="card-body p-4">
-              <p class="text-muted fw-bold small text-uppercase mb-2">Active Groups</p>
-              <h3 class="fw-bold mb-3">9</h3>
-            </div>
-          </div>
-        </div>
-
-        <!-- Pending Formations -->
-        <div class="col-lg-3 col-md-6">
-          <div class="card border-0 shadow-sm rounded-4 h-100">
-            <div class="card-body p-4">
-              <p class="text-muted fw-bold small text-uppercase mb-2">Pending Formations</p>
-              <h3 class="fw-bold mb-3">3</h3>
-            </div>
-          </div>
-        </div>
-
-        <!-- Off-Track Groups -->
-        <div class="col-lg-3 col-md-6">
-          <div class="card border-0 shadow-sm rounded-4 h-100">
-            <div class="card-body p-4">
-              <p class="text-muted fw-bold small text-uppercase mb-2">Off-Track Groups</p>
-              <h3 class="fw-bold mb-3">2</h3>
-            </div>
-          </div>
-        </div>
-      </div>
 
       <!-- container for side-by-side cards -->
       <div class="row g-4 mb-4">
 
+        <!-- Course Announcement Form -->
         <div class="col-lg-6 col-md-12">
           <div class="card border-0 shadow-sm rounded-4 h-100">
             <div class="card-body p-4">
               <div class="d-flex justify-content-between align-items-center mb-2">
-                <p class="text-muted fw-bold small text-uppercase mb-0">Handled Courses</p>
-                <h4 class="fw-bold mb-3">Avg. 27%</h4>
+                <p class="text-muted fw-bold small text-uppercase mb-0">Course Announcements</p>
               </div>
-              <h2 class="display-5 fw-bold mb-0">Thesis Writing 2</h2>
-              <div class="progress mt-3 rounded-pill" style="height: 10px;">
-                <div class="progress-bar bg-primary" role="progressbar" style="width: 27%;" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100"></div>
-              </div>
+              <form>
+                <!-- Course Selection -->
+                <div class="form-group">
+                  <label for="CourseSelect">Course</label>
+                  <select class="form-control" id="CourseSelect">
+                    <option>Thesis Writing 1</option>
+                    <option>Thesis Writing 2</option>
+                    <option>Thesis Writing 3</option>
+                    <option>Thesis Writing 4</option>
+                    <option>Thesis Writing 5</option>
+                  </select>
+                </div>
+                <div class="form-group p-1">
+                  <label for="exampleInputPassword1">Title</label>
+                  <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Enter your Thesis Title">
+                </div>
+                <div class="form-group p-1">
+                  <label for="exampleFormControlTextarea1">Message</label>
+                  <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Enter your announcement message"></textarea>
+                </div> 
+
+                <div class="d-flex justify-content-between align-items-center">
+                  <button type="submit" class="btn btn-primary my-1" onclick="alert('Placeholder: Publish announcement')">Publish</button>
+                  <div class="form-check mb-2 mr-sm-2">
+                  <input class="form-check-input" type="checkbox" id="inlineFormCheck">
+                  <label class="form-check-label" for="inlineFormCheck">
+                    Pin announcement to the top
+                  </label>
+                  </div>
+                </div>
+
+              </form>
             </div>
           </div>
         </div>
@@ -154,10 +139,22 @@
         <div class="col-lg-6 col-md-12">
           <div class="card border-0 shadow-sm rounded-4 h-100">
             <div class="card-body p-4">
-              <p class="text-muted fw-bold small text-uppercase mb-2">Needs your attention!</p>
-              <div class="d-flex justify-content-between align-items-center">
-                <h2 class="fw-bold mb-0">Group formations to review</h2>
-                <h3 class="fw-bold mb-0">5</h3>
+              <p class="text-muted fw-bold small text-uppercase mb-2">Published Announcements</p>
+
+              <div class="card">
+                <div class="card-body">
+                  <div class="d-flex justify-content-between align-items-center">
+                    <h5 class="card-title">Title Proposal Defense Week</h5>
+                    <h3><span class="badge text-bg-secondary">S11</span></h1></h3>
+                  </div>
+                  <h6 class="card-subtitle mb-2 text-muted">Sept. 10, 2027</h6>
+                  <p class="card-text">Good afternoon, class! The title Proposal Defense will be held on September 18, 2027 at...</p>
+                  <div class="d-flex justify-content-end align-items-center gap-2">
+                    <a href="#" class="badge text-bg-primary text-decoration-none" onclick="alert('Placeholder: Edit announcement')">Edit</a>
+                    <a href="#" class="badge text-bg-danger text-decoration-none" onclick="alert('Placeholder: Delete announcement')">Delete</a>
+                  </div>
+                  
+                </div>
               </div>
             </div>
           </div>
@@ -165,18 +162,6 @@
 
       </div>
 
-     <div class="card border-0 shadow-sm rounded-4 mb-4">
-        <div class="card-body p-4">
-          <p class="text-muted fw-bold small text-uppercase mb-3">Recent Announcements</p>
-          <div class="d-flex justify-content-between align-items-center">
-            <p class="fw-bold mb-0">Title Proposal Defense Week
-              <span class="badge text-bg-primary ms-2 fw-normal">Pinned</span>
-            </p>
-            <p class="text-muted small mb-2">Due on July 28, 2027</p>
-
-          </div>
-        </div>
-      </div>
 
     </main>
     </div>
