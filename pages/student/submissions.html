@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Submissions | U-Tracksis</title>
+
+  <!-- bootstrap css -->
+  <link rel="stylesheet" href="../../css/bootstrap.min.css">
+
+  <!-- local bootstrap icons -->
+  <link rel="stylesheet" href="../../css/bootstrap-icons.css">
+
+  <!-- custom css -->
+  <link rel="stylesheet" href="../../css/student/dashboard.css">
+
+  <!-- submissions specific css -->
+  <link rel="stylesheet" href="../../css/student/submissions.css">
+</head>
+<body>
+
+  <div class="dashboard-wrapper">
+
+    <!-- sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <img src="../../assets/images/logo.png" alt="U-Tracksis" class="sidebar-logo">
+        <div>
+          <h6 class="sidebar-title">U-Tracksis</h6>
+          <p class="sidebar-subtitle">STUDENT</p>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <a class="nav-link" href="dashboard.html">
+          <img src="../../assets/icons/grid-1x2-fill.svg" alt="" class="bi"> Dashboard
+        </a>
+        <a class="nav-link" href="group-profile.html">
+          <img src="../../assets/icons/people-fill.svg" alt="" class="bi"> Group Profile
+        </a>
+        <a class="nav-link" href="milestones.html">
+          <img src="../../assets/icons/flag-fill.svg" alt="" class="bi"> Milestones
+        </a>
+        <a class="nav-link active" href="submissions.html">
+          <img src="../../assets/icons/cloud-upload-fill.svg" alt="" class="bi"> Submissions
+        </a>
+        <a class="nav-link" href="#">
+          <img src="../../assets/icons/chat-left-text-fill.svg" alt="" class="bi"> Adviser Feedback
+        </a>
+        <a class="nav-link" href="#">
+          <img src="../../assets/icons/chat-dots-fill.svg" alt="" class="bi"> Consultations
+        </a>
+        <a class="nav-link" href="#">
+          <img src="../../assets/icons/clock-history.svg" alt="" class="bi"> Submission History
+        </a>
+        <a class="nav-link" href="#">
+          <img src="../../assets/icons/bell-fill.svg" alt="" class="bi"> Notifications
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <span>Theme</span>
+        <button class="theme-toggle" type="button" title="Toggle theme">
+          <img src="../../assets/icons/moon-stars-fill.svg" alt="" class="bi">
+        </button>
+      </div>
+    </aside>
+
+    <!-- mobile overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- main content -->
+    <main class="main-content">
+
+      <!-- top bar -->
+      <div class="top-bar">
+        <button class="mobile-menu-btn" id="menuBtn" type="button">
+          <img src="../../assets/icons/list.svg" alt="" class="bi">
+        </button>
+
+        <div class="topbar-search">
+          <img src="../../assets/icons/search.svg" alt="" class="bi search-icon">
+          <input type="text" class="form-control" placeholder="Search...">
+        </div>
+
+        <div class="topbar-actions">
+          <button class="topbar-icon-btn" type="button" title="Notifications">
+            <img src="../../assets/icons/bell.svg" alt="" class="bi">
+            <span class="notif-dot"></span>
+          </button>
+
+          <button class="btn-new-submission" type="button">
+            <img src="../../assets/icons/plus-lg.svg" alt="" class="bi">
+            <span>New Submission</span>
+          </button>
+
+          <button class="btn-logout" type="button" onclick="window.location.href='../auth/auth.html#login-section'">
+            <img src="../../assets/icons/box-arrow-left.svg" alt="" class="bi">
+            <span>Logout</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- page header -->
+      <div class="page-header">
+        <p class="page-eyebrow">DOCUMENTS</p>
+        <h1 class="page-title">Submissions</h1>
+        <p class="page-subtitle">Upload thesis documents and revisions. Track approval status in one place.</p>
+      </div>
+
+      <!-- upload dropzone -->
+      <div class="upload-dropzone" id="uploadDropzone">
+        <input type="file" id="fileInput" class="upload-input" accept=".pdf" multiple>
+        <div class="upload-icon">
+          <img src="../../assets/icons/cloud-upload.svg" alt="" class="bi">
+        </div>
+        <p class="upload-title">Drop files to upload</p>
+        <p class="upload-helper">PDF up to 25MB - auto-versioned</p>
+      </div>
+
+      <!-- recent submissions box -->
+      <div class="box mt-3">
+        <p class="box-label">Recent Submissions</p>
+
+        <!-- submission item 1 -->
+        <div class="submission-item">
+          <div class="submission-thumb">
+            <img src="../../assets/icons/file-earmark-text.svg" alt="" class="bi">
+          </div>
+          <div class="submission-info">
+            <p class="submission-name">Chapter 2 <span>--</span></p>
+            <p class="submission-meta">Month Day, Year &nbsp;&middot;&nbsp; -- MB</p>
+          </div>
+          <div class="submission-side">
+            <span class="badge-status badge-review">In Review</span>
+            <a href="#" class="submission-view">View</a>
+          </div>
+        </div>
+
+        <!-- submission item 2 -->
+        <div class="submission-item">
+          <div class="submission-thumb">
+            <img src="../../assets/icons/file-earmark-text.svg" alt="" class="bi">
+          </div>
+          <div class="submission-info">
+            <p class="submission-name">Chapter 1 <span>--</span></p>
+            <p class="submission-meta">Month Day, Year &nbsp;&middot;&nbsp; -- MB</p>
+          </div>
+          <div class="submission-side">
+            <span class="badge-status badge-approved">Approved</span>
+            <a href="#" class="submission-view">View</a>
+          </div>
+        </div>
+
+        <!-- submission item 3 -->
+        <div class="submission-item">
+          <div class="submission-thumb">
+            <img src="../../assets/icons/file-earmark-text.svg" alt="" class="bi">
+          </div>
+          <div class="submission-info">
+            <p class="submission-name">Title Proposal <span>--</span></p>
+            <p class="submission-meta">Month Day, Year &nbsp;&middot;&nbsp; -- MB</p>
+          </div>
+          <div class="submission-side">
+            <span class="badge-status badge-approved">Approved</span>
+            <a href="#" class="submission-view">View</a>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="../../js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    /* sidebar toggle */
+    const sidebar = document.getElementById('sidebar');
+    const menuBtn = document.getElementById('menuBtn');
+    const overlay = document.getElementById('sidebarOverlay');
+
+    function toggleSidebar() {
+      sidebar.classList.toggle('show');
+      overlay.classList.toggle('show');
+    }
+
+    menuBtn.addEventListener('click', toggleSidebar);
+    overlay.addEventListener('click', toggleSidebar);
+
+    /* close sidebar on link click for mobile */
+    document.querySelectorAll('.sidebar-nav .nav-link').forEach(link => {
+      link.addEventListener('click', () => {
+        if (window.innerWidth < 992) toggleSidebar();
+      });
+    });
+
+    /* upload dropzone */
+    const dropzone = document.getElementById('uploadDropzone');
+    const fileInput = document.getElementById('fileInput');
+
+  </script>
+</body>
+</html>

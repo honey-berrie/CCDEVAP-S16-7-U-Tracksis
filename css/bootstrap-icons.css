@@ -1,0 +1,28 @@
+.bi {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.125em;
+  fill: currentColor;
+  flex-shrink: 0;
+}
+
+.bi.search-icon {
+  position: absolute;
+  left: 0.85rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1rem;
+  height: 1rem;
+  pointer-events: none;
+}
+
+.text-muted.bi {
+  opacity: 0.6;
+}
+
+.member-avatar.bi {
+  width: 40px;
+  height: 40px;
+  color: var(--text-light);
+}
