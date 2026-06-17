@@ -85,123 +85,95 @@
           <i class="bi bi-list fs-3"></i>
         </button>
         <div>
-          <h1 class="h3 fw-bold mb-0">Student Dashboard</h1>
-          <p class="text-muted mb-0">Welcome back, students.</p>
+          <h1 class="h3 fw-bold mb-0">Coordinator Overview</h1>
         </div>
       </div>
 
-      <div class="card border-0 shadow-sm rounded-4 mb-4">
-        <div class="card-body p-4">
-          <p class="text-muted fw-bold small text-uppercase mb-2">Overall Thesis Progress</p>
-          <h2 class="display-5 fw-bold mb-0">--%</h2>
-          <div class="progress mt-3 rounded-pill" style="height: 10px;">
-            <div class="progress-bar bg-primary" role="progressbar" style="width: 45%;" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100"></div>
-          </div>
-          <p class="text-muted small mt-2 mb-0 fw-medium">-- of -- milestones done <span class="mx-2">&bull;</span> next deadline in -- days</p>
-        </div>
-      </div>
-
+      <!-- 4 cards layout, In a row when Big, 2x2 grid when small -->
       <div class="row g-4 mb-4">
-        <div class="col-md-6">
+
+        <!-- Handled Courses -->
+        <div class="col-lg-3 col-md-6">
           <div class="card border-0 shadow-sm rounded-4 h-100">
             <div class="card-body p-4">
-              <div class="d-flex justify-content-between align-items-start mb-2">
-                <p class="text-muted fw-bold small text-uppercase mb-0">Days to Defense</p>
-                <i class="bi bi-calendar-event text-secondary fs-5"></i>
-              </div>
-              <h3 class="fw-bold mb-1 fs-1">00</h3>
-              <p class="text-muted small mb-0 fw-medium">Month Day, Year</p>
+              <p class="text-muted fw-bold small text-uppercase mb-2">Handled Courses</p>
+              <h3 class="fw-bold mb-3">4</h3>
             </div>
           </div>
         </div>
-        <div class="col-md-6">
+
+        <!-- Active Groups -->
+        <div class="col-lg-3 col-md-6">
           <div class="card border-0 shadow-sm rounded-4 h-100">
             <div class="card-body p-4">
-              <div class="d-flex justify-content-between align-items-start mb-2">
-                <p class="text-muted fw-bold small text-uppercase mb-0">Expected Turnaround</p>
-                <i class="bi bi-hourglass-split text-secondary fs-5"></i>
-              </div>
-              <h3 class="fw-bold mb-1 fs-3 mt-2">Date</h3>
-              <p class="text-muted small mb-0 fw-medium">Adviser's Feedback</p>
+              <p class="text-muted fw-bold small text-uppercase mb-2">Active Groups</p>
+              <h3 class="fw-bold mb-3">9</h3>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pending Formations -->
+        <div class="col-lg-3 col-md-6">
+          <div class="card border-0 shadow-sm rounded-4 h-100">
+            <div class="card-body p-4">
+              <p class="text-muted fw-bold small text-uppercase mb-2">Pending Formations</p>
+              <h3 class="fw-bold mb-3">3</h3>
+            </div>
+          </div>
+        </div>
+
+        <!-- Off-Track Groups -->
+        <div class="col-lg-3 col-md-6">
+          <div class="card border-0 shadow-sm rounded-4 h-100">
+            <div class="card-body p-4">
+              <p class="text-muted fw-bold small text-uppercase mb-2">Off-Track Groups</p>
+              <h3 class="fw-bold mb-3">2</h3>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="card border-0 shadow-sm rounded-4 mb-4">
-        <div class="card-body p-4">
-          <p class="text-muted fw-bold small text-uppercase mb-0">Milestones</p>
-          <p class="text-secondary small mb-3">Super thesis management system</p>
+      <!-- container for side-by-side cards -->
+      <div class="row g-4 mb-4">
 
-          <ul class="list-group list-group-flush">
-            <li class="list-group-item px-0 py-3 border-bottom">
-              <p class="fw-bold mb-1">Chapter 1</p>
-              <div class="d-flex justify-content-between align-items-center">
-                <span class="text-muted small">Month Day, Year</span>
-                <span class="badge rounded-pill text-bg-success px-3 py-2">Approved</span>
+        <div class="col-lg-6 col-md-12">
+          <div class="card border-0 shadow-sm rounded-4 h-100">
+            <div class="card-body p-4">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <p class="text-muted fw-bold small text-uppercase mb-0">Handled Courses</p>
+                <h4 class="fw-bold mb-3">Avg. 27%</h4>
               </div>
-            </li>
-            <li class="list-group-item px-0 py-3 border-bottom">
-              <p class="fw-bold mb-1">Chapter 2</p>
-              <div class="d-flex justify-content-between align-items-center">
-                <span class="text-muted small">Month Day, Year</span>
-                <span class="badge rounded-pill text-bg-success px-3 py-2">Approved</span>
+              <h2 class="display-5 fw-bold mb-0">Thesis Writing 2</h2>
+              <div class="progress mt-3 rounded-pill" style="height: 10px;">
+                <div class="progress-bar bg-primary" role="progressbar" style="width: 27%;" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100"></div>
               </div>
-            </li>
-            <li class="list-group-item px-0 py-3 border-bottom">
-              <p class="fw-bold mb-1">Chapter 3</p>
-              <div class="d-flex justify-content-between align-items-center">
-                <span class="text-muted small">Month Day, Year</span>
-                <span class="badge rounded-pill text-bg-warning px-3 py-2">In Review</span>
-              </div>
-            </li>
-            <li class="list-group-item px-0 py-3">
-              <p class="fw-bold mb-1">Chapter 4</p>
-              <div class="d-flex justify-content-between align-items-center">
-                <span class="text-muted small">Month Day, Year</span>
-                <span class="badge rounded-pill text-bg-info text-white px-3 py-2">In progress</span>
-              </div>
-            </li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="card border-0 shadow-sm rounded-4 mb-4">
-        <div class="card-body p-4">
-          <p class="text-muted fw-bold small text-uppercase mb-3">Recent Activity</p>
-          
-          <div class="d-flex align-items-center mb-3">
-            <div class="bg-secondary rounded me-3" style="width: 48px; height: 48px; object-fit: cover;">
-              </div>
-            <span class="fw-medium">Project proposal</span>
-          </div>
-          
-          <div class="d-flex align-items-center mb-3">
-            <div class="bg-secondary rounded me-3" style="width: 48px; height: 48px; object-fit: cover;"></div>
-            <span class="fw-medium">Chapter 1</span>
-          </div>
-          
-          <div class="d-flex align-items-center">
-            <div class="bg-secondary rounded me-3" style="width: 48px; height: 48px; object-fit: cover;"></div>
-            <span class="fw-medium">Chapter 2</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="card border-0 shadow-sm rounded-4 mb-4">
-        <div class="card-body p-4">
-          <p class="text-muted fw-bold small text-uppercase mb-3">Latest Adviser Feedback</p>
-          
-          <div class="d-flex align-items-start gap-3 bg-light rounded-4 p-3 border">
-            <div class="bg-secondary rounded-circle flex-shrink-0" style="width: 50px; height: 50px;">
-               </div>
-            <div>
-              <p class="fw-bold mb-0">Prof. Richards <span class="badge text-bg-secondary ms-2 fw-normal">Main Adviser</span></p>
-              <p class="text-muted small mb-2">Date</p>
-              <p class="mb-0 text-dark fst-italic">
-                "Please adjust Chapter 3 according to the comments I left and be prepared to submit the revisions by next week."
-              </p>
             </div>
+          </div>
+        </div>
+
+        <div class="col-lg-6 col-md-12">
+          <div class="card border-0 shadow-sm rounded-4 h-100">
+            <div class="card-body p-4">
+              <p class="text-muted fw-bold small text-uppercase mb-2">Needs your attention!</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <h2 class="fw-bold mb-0">Group formations to review</h2>
+                <h3 class="fw-bold mb-0">5</h3>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+     <div class="card border-0 shadow-sm rounded-4 mb-4">
+        <div class="card-body p-4">
+          <p class="text-muted fw-bold small text-uppercase mb-3">Recent Announcements</p>
+          <div class="d-flex justify-content-between align-items-center">
+            <p class="fw-bold mb-0">Title Proposal Defense Week
+              <span class="badge text-bg-secondary ms-2 fw-normal">Pinned</span>
+            </p>
+            <p class="text-muted small mb-2">Due on July 28, 2027</p>
+
           </div>
         </div>
       </div>
