@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Coordinator Course Announcements | U-Tracksis</title>
+    <title>Coordinator Group Formations | U-Tracksis</title>
 
     <!-- Apply theme immediately -->
     <script>
@@ -56,7 +56,7 @@
             />
             Overview
           </a>
-          <a class="nav-link" href="#">
+          <a class="nav-link active" href="#">
             <img src="../../assets/icons/people-fill.svg" alt="" class="bi" />
             Group Formations
           </a>
@@ -68,10 +68,7 @@
             />
             Adviser Assignments
           </a>
-          <a
-            class="nav-link active"
-            href="coordinator-course-announcements.html"
-          >
+          <a class="nav-link" href="coordinator-course-announcements.html">
             <img
               src="../../assets/icons/megaphone-fill.svg"
               alt=""
@@ -153,76 +150,94 @@
         </div>
 
         <div class="page-header">
-          <h1 class="page-title">Adviser Assignments</h1>
+          <h1 class="page-title">Group Formations</h1>
           <p class="page-subtitle">Good day, {coordinator_first_name}.</p>
         </div>
 
+        <!-- Group Creation and Searching -->
         <div class="row g-4 mb-4">
-
-        <!-- Course Announcement Form -->
-        <div class="col-lg-6 col-md-12">
-          <div class="box mb-4 h-100">
-              <div class="d-flex justify-content-between align-items-center mb-2">
-                <p class="box-label">Course Announcements</p>
+          <!-- Groups -->
+          <div class="box mb-4">
+            <div class="d-flex justify-content-between mb-4">
+              <div class="box-label">Group Registry</div>
+              <button
+                class="btn-new-submission"
+                type="button"
+                onclick="
+                  window.location.href = 'coordinator-course-announcements.html'
+                "
+              >
+                <img src="../../assets/icons/plus-lg.svg" alt="" class="bi" />
+                <span>Create Group</span>
+              </button>
+            </div>
+            <div class="row align-items-center">
+              <div class="col-lg-8">
+                <p class="text medium mb-0">
+                  Courses handled (3): Thesis Writing 1, Thesis Writing 2,
+                  Thesis Writing 3
+                </p>
               </div>
-              <form>
-                <!-- Course Selection -->
+              <div class="col-lg-4">
+                <div class="topbar-search">
+                  <img
+                    src="../../assets/icons/search.svg"
+                    alt=""
+                    class="bi search-icon"
+                  />
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Search Group"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Group List and Group Filter -->
+          <div class="box">
+            <div class="row">
+              <div class="col-lg-4 md-6 sm-12 mb-4">
                 <div class="form-group">
-                  <label for="CourseSelect">Course</label>
+                  <label for="GroupFilter">Group Filter</label>
                   <select class="form-control" id="CourseSelect">
-                    <option>Thesis Writing 1</option>
-                    <option>Thesis Writing 2</option>
-                    <option>Thesis Writing 3</option>
-                    <option>Thesis Writing 4</option>
-                    <option>Thesis Writing 5</option>
+                    <option>Pending</option>
+                    <option>Approved</option>
+                    <option>Coordinator-Created</option>
+                    <option>All</option>
                   </select>
                 </div>
-                <div class="form-group p-1">
-                  <label for="exampleInputPassword1">Title</label>
-                  <input type="text" class="form-control" id="AnnouncementTitle" placeholder="Enter your Announcement Title">
-                </div>
-                <div class="form-group p-1">
-                  <label for="exampleFormControlTextarea1">Message</label>
-                  <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Enter your announcement message"></textarea>
-                </div> 
+              </div>
 
-                <div class="d-flex justify-content-between align-items-center">
-                  <button type="submit" class="btn btn-primary my-1" onclick="alert('Placeholder: Publish announcement')">Publish</button>
-                  <div class="form-check mb-2 mr-sm-2">
-                  <input class="form-check-input" type="checkbox" id="inlineFormCheck">
-                  <label class="form-check-label" for="inlineFormCheck">
-                    Pin announcement to the top
-                  </label>
-                  </div>
-                </div>
-              </form>
-           
-          </div>
-        </div>
-
-        <!-- Published Announcements -->
-        <div class="col-lg-6 col-md-12">
-          <div class="box mb-4 h-100">
-              <p class="box-label">Published Announcements</p>
+              <!-- One box per group -->
               <div class="box">
                 <div class="card-body">
-                  <div class="d-flex justify-content-between align-items-center">
-                    <h5 class="card-title">Title Proposal Defense Week</h5>
-                    <h3><span class="badge text-bg-secondary">S11</span></h1></h3>
+                  <div class="d-flex bd-highlight mb-4">
+                    <div class="me-auto p-2 bd-highlight">
+                      <h5 class="card-title">Group A</h5>
+                    </div>
+                    <div class="p-2 bd-highlight"><h3><span class="badge text-bg-secondary">S13</span></h1></h3></div>
+                    <div class="p-2 bd-highlight"><h3><span class="badge text-bg-warning">Pending</span></h1></h3></div>
                   </div>
-                  <p class="box-label">Sept. 10, 2027</p>
-                  <p class="card-text">Good afternoon, class! The title Proposal Defense will be held on September 18, 2027 at...</p>
-                  <div class="d-flex justify-content-end align-items-center gap-2">
-                    <a href="#" class="badge text-bg-primary text-decoration-none" onclick="alert('Placeholder: Edit announcement')">Edit</a>
-                    <a href="#" class="badge text-bg-danger text-decoration-none" onclick="alert('Placeholder: Delete announcement')">Delete</a>
-                  </div>
+
+                  <h6 class="card-subtitle mb-2 text">Thesis Title</h6>
+                   <p class="box-label">Submitted on: July 28, 2027</p>
+                  <div class="d-flex bd-highlight mb-4">
+                    <div class="p-2 bd-highlight"><span class="badge text-bg-primary">Person 1</span></div>
+                    <div class="p-2 bd-highlight"><span class="badge text-bg-secondary">Person 2</span></div>
+                    <div class="p-2 bd-highlight"><span class="badge text-bg-secondary">Person 3</span></div>
+                    <div class="p-2 bd-highlight"><span class="badge text-bg-secondary">Person 4</span></div>
+                    <div class="ms-auto p-2 bd-highlight">
+                        <a href="#" class="badge text-bg-success text-decoration-none" onclick="alert('Placeholder: Approve Group')">Approve</a>
+                        <a href="#" class="badge text-bg-danger text-decoration-none" onclick="alert('Placeholder: Reject Group')">Reject</a>
+                    </div>
+                    </div>
                 </div>
               </div>
+            </div>
           </div>
         </div>
-
-      </div>
-        
       </main>
     </div>
 
