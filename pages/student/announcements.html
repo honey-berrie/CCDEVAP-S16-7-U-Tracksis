@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Announcements | U-Tracksis</title>
+
+  <!-- Apply theme immediately -->
+  <script>
+    (function() {
+      var t = localStorage.getItem('theme');
+      var d = t || (window.matchMedia('(prefers-color-scheme:dark)').matches ? 'dark' : 'light');
+      if (d === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+    })();
+  </script>
+
+  <!-- bootstrap css -->
+  <link rel="stylesheet" href="../../css/bootstrap.min.css">
+
+  <!-- local bootstrap icons -->
+  <link rel="stylesheet" href="../../css/bootstrap-icons.css">
+
+  <!-- dashboard css -->
+  <link rel="stylesheet" href="../../css/student/dashboard.css">
+
+  <!-- announcements specific css -->
+  <link rel="stylesheet" href="../../css/student/announcements.css">
+</head>
+<body>
+
+  <div class="dashboard-wrapper">
+
+    <!-- sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <img src="../../assets/images/logo.png" alt="U-Tracksis" class="sidebar-logo">
+        <div>
+          <h6 class="sidebar-title">U-Tracksis</h6>
+          <p class="sidebar-subtitle">STUDENT</p>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <a class="nav-link" href="dashboard.html">
+          <img src="../../assets/icons/grid-1x2-fill.svg" alt="" class="bi"> Dashboard
+        </a>
+        <a class="nav-link" href="group-profile.html">
+          <img src="../../assets/icons/people-fill.svg" alt="" class="bi"> Group Profile
+        </a>
+        <a class="nav-link" href="milestones.html">
+          <img src="../../assets/icons/flag-fill.svg" alt="" class="bi"> Milestones
+        </a>
+        <a class="nav-link" href="submissions.html">
+          <img src="../../assets/icons/cloud-upload-fill.svg" alt="" class="bi"> Submissions
+        </a>
+        <a class="nav-link" href="feedback.html">
+          <img src="../../assets/icons/chat-left-text-fill.svg" alt="" class="bi"> Feedbacks
+        </a>
+        <a class="nav-link" href="consultations.html">
+          <img src="../../assets/icons/chat-dots-fill.svg" alt="" class="bi"> Consultations
+        </a>
+        <a class="nav-link active" href="announcements.html">
+          <img src="../../assets/icons/megaphone-fill.svg" alt="" class="bi"> Announcements
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <span>Theme</span>
+        <button class="theme-toggle" id="themeToggle" type="button" title="Toggle theme">
+          <img src="../../assets/icons/moon-stars-fill.svg" alt="" class="bi" id="themeIcon">
+        </button>
+      </div>
+    </aside>
+
+    <!-- mobile overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- main content -->
+    <main class="main-content">
+
+      <!-- top bar -->
+      <div class="top-bar">
+        <button class="mobile-menu-btn" id="menuBtn" type="button">
+          <img src="../../assets/icons/list.svg" alt="" class="bi">
+        </button>
+
+        <div class="topbar-actions">
+          <button class="btn-logout" type="button" onclick="window.location.href='../auth/auth.html#login-section'">
+            <img src="../../assets/icons/box-arrow-left.svg" alt="" class="bi">
+            <span>Logout</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- page header -->
+      <div class="page-header">
+        <p class="page-eyebrow">BULLETIN</p>
+        <h1 class="page-title">Announcements</h1>
+        <p class="page-subtitle">Updates and reminders from your advisers.</p>
+      </div>
+
+      <!-- announcements list -->
+      <div class="notif-list">
+
+        <!-- announcement 1 -->
+        <div class="notif-card unread" data-title="Defense Schedule Released" data-sender="Dr. Catua" data-role="Adviser" data-date="March 18, 2024" data-time="10:30 AM" data-message="Good day! The defense schedule for Chapter 2 has been released. Please check the milestones page for your specific schedule. Kindly prepare your presentation slides and be at the venue 15 minutes before your scheduled time. Make sure to bring a printed copy of your manuscript for the panel.">
+          <div class="notif-icon">
+            <img src="../../assets/icons/megaphone-fill.svg" alt="" class="bi">
+          </div>
+          <div class="notif-body">
+            <p class="notif-title">Defense Schedule Released</p>
+            <p class="notif-meta">From <span>Dr. Catua</span> . Adviser</p>
+            <p class="notif-time">Just now</p>
+          </div>
+          <div class="notif-mark"></div>
+        </div>
+
+        <!-- announcement 2 -->
+        <div class="notif-card unread" data-title="Revised Submission Guidelines" data-sender="Dr. Richards" data-role="Adviser" data-date="March 17, 2024" data-time="2:15 PM" data-message="Please be advised of the updated formatting guidelines for the final thesis. Margins should be 1.5 inches on the left and 1 inch on all other sides. Font should be Times New Roman 12. Citations must follow the APA 7th edition format. The deadline for the final manuscript remains on April 30, 2024.">
+          <div class="notif-icon">
+            <img src="../../assets/icons/megaphone-fill.svg" alt="" class="bi">
+          </div>
+          <div class="notif-body">
+            <p class="notif-title">Revised Submission Guidelines</p>
+            <p class="notif-meta">From <span>Dr. Richards</span> . Adviser</p>
+            <p class="notif-time">2 hours ago</p>
+          </div>
+          <div class="notif-mark"></div>
+        </div>
+
+        <!-- announcement 3 -->
+        <div class="notif-card" data-title="Consultation Hours Update" data-sender="Dr. Catua" data-role="Adviser" data-date="March 15, 2024" data-time="9:00 AM" data-message="My consultation hours will be moved to every Wednesday and Friday, 1:00 PM to 4:00 PM, starting next week. Please book a slot through the consultations page if you need to meet. Walk-ins are still welcome but scheduled meetings will be prioritized.">
+          <div class="notif-icon">
+            <img src="../../assets/icons/megaphone-fill.svg" alt="" class="bi">
+          </div>
+          <div class="notif-body">
+            <p class="notif-title">Consultation Hours Update</p>
+            <p class="notif-meta">From <span>Dr. Catua</span> . Adviser</p>
+            <p class="notif-time">Yesterday</p>
+          </div>
+          <div class="notif-mark"></div>
+        </div>
+
+      </div>
+
+    </main>
+  </div>
+
+  <!-- announcement read modal -->
+  <div class="preview-overlay" id="annOverlay">
+    <div class="preview-modal">
+      <div class="preview-header">
+        <div>
+          <p class="preview-eyebrow">ANNOUNCEMENT</p>
+          <h3 class="preview-title" id="annTitle">Title</h3>
+        </div>
+        <button type="button" class="preview-close" id="annClose" aria-label="Close">
+          <img src="../../assets/icons/x-lg.svg" alt="" class="bi">
+        </button>
+      </div>
+
+      <div class="preview-body">
+        <div class="ann-sender">
+          <div class="ann-avatar" id="annAvatar">MS</div>
+          <div class="ann-sender-info">
+            <p class="ann-sender-name" id="annSender">--</p>
+            <p class="ann-sender-role" id="annRole">--</p>
+          </div>
+        </div>
+
+        <div class="ann-message">
+          <p id="annMessage">--</p>
+        </div>
+
+        <div class="ann-footer-meta">
+          <span class="ann-date" id="annDate">--</span>
+          <span class="ann-time" id="annTime">--</span>
+        </div>
+      </div>
+
+      <div class="preview-footer">
+        <button type="button" class="preview-btn preview-btn-primary" id="annCloseBtn">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../../js/bootstrap.bundle.min.js"></script>
+  <script src="../../js/student/theme.js"></script>
+
+  <script>
+    /* sidebar toggle */
+    const sidebar = document.getElementById('sidebar');
+    const menuBtn = document.getElementById('menuBtn');
+    const overlay = document.getElementById('sidebarOverlay');
+
+    function toggleSidebar() {
+      sidebar.classList.toggle('show');
+      overlay.classList.toggle('show');
+    }
+
+    menuBtn.addEventListener('click', toggleSidebar);
+    overlay.addEventListener('click', toggleSidebar);
+
+    /* close sidebar on link click for mobile */
+    document.querySelectorAll('.sidebar-nav .nav-link').forEach(link => {
+      link.addEventListener('click', () => {
+        if (window.innerWidth < 992) toggleSidebar();
+      });
+    });
+
+    /* announcement modal */
+    const annOverlay = document.getElementById('annOverlay');
+    const annClose = document.getElementById('annClose');
+    const annCloseBtn = document.getElementById('annCloseBtn');
+    const annTitle = document.getElementById('annTitle');
+    const annAvatar = document.getElementById('annAvatar');
+    const annSender = document.getElementById('annSender');
+    const annRole = document.getElementById('annRole');
+    const annMessage = document.getElementById('annMessage');
+    const annDate = document.getElementById('annDate');
+    const annTime = document.getElementById('annTime');
+
+    function getInitials(name) {
+      const parts = name.replace(/^(Dr\.|Prof\.|Mr\.|Ms\.|Mrs\.)\s*/i, '').split(' ');
+      if (parts.length >= 2) {
+        return (parts[0][0] + parts[1][0]).toUpperCase();
+      }
+      return parts[0].substring(0, 2).toUpperCase();
+    }
+
+    function openAnnouncement(card) {
+      const title = card.dataset.title;
+      const sender = card.dataset.sender;
+      const role = card.dataset.role;
+      const date = card.dataset.date;
+      const time = card.dataset.time;
+      const message = card.dataset.message;
+
+      annTitle.textContent = title;
+      annAvatar.textContent = getInitials(sender);
+      annSender.textContent = sender;
+      annRole.textContent = role;
+      annMessage.textContent = message;
+      annDate.textContent = date;
+      annTime.textContent = time;
+
+      /* mark as read */
+      card.classList.remove('unread');
+
+      annOverlay.classList.add('show');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeAnnouncement() {
+      annOverlay.classList.remove('show');
+      document.body.style.overflow = '';
+    }
+
+    document.querySelectorAll('.notif-card').forEach(card => {
+      card.addEventListener('click', () => openAnnouncement(card));
+    });
+
+    annClose.addEventListener('click', closeAnnouncement);
+    annCloseBtn.addEventListener('click', closeAnnouncement);
+    annOverlay.addEventListener('click', (e) => {
+      if (e.target === annOverlay) closeAnnouncement();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && annOverlay.classList.contains('show')) closeAnnouncement();
+    });
+  </script>
+</body>
+</html>

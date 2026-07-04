@@ -20,7 +20,7 @@
   <!-- local bootstrap icons -->
   <link rel="stylesheet" href="../../css/bootstrap-icons.css">
 
-  <!-- custom css -->
+  <!-- dashboard css -->
   <link rel="stylesheet" href="../../css/student/dashboard.css">
 
   <!-- submissions specific css -->
@@ -54,16 +54,13 @@
           <img src="../../assets/icons/cloud-upload-fill.svg" alt="" class="bi"> Submissions
         </a>
         <a class="nav-link" href="feedback.html">
-          <img src="../../assets/icons/chat-left-text-fill.svg" alt="" class="bi"> Adviser Feedback
+          <img src="../../assets/icons/chat-left-text-fill.svg" alt="" class="bi"> Feedbacks
         </a>
         <a class="nav-link" href="consultations.html">
           <img src="../../assets/icons/chat-dots-fill.svg" alt="" class="bi"> Consultations
         </a>
-        <a class="nav-link" href="submission-history.html">
-          <img src="../../assets/icons/clock-history.svg" alt="" class="bi"> Submission History
-        </a>
-        <a class="nav-link" href="notifications.html">
-          <img src="../../assets/icons/bell-fill.svg" alt="" class="bi"> Notifications
+        <a class="nav-link" href="announcements.html">
+          <img src="../../assets/icons/megaphone-fill.svg" alt="" class="bi"> Announcements
         </a>
       </nav>
 
@@ -87,22 +84,7 @@
           <img src="../../assets/icons/list.svg" alt="" class="bi">
         </button>
 
-        <div class="topbar-search">
-          <img src="../../assets/icons/search.svg" alt="" class="bi search-icon">
-          <input type="text" class="form-control" placeholder="Search...">
-        </div>
-
         <div class="topbar-actions">
-          <button class="topbar-icon-btn" type="button" title="Notifications" onclick="window.location.href='notifications.html'">
-            <img src="../../assets/icons/bell.svg" alt="" class="bi">
-            <span class="notif-dot"></span>
-          </button>
-
-          <button class="btn-new-submission" type="button" onclick="window.location.href='submissions.html'">
-            <img src="../../assets/icons/plus-lg.svg" alt="" class="bi">
-            <span>New Submission</span>
-          </button>
-
           <button class="btn-logout" type="button" onclick="window.location.href='../auth/auth.html#login-section'">
             <img src="../../assets/icons/box-arrow-left.svg" alt="" class="bi">
             <span>Logout</span>
@@ -114,7 +96,26 @@
       <div class="page-header">
         <p class="page-eyebrow">DOCUMENTS</p>
         <h1 class="page-title">Submissions</h1>
-        <p class="page-subtitle">Upload thesis documents and revisions. Track approval status in one place.</p>
+        <p class="page-subtitle">Upload thesis documents, view recent activity, and access your full archive.</p>
+      </div>
+
+      <!-- document type select -->
+      <div class="doc-type-wrap">
+        <label for="docType" class="doc-type-label">Document Type</label>
+        <div class="doc-type-select-wrap">
+          <select id="docType" class="doc-type-select">
+            <option value="" disabled selected>Select document type</option>
+            <option value="title-proposal">Title Proposal</option>
+            <option value="chapter-1">Chapter 1</option>
+            <option value="chapter-2">Chapter 2</option>
+            <option value="chapter-3">Chapter 3</option>
+            <option value="chapter-4">Chapter 4</option>
+            <option value="chapter-5">Chapter 5</option>
+            <option value="final-thesis">Final Thesis</option>
+            <option value="revision">Revision</option>
+          </select>
+          <span class="doc-type-chevron" aria-hidden="true">&#9662;</span>
+        </div>
       </div>
 
       <!-- upload dropzone -->
@@ -124,7 +125,7 @@
           <img src="../../assets/icons/cloud-upload.svg" alt="" class="bi">
         </div>
         <p class="upload-title">Drop files to upload</p>
-        <p class="upload-helper">PDF up to 25MB - auto-versioned</p>
+        <p class="upload-helper">PDF up to 25MB</p>
       </div>
 
       <!-- recent submissions box -->
@@ -132,52 +133,154 @@
         <p class="box-label">Recent Submissions</p>
 
         <!-- submission item 1 -->
-        <div class="submission-item">
+        <div class="submission-item" data-title="Chapter 2" data-date="March 12, 2024" data-size="2.4 MB" data-status="In Review" data-status-class="badge-review" data-uploader="Christian Wesley Yu">
           <div class="submission-thumb">
             <img src="../../assets/icons/file-earmark-text.svg" alt="" class="bi">
           </div>
           <div class="submission-info">
-            <p class="submission-name">Chapter 2 <span>Chapter 2 — RRL </span></p>
-            <p class="submission-meta">March 18, 2026 &nbsp;&middot;&nbsp; -- MB</p>
+            <p class="submission-name">Chapter 2</p>
+            <p class="submission-meta">March 12, 2024 . 2.4 MB</p>
           </div>
           <div class="submission-side">
             <span class="badge-status badge-review">In Review</span>
-            <a href="#" class="submission-view">View</a>
+            <button type="button" class="submission-view btn-preview">View</button>
           </div>
         </div>
 
         <!-- submission item 2 -->
-        <div class="submission-item">
+        <div class="submission-item" data-title="Chapter 1" data-date="February 28, 2024" data-size="3.1 MB" data-status="Approved" data-status-class="badge-approved" data-uploader="Kyrelle Ramos">
           <div class="submission-thumb">
             <img src="../../assets/icons/file-earmark-text.svg" alt="" class="bi">
           </div>
           <div class="submission-info">
-            <p class="submission-name">Chapter 1 <span>Chapter 1 — Introduction</span></p>
-            <p class="submission-meta">Nov 18, 2025 &nbsp;&middot;&nbsp; -- MB</p>
+            <p class="submission-name">Chapter 1</p>
+            <p class="submission-meta">February 28, 2024 . 3.1 MB</p>
           </div>
           <div class="submission-side">
             <span class="badge-status badge-approved">Approved</span>
-            <a href="#" class="submission-view">View</a>
+            <button type="button" class="submission-view btn-preview">View</button>
           </div>
         </div>
 
         <!-- submission item 3 -->
-        <div class="submission-item">
+        <div class="submission-item" data-title="Title Proposal" data-date="January 15, 2024" data-size="1.2 MB" data-status="Approved" data-status-class="badge-approved" data-uploader="Kyrelle Ramos">
           <div class="submission-thumb">
             <img src="../../assets/icons/file-earmark-text.svg" alt="" class="bi">
           </div>
           <div class="submission-info">
-            <p class="submission-name">Title Proposal <span>Title Proposal</span></p>
-            <p class="submission-meta">Sept 20, 2025 &nbsp;&middot;&nbsp; -- MB</p>
+            <p class="submission-name">Title Proposal</p>
+            <p class="submission-meta">January 15, 2024 . 1.2 MB</p>
           </div>
           <div class="submission-side">
             <span class="badge-status badge-approved">Approved</span>
-            <a href="#" class="submission-view">View</a>
+            <button type="button" class="submission-view btn-preview">View</button>
           </div>
         </div>
       </div>
 
+      <!-- submission history -->
+      <p class="box-label mt-3">Submission History</p>
+      <div class="history-list" id="history">
+
+        <!-- history item 1 -->
+        <div class="history-row" data-title="Chapter 2" data-date="March 12, 2024" data-size="2.4 MB" data-status="In Review" data-status-class="badge-review" data-uploader="Christian Wesley Yu">
+          <div class="history-bullet"></div>
+          <div class="history-info">
+            <p class="history-name">Chapter 2</p>
+            <p class="history-date">March 12, 2024</p>
+          </div>
+          <div class="history-side">
+            <span class="badge-status badge-review">In Review</span>
+            <button type="button" class="history-download btn-preview">View</button>
+          </div>
+        </div>
+
+        <!-- history item 2 -->
+        <div class="history-row" data-title="Chapter 1" data-date="February 10, 2024" data-size="2.8 MB" data-status="Approved" data-status-class="badge-approved" data-uploader="Kyrelle Ramos">
+          <div class="history-bullet"></div>
+          <div class="history-info">
+            <p class="history-name">Chapter 1</p>
+            <p class="history-date">February 10, 2024</p>
+          </div>
+          <div class="history-side">
+            <span class="badge-status badge-approved">Approved</span>
+            <button type="button" class="history-download btn-preview">View</button>
+          </div>
+        </div>
+
+        <!-- history item 3 -->
+        <div class="history-row" data-title="Title Proposal" data-date="January 15, 2024" data-size="1.2 MB" data-status="Approved" data-status-class="badge-approved" data-uploader="Kyrelle Ramos">
+          <div class="history-bullet"></div>
+          <div class="history-info">
+            <p class="history-name">Title Proposal</p>
+            <p class="history-date">January 15, 2024</p>
+          </div>
+          <div class="history-side">
+            <span class="badge-status badge-approved">Approved</span>
+            <button type="button" class="history-download btn-preview">View</button>
+          </div>
+        </div>
+
+      </div>
+
     </main>
+  </div>
+
+  <!-- preview modal -->
+  <div class="preview-overlay" id="previewOverlay">
+    <div class="preview-modal">
+      <div class="preview-header">
+        <div>
+          <p class="preview-eyebrow">SUBMISSION DETAILS</p>
+          <h3 class="preview-title" id="previewTitle">Title</h3>
+        </div>
+        <button type="button" class="preview-close" id="previewClose" aria-label="Close">
+          <img src="../../assets/icons/x-lg.svg" alt="" class="bi">
+        </button>
+      </div>
+
+      <div class="preview-body">
+        <div class="preview-meta">
+          <div class="preview-meta-item">
+            <span class="preview-meta-label">Date</span>
+            <span class="preview-meta-value" id="previewDate">--</span>
+          </div>
+          <div class="preview-meta-item">
+            <span class="preview-meta-label">Size</span>
+            <span class="preview-meta-value" id="previewSize">--</span>
+          </div>
+          <div class="preview-meta-item">
+            <span class="preview-meta-label">Uploaded by</span>
+            <span class="preview-meta-value" id="previewUploader">--</span>
+          </div>
+          <div class="preview-meta-item">
+            <span class="preview-meta-label">Status</span>
+            <span class="badge-status" id="previewStatus">--</span>
+          </div>
+        </div>
+
+        <div class="preview-section">
+          <p class="preview-section-label">Document Preview</p>
+          <div class="preview-file">
+            <div class="preview-file-icon">
+              <img src="../../assets/icons/file-earmark-text.svg" alt="" class="bi">
+            </div>
+            <div class="preview-file-info">
+              <p class="preview-file-name" id="previewFileName">document.pdf</p>
+              <p class="preview-file-meta" id="previewFileMeta">PDF Document</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="preview-footer">
+        <button type="button" class="preview-btn preview-btn-secondary" id="previewDownload">
+          <img src="../../assets/icons/download.svg" alt="" class="bi">
+          Download
+        </button>
+        <button type="button" class="preview-btn preview-btn-primary" id="previewCloseBtn">Close</button>
+      </div>
+    </div>
   </div>
 
   <script src="../../js/bootstrap.bundle.min.js"></script>
@@ -208,6 +311,60 @@
     const dropzone = document.getElementById('uploadDropzone');
     const fileInput = document.getElementById('fileInput');
 
+    /* preview modal */
+    const previewOverlay = document.getElementById('previewOverlay');
+    const previewClose = document.getElementById('previewClose');
+    const previewCloseBtn = document.getElementById('previewCloseBtn');
+    const previewTitle = document.getElementById('previewTitle');
+    const previewDate = document.getElementById('previewDate');
+    const previewSize = document.getElementById('previewSize');
+    const previewUploader = document.getElementById('previewUploader');
+    const previewStatus = document.getElementById('previewStatus');
+    const previewFileName = document.getElementById('previewFileName');
+    const previewFileMeta = document.getElementById('previewFileMeta');
+
+    function openPreview(item) {
+      const title = item.dataset.title;
+      const date = item.dataset.date;
+      const size = item.dataset.size;
+      const uploader = item.dataset.uploader;
+      const status = item.dataset.status;
+      const statusClass = item.dataset.statusClass;
+
+      previewTitle.textContent = title;
+      previewDate.textContent = date;
+      previewSize.textContent = size;
+      previewUploader.textContent = uploader;
+      previewStatus.textContent = status;
+      previewStatus.className = 'badge-status ' + statusClass;
+      previewFileName.textContent = title.toLowerCase().replace(/\s+/g, '-') + '.pdf';
+      previewFileMeta.textContent = 'PDF Document • ' + size;
+
+      previewOverlay.classList.add('show');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closePreview() {
+      previewOverlay.classList.remove('show');
+      document.body.style.overflow = '';
+    }
+
+    document.querySelectorAll('.btn-preview').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const item = e.target.closest('.submission-item, .history-row');
+        if (item) openPreview(item);
+      });
+    });
+
+    previewClose.addEventListener('click', closePreview);
+    previewCloseBtn.addEventListener('click', closePreview);
+    previewOverlay.addEventListener('click', (e) => {
+      if (e.target === previewOverlay) closePreview();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && previewOverlay.classList.contains('show')) closePreview();
+    });
   </script>
 </body>
 </html>
