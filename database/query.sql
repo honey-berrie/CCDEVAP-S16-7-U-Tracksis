@@ -8,7 +8,7 @@ SET FOREIGN_KEY_CHECKS = 1;
 
 CREATE TABLE IF NOT EXISTS users (
   id INT AUTO_INCREMENT PRIMARY KEY,
-  role ENUM('student','adviser','panel','admin') NOT NULL,
+  role ENUM('student','adviser','coordinator','admin') NOT NULL,
   firstname VARCHAR(50) NOT NULL,
   lastname VARCHAR(50) NOT NULL,
   email VARCHAR(150) NOT NULL UNIQUE,
