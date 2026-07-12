@@ -35,14 +35,6 @@ if ($stmt->fetch()) {
     error('Email already exists', 422);
 }
 
-// check if name already exists
-$stmt = $pdo->prepare("SELECT id FROM users WHERE firstname = ? AND lastname = ? LIMIT 1");
-$stmt->execute([$firstname, $lastname]);
-if ($stmt->fetch()) {
-    error('Name already exists', 422);
-}
-
-
 $hash = password_hash($pass, PASSWORD_BCRYPT);
 
 try {
