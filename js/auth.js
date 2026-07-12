@@ -1,35 +1,92 @@
-const loginEmail = document.getElementById('login-email');
-const loginPassword = document.getElementById('login-password');
 
-function login() {
-    const email = loginEmail.value.trim();
-    const password = loginPassword.value.trim();
+const API = '../../api';
 
-    console.log('Login attempt with email:', email);
+async function login() {
+  const email = document.getElementById('login-email').value.trim();
+  const password = document.getElementById('login-password').value;
 
-    if (!email || !password) {
-        alert('Please enter both email and password.');
-        return;
+  if (!email || !password) {
+    alert('Please enter your email and password.');
+    return;
+  }
+
+  try {
+    const res = await fetch(`${API}/auth/login.php`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ email, password }),
+    });
+    const data = await res.json();
+
+    if (!res.ok) {
+      alert(data.error || 'Login failed');
+      return;
     }
 
-    if (email === 'student@example.com' && password === 'student123') {
-        window.location.href = '../../pages/student/dashboard.html';
-    } else if (email === 'admin@example.com' && password === 'admin123') {
-        // redirect to admin dashboard
+    alert('Login successful!');
+    // redirect based on role
+    const role = data.user.role;
+    if (role === 'admin')
+      window.location.href = '../../adminhtml/admin-dashboard.html';
+    else if (role === 'adviser' || role === 'panel') 
+      window.location.href = '../../adviserhtml/thesis-adviser-overview.html';
+    else
+      window.location.href = '../../pages/student/dashboard.html';
 
-        alert('(Admin Dashboard redirection not implemented yet)'); // remove after implementing
+  } catch (err) {
+    alert('Network error: ' + err.message);
+  }
+}
 
-    } else if (email === 'coordinator@example.com' && password === 'coordinator123') {
-        // redirect to coordinator dashboard
+async function register() {
+  const registerSection = document.getElementById('register-section');
+  const loginSection = document.getElementById('login-section');
 
-        alert('(Coordinator Dashboard redirection not implemented yet)'); // remove after implementing
+  function toggleLogin() {
+    loginSection.style.display = 'block';
+    registerSection.style.display = 'none';
+  }
 
-    } else if (email === 'adviser@example.com' && password === 'adviser123') {
-        // redirect to adviser dashboard
+  const firstname = document.getElementById('firstname').value.trim();
+  const lastname = document.getElementById('lastname').value.trim();
+  const email = document.getElementById('register-email').value.trim();
+  const password = document.getElementById('register-password').value;
+  const confirm = document.getElementById('confirm').value;
+  const accountType = document.getElementById('accountType').value;
 
-        alert('(Adviser Dashboard redirection not implemented yet)'); // remove after implementing
+  if (!firstname || !lastname || !email || !password || !confirm) {
+    alert('Please fill in all fields.');
+    return;
+  }
+  if (password.length < 8) {
+    alert('Password must be at least 8 characters.');
+    return;
+  }
+  if (password !== confirm) {
+    alert('Passwords do not match.');
+    return;
+  }
 
-    } else {
-        alert('Invalid email or password.');
+  try {
+    const res = await fetch(`${API}/auth/signup.php`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({
+        firstname, lastname, email, password, confirm, accountType,
+      }),
+    });
+    const data = await res.json();
+
+    if (!res.ok) {
+      alert(data.error || 'Registration failed');
+      return;
     }
+
+    alert('Registration successful!');
+    toggleLogin();
+  } catch (err) {
+    alert('Network error: ' + err.message);
+  }
 }
