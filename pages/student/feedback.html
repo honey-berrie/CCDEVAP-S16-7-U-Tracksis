@@ -85,7 +85,8 @@
         </button>
 
         <div class="topbar-actions">
-          <button class="btn-logout" type="button" onclick="window.location.href='../auth/auth.html#login-section'">
+          <span class="topbar-user" id="topbar-user">User Name</span>
+          <button class="btn-logout" type="button" onclick="logout()">
             <img src="../../assets/icons/box-arrow-left.svg" alt="" class="bi">
             <span>Logout</span>
           </button>
@@ -162,6 +163,7 @@
 
   <script src="../../js/bootstrap.bundle.min.js"></script>
   <script src="../../js/student/theme.js"></script>
+  <script src="../../js/student/dashboard.js"></script>
 
   <script>
     /* sidebar toggle */

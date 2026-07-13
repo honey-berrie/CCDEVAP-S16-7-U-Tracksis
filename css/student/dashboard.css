@@ -186,6 +186,16 @@ body {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
 }
 
+.topbar-user {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text);
+  background: var(--bg-box);
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  padding: 0.5rem 0.75rem;
+}
+
 .mobile-menu-btn {
   display: none;
   background: var(--navy-accent);

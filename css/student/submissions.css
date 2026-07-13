@@ -123,6 +123,34 @@
   margin: 0;
 }
 
+.btn-upload {
+  background: var(--navy-accent);
+  color: #fff;
+  border: 0;
+  border-radius: 10px;
+  padding: 0.6rem 1.4rem;
+  font-size: 0.88rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  transition: background 0.2s, transform 0.05s, opacity 0.2s;
+}
+
+.btn-upload:hover:not(:disabled) {
+  background: var(--navy-accent-hover);
+}
+
+.btn-upload:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.btn-upload:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+
 /* recent submission item */
 .submission-item {
   display: grid;

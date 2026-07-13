@@ -1,5 +1,36 @@
 const API = '../../api';
 
+
+async function fetchUserData() {
+  const userNameElement = document.getElementById('topbar-user');
+
+  try {
+
+    const res = await fetch(`${API}/auth/user.php`, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+    });
+    const data = await res.json();
+
+    if (!res.ok) {
+      alert('Failed to fetch user data: ' + res.statusText);
+      window.location.href = '../../pages/auth/auth.html';
+      return;
+    }
+
+    const user = data.user;
+    if (user && user.firstname && user.lastname) {
+      userNameElement.textContent = `${user.firstname} ${user.lastname}`;
+    }
+
+  } catch (err) {
+    alert('Network error: ' + err.message);
+  }
+}
+
+fetchUserData();
+
 async function logout() {
 
   const confirmed = confirm('Are you sure you want to log out?');

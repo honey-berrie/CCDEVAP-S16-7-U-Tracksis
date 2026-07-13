@@ -35,6 +35,7 @@ if ($stmt->fetch()) {
     error('Email already exists', 422);
 }
 
+
 $hash = password_hash($pass, PASSWORD_BCRYPT);
 
 try {

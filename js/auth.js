@@ -1,6 +1,35 @@
 
 const API = '../../api';
 
+// check if user is already logged in
+async function checkLoginStatus() {
+   // check if user is already logged in
+  try {
+    const checkRes = await fetch(`${API}/auth/user.php`, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+    });
+    const checkData = await checkRes.json();
+
+    if (checkRes.ok && checkData.user) {
+      // redirect based on role
+      const role = checkData.user.role;
+      if (role === 'admin')
+        window.location.href = '../../adminhtml/admin-dashboard.html';
+      else if (role === 'adviser' || role === 'panel') 
+        window.location.href = '../../adviserhtml/thesis-adviser-overview.html';
+      else
+        window.location.href = '../../pages/student/dashboard.html';
+      return;
+    }
+  } catch (err) {
+    console.error('Error checking login status:', err);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', checkLoginStatus);
+
 async function login() {
   const email = document.getElementById('login-email').value.trim();
   const password = document.getElementById('login-password').value;

@@ -85,7 +85,8 @@
         </button>
 
         <div class="topbar-actions">
-          <button class="btn-logout" type="button" onclick="window.location.href='../auth/auth.html#login-section'">
+          <span class="topbar-user" id="topbar-user">User Name</span>
+          <button class="btn-logout" type="button" onclick="logout()">
             <img src="../../assets/icons/box-arrow-left.svg" alt="" class="bi">
             <span>Logout</span>
           </button>
@@ -124,16 +125,20 @@
         <div class="upload-icon">
           <img src="../../assets/icons/cloud-upload.svg" alt="" class="bi">
         </div>
-        <p class="upload-title">Drop files to upload</p>
-        <p class="upload-helper">PDF up to 25MB</p>
+        <p class="upload-title" id="uploadTitle">Drop PDF or click to choose</p>
+        <p class="upload-helper" id="uploadHelper">PDF up to 25MB</p>
+        <button type="button" class="btn-upload" id="submitBtn" disabled>
+          <span id="submitBtnLabel">Submit</span>
+        </button>
       </div>
 
+
       <!-- recent submissions box -->
-      <div class="box mt-3">
+      <div class="box mt-3" id="recentSubmissionsBox">
         <p class="box-label">Recent Submissions</p>
 
         <!-- submission item 1 -->
-        <div class="submission-item" data-title="Chapter 2" data-date="March 12, 2024" data-size="2.4 MB" data-status="In Review" data-status-class="badge-review" data-uploader="Christian Wesley Yu">
+        <div class="submission-item" data-title="Chapter 2" data-date="March 12, 2024" data-size="2.4 MB" data-status="In Review" data-status-class="badge-review" data-uploader="Christian Wesley Yu" id="submissionItemTemp" style="display: none;" >
           <div class="submission-thumb">
             <img src="../../assets/icons/file-earmark-text.svg" alt="" class="bi">
           </div>
@@ -147,40 +152,11 @@
           </div>
         </div>
 
-        <!-- submission item 2 -->
-        <div class="submission-item" data-title="Chapter 1" data-date="February 28, 2024" data-size="3.1 MB" data-status="Approved" data-status-class="badge-approved" data-uploader="Kyrelle Ramos">
-          <div class="submission-thumb">
-            <img src="../../assets/icons/file-earmark-text.svg" alt="" class="bi">
-          </div>
-          <div class="submission-info">
-            <p class="submission-name">Chapter 1</p>
-            <p class="submission-meta">February 28, 2024 . 3.1 MB</p>
-          </div>
-          <div class="submission-side">
-            <span class="badge-status badge-approved">Approved</span>
-            <button type="button" class="submission-view btn-preview">View</button>
-          </div>
-        </div>
-
-        <!-- submission item 3 -->
-        <div class="submission-item" data-title="Title Proposal" data-date="January 15, 2024" data-size="1.2 MB" data-status="Approved" data-status-class="badge-approved" data-uploader="Kyrelle Ramos">
-          <div class="submission-thumb">
-            <img src="../../assets/icons/file-earmark-text.svg" alt="" class="bi">
-          </div>
-          <div class="submission-info">
-            <p class="submission-name">Title Proposal</p>
-            <p class="submission-meta">January 15, 2024 . 1.2 MB</p>
-          </div>
-          <div class="submission-side">
-            <span class="badge-status badge-approved">Approved</span>
-            <button type="button" class="submission-view btn-preview">View</button>
-          </div>
-        </div>
       </div>
 
       <!-- submission history -->
       <p class="box-label mt-3">Submission History</p>
-      <div class="history-list" id="history">
+      <div class="history-list" id="historyList">
 
         <!-- history item 1 -->
         <div class="history-row" data-title="Chapter 2" data-date="March 12, 2024" data-size="2.4 MB" data-status="In Review" data-status-class="badge-review" data-uploader="Christian Wesley Yu">
@@ -285,6 +261,8 @@
 
   <script src="../../js/bootstrap.bundle.min.js"></script>
   <script src="../../js/student/theme.js"></script>
+  <script src="../../js/student/dashboard.js"></script>
+  <script src="../../js/student/submissions.js"></script>
 
   <script>
     /* sidebar toggle */
@@ -323,38 +301,12 @@
     const previewFileName = document.getElementById('previewFileName');
     const previewFileMeta = document.getElementById('previewFileMeta');
 
-    function openPreview(item) {
-      const title = item.dataset.title;
-      const date = item.dataset.date;
-      const size = item.dataset.size;
-      const uploader = item.dataset.uploader;
-      const status = item.dataset.status;
-      const statusClass = item.dataset.statusClass;
-
-      previewTitle.textContent = title;
-      previewDate.textContent = date;
-      previewSize.textContent = size;
-      previewUploader.textContent = uploader;
-      previewStatus.textContent = status;
-      previewStatus.className = 'badge-status ' + statusClass;
-      previewFileName.textContent = title.toLowerCase().replace(/\s+/g, '-') + '.pdf';
-      previewFileMeta.textContent = 'PDF Document • ' + size;
-
-      previewOverlay.classList.add('show');
-      document.body.style.overflow = 'hidden';
-    }
+    
 
     function closePreview() {
       previewOverlay.classList.remove('show');
       document.body.style.overflow = '';
     }
-
-    document.querySelectorAll('.btn-preview').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        const item = e.target.closest('.submission-item, .history-row');
-        if (item) openPreview(item);
-      });
-    });
 
     previewClose.addEventListener('click', closePreview);
     previewCloseBtn.addEventListener('click', closePreview);
