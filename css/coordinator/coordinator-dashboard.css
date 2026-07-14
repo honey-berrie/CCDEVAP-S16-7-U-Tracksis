@@ -235,6 +235,21 @@ body {
   max-width: 400px;
 }
 
+.topbar-search .search-icon {
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  width: 16px;
+  height: 16px;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: var(--text-light);
+}
+
+[data-theme="dark"] .topbar-search .search-icon {
+  color: #ffffff;
+}
+
 .topbar-search .form-control {
   height: 38px;
   border: 1px solid var(--border);
