@@ -186,6 +186,16 @@ body {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
 }
 
+.topbar-user {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text);
+  background: var(--bg-box);
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  padding: 0.5rem 0.75rem;
+}
+
 .mobile-menu-btn {
   display: none;
   background: var(--navy-accent);
@@ -250,33 +260,6 @@ body {
   margin-left: auto;
 }
 
-.topbar-icon-btn {
-  position: relative;
-  background: transparent;
-  border: 1px solid var(--border);
-  color: var(--text);
-  width: 38px;
-  height: 38px;
-  border-radius: 8px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.2s;
-  padding: 0;
-}
-
-.topbar-icon-btn .bi {
-  width: 18px;
-  height: 18px;
-}
-
-.topbar-icon-btn:hover {
-  background: var(--bg-main);
-  color: var(--navy-accent);
-  border-color: var(--navy-accent);
-}
-
 .notif-dot {
   position: absolute;
   top: 8px;
@@ -288,7 +271,7 @@ body {
   border: 2px solid var(--bg-box);
 }
 
-.btn-new-submission, .btn-logout {
+.btn-logout {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
@@ -304,11 +287,11 @@ body {
   white-space: nowrap;
 }
 
-.btn-new-submission:hover, .btn-logout:hover {
+.btn-logout:hover {
   background: var(--navy-accent-hover);
 }
 
-.btn-new-submission .bi, .btn-logout .bi {
+.btn-logout .bi {
   width: 16px;
   height: 16px;
   filter: brightness(0) invert(1);
@@ -518,22 +501,6 @@ body {
   .top-bar {
     padding: 0.6rem 0.75rem;
     gap: 0.5rem;
-  }
-  .topbar-search {
-    max-width: none;
-  }
-  .topbar-search .form-control {
-    height: 36px;
-    font-size: 0.8rem;
-  }
-  .btn-new-submission span {
-    display: none;
-  }
-  .btn-new-submission {
-    width: 36px;
-    height: 36px;
-    padding: 0;
-    justify-content: center;
   }
   .btn-logout span {
     display: none;
