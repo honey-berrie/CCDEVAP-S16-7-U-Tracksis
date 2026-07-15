@@ -279,3 +279,14 @@ INSERT INTO announcements (sender_id, group_id, is_broadcast, title, message, cr
 (1, NULL, 1, 'Final Defense Schedule', 'All groups with an approved final chapter must confirm their defense slot with the coordinator by the end of the month.', NOW() - INTERVAL 3 DAY),
 (1, NULL, 1, 'Submission Deadline Reminder', 'Chapter 3 submissions are due within two weeks. Late submissions will need adviser approval for an extension.', NOW() - INTERVAL 1 DAY),
 (1, NULL, 1, 'Portal Maintenance Notice', 'The submission portal will be briefly unavailable for maintenance next weekend. Draft content will not be affected.', NOW() - INTERVAL 7 DAY);
+
+INSERT INTO consultations (
+  group_id, user_id, recipient_id, topic, agenda, proposed_schedule,
+  consultation_end, meeting_link, status, adviser_notes,
+  reschedule_reason, created_at
+) VALUES
+(1, 7, 4, 'Discuss Chapter 2 revisions.', 'Review related studies and citation updates.', DATE_ADD(NOW(), INTERVAL 5 DAY), DATE_ADD(NOW(), INTERVAL 5 DAY) + INTERVAL 1 HOUR, 'https://meet.example/cortana', 'approved', NULL, NULL, NOW() - INTERVAL 2 DAY),
+(2, 10, 5, 'Review methodology revisions.', 'Check Chapter 3 flow and research instrument changes.', DATE_ADD(NOW(), INTERVAL 7 DAY), DATE_ADD(NOW(), INTERVAL 7 DAY) + INTERVAL 1 HOUR, 'https://meet.example/byteforce', 'approved', NULL, NULL, NOW() - INTERVAL 1 DAY),
+(1, 8, 4, 'Clarify literature review.', 'Clarify adviser feedback before resubmission.', DATE_SUB(NOW(), INTERVAL 8 DAY), DATE_SUB(NOW(), INTERVAL 8 DAY) + INTERVAL 1 HOUR, 'https://meet.example/cortana-history', 'completed', 'Expand the related studies section and fix citation format.', NULL, NOW() - INTERVAL 10 DAY),
+(2, 11, 5, 'Discuss rejected Chapter 2.', 'Review missing sources and revision plan.', DATE_SUB(NOW(), INTERVAL 6 DAY), DATE_SUB(NOW(), INTERVAL 6 DAY) + INTERVAL 1 HOUR, 'https://meet.example/byteforce-history', 'completed', 'Literature review needs more recent sources and clearer synthesis.', NULL, NOW() - INTERVAL 8 DAY),
+(3, 13, 6, 'Final defense preparation.', 'Prepare final checklist and panel reminders.', DATE_SUB(NOW(), INTERVAL 3 DAY), DATE_SUB(NOW(), INTERVAL 3 DAY) + INTERVAL 1 HOUR, 'https://meet.example/nexgen-history', 'completed', 'Final manuscript is approved. Prepare defense materials.', NULL, NOW() - INTERVAL 5 DAY);
