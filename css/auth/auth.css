@@ -2,25 +2,30 @@
 :root {
   --primary: #182e59;
   --primary-dark: #0c1a32;
-  --white: #FFFFFF;
-  --gray: #E0E0E0;
-  --light-gray: #F5F5F5;
-  --text: #1A1A1A;
+  --white: #ffffff;
+  --gray: #e0e0e0;
+  --light-gray: #f5f5f5;
+  --text: #1a1a1a;
   --text-light: #666666;
 }
 
-html, body {
+html,
+body {
   height: 100%;
 }
 
 body {
   min-height: 100vh;
-  background: radial-gradient(circle at center, var(--primary) 0%, var(--primary-dark) 100%);
+  background: radial-gradient(
+    circle at center,
+    var(--primary) 0%,
+    var(--primary-dark) 100%
+  );
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 1.25rem;
-  font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
 }
 
 /* card */
@@ -73,7 +78,9 @@ body {
   border-radius: 8px;
   padding: 0 0.875rem;
   color: var(--text);
-  transition: border-color 0.2s, box-shadow 0.2s;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
 }
 
 .auth-card .form-control:focus {
@@ -126,7 +133,7 @@ body {
 
 .auth-divider::before,
 .auth-divider::after {
-  content: '';
+  content: "";
   flex: 1;
   border-bottom: 1px solid var(--gray);
 }
@@ -146,7 +153,9 @@ body {
   font-weight: 600;
   cursor: pointer;
   margin-top: 0.5rem;
-  transition: background 0.2s, transform 0.05s;
+  transition:
+    background 0.2s,
+    transform 0.05s;
 }
 
 .btn-omnitrace:hover {
@@ -182,6 +191,31 @@ body {
 }
 
 .btn-role.active {
+  background: var(--primary);
+  color: var(--white);
+  border-color: var(--primary);
+}
+
+/* subrole buttons use the same styling as role buttons */
+.btn-subrole {
+  flex: 1;
+  height: 40px;
+  background: var(--white);
+  border: 1px solid var(--gray);
+  border-radius: 8px;
+  font-size: 0.875rem;
+  color: var(--text);
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.btn-subrole:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.btn-subrole.active {
   background: var(--primary);
   color: var(--white);
   border-color: var(--primary);

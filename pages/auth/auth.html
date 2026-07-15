@@ -1,131 +1,240 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Authentication | U-Tracksis</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Authentication | U-Tracksis</title>
 
-  <!-- Bootstrap 5 -->
-  <link rel="stylesheet" href="../../css/bootstrap.min.css">
+    <!-- Bootstrap 5 -->
+    <link rel="stylesheet" href="../../css/bootstrap.min.css" />
 
-  <!-- Styles -->
-  <link rel="stylesheet" href="../../css/auth/auth.css">
-</head>
-<body>
+    <!-- Styles -->
+    <link rel="stylesheet" href="../../css/auth/auth.css" />
+  </head>
+  <body>
+    <div class="auth-card">
+      <!-- LOGIN SECTION -->
+      <section class="auth-section" id="login-section">
+        <h1>Login</h1>
+        <p class="auth-subtitle">Enter your email and password to sign in.</p>
 
-  <div class="auth-card">
+        <form id="loginForm" action="#" method="post" novalidate>
+          <div class="mb-3">
+            <label for="login-email" class="form-label">Email</label>
+            <input
+              type="email"
+              class="form-control"
+              id="login-email"
+              name="email"
+              placeholder="Enter your email"
+              required
+            />
+          </div>
 
-    <!-- LOGIN SECTION -->
-    <section class="auth-section" id="login-section">
-      <h1>Login</h1>
-      <p class="auth-subtitle">Enter your email and password to sign in.</p>
+          <div class="mb-3">
+            <label for="login-password" class="form-label">Password</label>
+            <input
+              type="password"
+              class="form-control"
+              id="login-password"
+              name="password"
+              placeholder="Enter your password"
+              required
+            />
+          </div>
 
-      <form id="loginForm" action="#" method="post" novalidate>
-        <div class="mb-3">
-          <label for="login-email" class="form-label">Email</label>
-          <input type="email" class="form-control" id="login-email" name="email" placeholder="Enter your email" required>
-        </div>
+          <button type="button" class="btn-omnitrace" onclick="login()">
+            Sign in
+          </button>
 
-        <div class="mb-3">
-          <label for="login-password" class="form-label">Password</label>
-          <input type="password" class="form-control" id="login-password" name="password" placeholder="Enter your password" required>
-        </div>
+          <p class="footer-text">
+            Don't have an account? <a href="#register-section">Register</a>
+          </p>
+        </form>
+      </section>
 
-        <button type="button" class="btn-omnitrace" onclick="login()">Sign in</button>
-
-        <p class="footer-text">
-          Don't have an account? <a href="#register-section">Register</a>
+      <!-- REGISTER SECTION -->
+      <section class="auth-section" id="register-section" style="display: none">
+        <h1>Create your account</h1>
+        <p class="auth-subtitle">
+          Access all that our site has to offer with a single account. All
+          fields are required.
         </p>
-      </form>
-    </section>
 
-    <!-- REGISTER SECTION -->
-    <section class="auth-section" id="register-section" style="display: none;">
-      <h1>Create your account</h1>
-      <p class="auth-subtitle">
-        Access all that our site has to offer with a single account.
-        All fields are required.
-      </p>
-
-      <form id="registerForm" action="#" method="post" novalidate>
-        <div class="row g-2 mb-3">
-          <div class="col-6">
-            <label for="firstname" class="form-label">First Name</label>
-            <input type="text" class="form-control" id="firstname" name="firstname" placeholder="Enter your first name" required>
+        <form id="registerForm" action="#" method="post" novalidate>
+          <div class="row g-2 mb-3">
+            <div class="col-6">
+              <label for="firstname" class="form-label">First Name</label>
+              <input
+                type="text"
+                class="form-control"
+                id="firstname"
+                name="firstname"
+                placeholder="Enter your first name"
+                required
+              />
+            </div>
+            <div class="col-6">
+              <label for="lastname" class="form-label">Last Name</label>
+              <input
+                type="text"
+                class="form-control"
+                id="lastname"
+                name="lastname"
+                placeholder="Enter your last name"
+                required
+              />
+            </div>
           </div>
-          <div class="col-6">
-            <label for="lastname" class="form-label">Last Name</label>
-            <input type="text" class="form-control" id="lastname" name="lastname" placeholder="Enter your last name" required>
+
+          <div class="mb-3">
+            <label for="register-email" class="form-label">Email</label>
+            <input
+              type="email"
+              class="form-control"
+              id="register-email"
+              name="email"
+              placeholder="Enter your email"
+              required
+            />
           </div>
-        </div>
 
-        <div class="mb-3">
-          <label for="register-email" class="form-label">Email</label>
-          <input type="email" class="form-control" id="register-email" name="email" placeholder="Enter your email" required>
-        </div>
-
-        <div class="mb-3">
-          <label for="register-password" class="form-label">Password</label>
-          <input type="password" class="form-control" id="register-password" name="password" placeholder="Create a password" required minlength="8">
-        </div>
-
-        <div class="mb-3">
-          <label for="confirm" class="form-label">Confirm Password</label>
-          <input type="password" class="form-control" id="confirm" name="confirm" placeholder="Confirm your password" required>
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label d-block">Account Type</label>
-          <div class="role-group">
-            <button type="button" class="btn-role active" data-role="student">Student</button>
-            <button type="button" class="btn-role" data-role="faculty">Faculty</button>
+          <div class="mb-3">
+            <label for="register-password" class="form-label">Password</label>
+            <input
+              type="password"
+              class="form-control"
+              id="register-password"
+              name="password"
+              placeholder="Create a password"
+              required
+              minlength="8"
+            />
           </div>
-          <input type="hidden" id="accountType" name="accountType" value="student">
-        </div>
 
-        <button type="button" class="btn-omnitrace" onclick="register()">Create Account</button>
+          <div class="mb-3">
+            <label for="confirm" class="form-label">Confirm Password</label>
+            <input
+              type="password"
+              class="form-control"
+              id="confirm"
+              name="confirm"
+              placeholder="Confirm your password"
+              required
+            />
+          </div>
 
-        <p class="footer-text">
-          Already have an account? <a href="#login-section">Sign in</a>
-        </p>
-      </form>
-    </section>
+          <div class="mb-3">
+            <label class="form-label d-block">Account Type</label>
+            <div class="role-group">
+              <button type="button" class="btn-role active" data-role="student">
+                Student
+              </button>
+              <button type="button" class="btn-role" data-role="faculty">
+                Faculty
+              </button>
+            </div>
 
-  </div>
+            <div id="facultySubrole" style="display: none; margin-top: 8px">
+              <label class="form-label d-block">Faculty Type</label>
+              <div class="role-group">
+                <button
+                  type="button"
+                  class="btn-subrole active"
+                  data-role="adviser"
+                >
+                  Thesis Adviser
+                </button>
+                <button
+                  type="button"
+                  class="btn-subrole"
+                  data-role="coordinator"
+                >
+                  Coordinator
+                </button>
+              </div>
+            </div>
 
-  <!-- Bootstrap JS -->
-  <script src="../../js/bootstrap.bundle.min.js"></script>
-  
-  <script src="../../js/auth.js"></script>
+            <input
+              type="hidden"
+              id="accountType"
+              name="accountType"
+              value="student"
+            />
+          </div>
 
-  <script>
-    // Toggle between login and register sections
-    const registerSection = document.getElementById('register-section');
-    const loginSection = document.getElementById('login-section');
+          <button type="button" class="btn-omnitrace" onclick="register()">
+            Create Account
+          </button>
 
-    loginSection.querySelector('a').addEventListener('click', e => {
-      e.preventDefault();
-      loginSection.style.display = 'none';
-      registerSection.style.display = 'block';
-    });
+          <p class="footer-text">
+            Already have an account? <a href="#login-section">Sign in</a>
+          </p>
+        </form>
+      </section>
+    </div>
 
-    registerSection.querySelector('a').addEventListener('click', e => {
-      e.preventDefault();
-      registerSection.style.display = 'none';
-      loginSection.style.display = 'block';
-    });
+    <!-- Bootstrap JS -->
+    <script src="../../js/bootstrap.bundle.min.js"></script>
 
-    //  Role selection logic
-    const roleButtons = document.querySelectorAll('.btn-role');
-    const hiddenInput = document.getElementById('accountType');
+    <script src="../../js/auth.js"></script>
 
-    roleButtons.forEach(btn => {
-      btn.addEventListener('click', () => {
-        roleButtons.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        hiddenInput.value = btn.dataset.role;
+    <script>
+      // Toggle between login and register sections
+      const registerSection = document.getElementById("register-section");
+      const loginSection = document.getElementById("login-section");
+
+      loginSection.querySelector("a").addEventListener("click", (e) => {
+        e.preventDefault();
+        loginSection.style.display = "none";
+        registerSection.style.display = "block";
       });
-    });
-  </script>
-</body>
+
+      registerSection.querySelector("a").addEventListener("click", (e) => {
+        e.preventDefault();
+        registerSection.style.display = "none";
+        loginSection.style.display = "block";
+      });
+
+      //  Role selection logic
+      const roleButtons = document.querySelectorAll(".btn-role");
+      const hiddenInput = document.getElementById("accountType");
+      const facultySubrole = document.getElementById("facultySubrole");
+      const subroleButtons = document.querySelectorAll(".btn-subrole");
+
+      function setSubroleVisibility(show) {
+        facultySubrole.style.display = show ? "block" : "none";
+      }
+
+      roleButtons.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          roleButtons.forEach((b) => b.classList.remove("active"));
+          btn.classList.add("active");
+
+          const sel = btn.dataset.role;
+          if (sel === "faculty") {
+            // show subrole and default to adviser
+            setSubroleVisibility(true);
+            subroleButtons.forEach((b) => b.classList.remove("active"));
+            const defaultBtn = document.querySelector(
+              '.btn-subrole[data-role="adviser"]',
+            );
+            if (defaultBtn) defaultBtn.classList.add("active");
+            hiddenInput.value = "adviser";
+          } else {
+            setSubroleVisibility(false);
+            hiddenInput.value = sel;
+          }
+        });
+      });
+
+      subroleButtons.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          subroleButtons.forEach((b) => b.classList.remove("active"));
+          btn.classList.add("active");
+          hiddenInput.value = btn.dataset.role;
+        });
+      });
+    </script>
+  </body>
 </html>

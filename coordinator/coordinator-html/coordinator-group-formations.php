@@ -1,6 +1,6 @@
 <?php
 // 1. Include the PDO database connection
-require_once 'db.php'; 
+require_once '..\..\api\db.php'; 
 
 // 2. Fetch coordinator name safely using PDO
 try {
@@ -68,7 +68,7 @@ try {
         </div>
 
         <nav class="sidebar-nav">
-          <a class="nav-link" href="coordinator-overview.html">
+          <a class="nav-link" href="coordinator-overview.php">
             <img
               src="../../assets/icons/binoculars-fill.svg"
               alt=""
@@ -76,11 +76,11 @@ try {
             />
             Overview
           </a>
-          <a class="nav-link active" href="coordinator-group-formations.html">
+          <a class="nav-link active" href="coordinator-group-formations.php">
             <img src="../../assets/icons/people-fill.svg" alt="" class="bi" />
             Group Formations
           </a>
-          <a class="nav-link" href="coordinator-adviser-assignments.html">
+          <a class="nav-link" href="coordinator-adviser-assignments.php">
             <img
               src="../../assets/icons/diagram-3-fill.svg"
               alt=""
@@ -88,7 +88,7 @@ try {
             />
             Adviser Assignments
           </a>
-          <a class="nav-link" href="coordinator-course-announcements.html">
+          <a class="nav-link" href="coordinator-course-announcements.php">
             <img
               src="../../assets/icons/megaphone-fill.svg"
               alt=""
@@ -96,7 +96,7 @@ try {
             />
             Announcements
           </a>
-          <a class="nav-link" href="coordinator-course-progress.html">
+          <a class="nav-link" href="coordinator-course-progress.php">
             <img src="../../assets/icons/flag-fill.svg" alt="" class="bi" />
             Course Progress
           </a>
@@ -161,9 +161,7 @@ try {
             <button
               class="btn-logout"
               type="button"
-              onclick="
-                window.location.href = '/pages/auth/auth.html#login-section'
-              "
+              onclick="logout()"
             >
               <img
                 src="../../assets/icons/box-arrow-left.svg"
@@ -174,6 +172,7 @@ try {
             </button>
           </div>
         </div>
+        <script src="../../js/logout.js"></script>
 
         <div class="page-header">
           <h1 class="page-title">Group Formations</h1>
@@ -275,6 +274,7 @@ try {
 
     <script src="../../js/bootstrap.bundle.min.js"></script>
     <script src="../../js/student/theme.js"></script>
+    <script src="../coordinator-back-end/coordinator-logout.js"></script>
 
     <script>
       /* sidebar toggle */
