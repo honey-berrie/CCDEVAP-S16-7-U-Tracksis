@@ -2,6 +2,9 @@ USE u_tracksis;
 
 SET FOREIGN_KEY_CHECKS = 0;
 
+DROP TABLE IF EXISTS announcements;
+DROP TABLE IF EXISTS sections;
+DROP TABLE IF EXISTS courses;
 DROP TABLE IF EXISTS milestones;
 DROP TABLE IF EXISTS submissions;
 DROP TABLE IF EXISTS group_members;
