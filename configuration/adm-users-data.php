@@ -1,18 +1,4 @@
 <?php
-/*
-|--------------------------------------------------------------------------
-| User Management Data Endpoint (GET)
-|--------------------------------------------------------------------------
-| Query params:
-|   search    - matches firstname/lastname/email
-|   role      - student | adviser | coordinator | admin | (empty = all)
-|   status    - active | inactive | (empty = all)
-|   page      - 1-based page number
-|   perPage   - rows per page
-|
-| Also returns roleCounts (for the filter chips) and adviser/student lookup
-| lists so the "Create Thesis Group" modal never needs a second round trip.
-*/
 
 require_once "session.php";
 requireAdminApi();

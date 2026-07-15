@@ -1,11 +1,4 @@
 <?php
-/*
-|--------------------------------------------------------------------------
-| Archive Actions Endpoint (POST)
-|--------------------------------------------------------------------------
-| action=archive  -> id (team must have every milestone approved)
-| action=restore  -> id
-*/
 
 require_once "session.php";
 requireAdminApi();
@@ -26,7 +19,7 @@ if ($id <= 0) {
 }
 
 if ($action === "archive") {
-    // Enforce: only fully-approved groups may be archived.
+    
     $check = $conn->prepare("
         SELECT
             (SELECT COUNT(*) FROM milestones WHERE group_id = ?) total,

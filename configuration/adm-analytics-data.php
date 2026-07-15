@@ -30,11 +30,6 @@ $subWhereSql = implode(" AND ", $subWhere);
 
 $response = [];
 
-/*
-|--------------------------------------------------------------------------
-| Summary cards
-|--------------------------------------------------------------------------
-*/
 $totalSql = "SELECT COUNT(*) c FROM submissions s JOIN teams t ON t.id = s.group_id WHERE $subWhereSql";
 $onTimeSql = "SELECT COUNT(*) c FROM submissions s JOIN teams t ON t.id = s.group_id WHERE $subWhereSql AND s.status = 'approved'";
 
@@ -61,11 +56,7 @@ $response['summary'] = [
     "avgProgress" => $avgProgress,
 ];
 
-/*
-|--------------------------------------------------------------------------
-| Submission Status Breakdown (donut)
-|--------------------------------------------------------------------------
-*/
+
 $statusSql = "
     SELECT s.status, COUNT(*) total
     FROM submissions s
@@ -86,11 +77,7 @@ $response['statusBreakdown'] = [
     "values" => array_values($statusBreakdown),
 ];
 
-/*
-|--------------------------------------------------------------------------
-| Submissions Over Time
-|--------------------------------------------------------------------------
-*/
+
 $overTimeSql = "
     SELECT MONTH(s.uploaded_at) month, COUNT(*) total
     FROM submissions s
@@ -111,11 +98,7 @@ while ($row = $result->fetch_assoc()) {
 }
 $response['submissionsOverTime'] = ["labels" => $labels, "values" => $values];
 
-/*
-|--------------------------------------------------------------------------
-| Group Progress Comparison (respects adviser filter only — it's per-group)
-|--------------------------------------------------------------------------
-*/
+
 $groupWhere = ["t.status = 'active'"];
 $groupParams = [];
 $groupTypes = "";
@@ -152,11 +135,7 @@ while ($row = $result->fetch_assoc()) {
 }
 $response['groupProgress'] = ["labels" => $progLabels, "values" => $progValues];
 
-/*
-|--------------------------------------------------------------------------
-| Filter lookup lists
-|--------------------------------------------------------------------------
-*/
+
 $groups = [];
 $gr = $conn->query("SELECT id, group_name FROM teams WHERE status='active' ORDER BY group_name");
 while ($row = $gr->fetch_assoc()) {

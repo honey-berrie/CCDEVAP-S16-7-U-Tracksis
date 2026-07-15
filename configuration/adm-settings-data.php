@@ -1,11 +1,4 @@
 <?php
-/*
-|--------------------------------------------------------------------------
-| Settings Data Endpoint (GET)
-|--------------------------------------------------------------------------
-| Returns the current admin's profile fields and the system_settings
-| key/value table (site name, academic year, maintenance mode).
-*/
 
 require_once "session.php";
 requireAdminApi();

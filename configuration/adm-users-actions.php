@@ -1,14 +1,4 @@
 <?php
-/*
-|--------------------------------------------------------------------------
-| User Management Actions Endpoint (POST)
-|--------------------------------------------------------------------------
-| action=create_user   -> firstname, lastname, email, role, password
-| action=update_user   -> id, firstname, lastname, email, role, is_active
-| action=delete_user    -> id
-| action=create_team    -> group_name, thesis_title, abstract, adviser_id,
-|                          academic_year, defense_date, member_ids[]
-*/
 
 require_once "session.php";
 requireAdminApi();

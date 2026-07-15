@@ -1,17 +1,4 @@
 <?php
-/*
-|--------------------------------------------------------------------------
-| Thesis Records Data Endpoint (GET)
-|--------------------------------------------------------------------------
-| ?detail=<team_id>            -> full record: members, adviser, milestones,
-|                                  submission history for one team
-| ?search=&adviser=&status=&page=&perPage=  -> paginated team list
-|
-| "status" here is derived, not stored:
-|   completed -> every milestone approved
-|   behind    -> a milestone is overdue (due_date passed, not approved)
-|   on-track  -> anything else
-*/
 
 require_once "session.php";
 requireAdminApi();
