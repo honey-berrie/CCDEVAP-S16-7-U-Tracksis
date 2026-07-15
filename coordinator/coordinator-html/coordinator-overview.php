@@ -4,15 +4,25 @@ require_once '..\..\api\db.php';
 
 // 2. Fetch coordinator name safely using PDO
 try {
-    // Temporary hardcoded ID until you wire up your login system's $_SESSION['user_id']
-    $user_id = 1; 
-    
-    $stmt = $pdo->prepare("SELECT firstname FROM users WHERE id = :id");
-    $stmt->execute(['id' => $user_id]);
-    $user = $stmt->fetch();
-    
-    // Fallback to "Coordinator" if user isn't found
-    $first_name = $user ? $user['firstname'] : "Coordinator";
+  // Use logged-in user from session when available
+  // `api/auth/login.php` sets `$_SESSION['user']` on successful login.
+  $first_name = "Coordinator";
+
+  if (!empty($_SESSION['user'])) {
+    $sessUser = $_SESSION['user'];
+    // ensure only coordinators access this page
+    if (!empty($sessUser['role']) && $sessUser['role'] !== 'coordinator') {
+      header('Location: ../../pages/auth/auth.html');
+      exit;
+    }
+
+    // Prefer session firstname to avoid an extra DB query
+    $first_name = $sessUser['firstname'] ?? ($sessUser['email'] ?? 'Coordinator');
+  } else {
+    // Not logged in — redirect to login
+    header('Location: ../../pages/auth/auth.html');
+    exit;
+  }
 } catch (PDOException $e) {
     // Fallback if the database table doesn't exist yet
     $first_name = "Coordinator"; 
