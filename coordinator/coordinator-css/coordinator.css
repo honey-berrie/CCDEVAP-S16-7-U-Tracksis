@@ -1,9 +1,9 @@
 .navigationBar-Header {
-    background-color: #0C1A32 !important;
+  background-color: #0c1a32 !important;
 }
 
 .active {
-    background-color: #182e58 !important;
+  background-color: #182e58 !important;
 }
 
 .form-control::placeholder {
@@ -28,4 +28,10 @@
   color: #cbd5e1 !important;
 }
 
+[data-theme="dark"] .box .border-bottom {
+  border-bottom: 1px solid #182e58 !important;
+}
 
+.box .row:last-child {
+  border-bottom: none !important;
+}

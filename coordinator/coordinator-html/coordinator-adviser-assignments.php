@@ -1,6 +1,6 @@
 <?php
 // 1. Include the PDO database connection
-require_once '..\..\api\db.php'; 
+require_once '../../api/db.php';
 
 // 2. Fetch coordinator name safely using PDO
 try {
@@ -60,6 +60,7 @@ try {
       rel="stylesheet"
       href="../../css/coordinator/coordinator-dashboard.css"
     />
+    <link rel="stylesheet" href="../coordinator-css/coordinator.css" />
   </head>
   <body>
     <div class="dashboard-wrapper">
@@ -193,63 +194,87 @@ try {
           <p class="page-subtitle">Good day, <?php echo htmlspecialchars($first_name); ?>.</p>
         </div>
 
-        <div class="row">
-          <div class="col-12">
-            <div class="d-flex justify-content-between align-items-center">
-              <div class="flex-fill text-center">
+       <!-- Header & Groups Container (Aligned) -->
+        <div class="row g-4 mb-4">
+          <!-- Groups PHP Query -->
+          <?php
+          $coordinatorId = $sessUser['id'] ?? null;
+
+          $stmt = $pdo->prepare("
+              SELECT
+                  t.id AS team_id,
+                  t.group_name,
+                  c.course_code,
+                  t.adviser_id,
+                  u.firstname AS adviser_firstname,
+                  u.lastname AS adviser_lastname,
+                  t.approval_status
+              FROM teams t
+              JOIN sections s ON t.section_id = s.id
+              JOIN courses c ON s.course_id = c.id
+              LEFT JOIN users u ON t.adviser_id = u.id
+              WHERE c.coordinator_id = ?
+              ORDER BY t.group_name
+          ");
+          $stmt->execute([$coordinatorId]);
+          $teams = $stmt->fetchAll(PDO::FETCH_ASSOC);
+          $teamCount = count($teams);
+          ?>
+
+          <div class="box mb-4">
+            <!-- Header Row -->
+            <div class="row py-3 border-bottom align-items-center text-center">
+              <div class="col-3">
                 <p class="text fw-bold small text-uppercase mb-0">Group</p>
               </div>
-              <div class="flex-fill text-center">
+              <div class="col-3">
                 <p class="text fw-bold small text-uppercase mb-0">Course</p>
               </div>
-              <div class="flex-fill text-center">
+              <div class="col-3">
                 <p class="text fw-bold small text-uppercase mb-0">Adviser</p>
               </div>
-              <div class="flex-fill text-center">
+              <div class="col-3">
                 <p class="text fw-bold small text-uppercase mb-0">Action</p>
               </div>
             </div>
-          </div>
-        </div>
 
-        <div class="row g-4 mb-4">
-          <!-- Groups -->
-          <div class="box mb-4">
-            <div class="row">
-              <div class="col-12">
-                <div class="d-flex justify-content-between align-items-center">
-                  <div class="flex-fill text-center">
-                    <p class="text fw-bold small text-uppercase mb-0">
-                      Group A
-                    </p>
-                  </div>
-                  <div class="flex-fill text-center">
-                    <p class="mb-0">
-                      <span
-                        class="badge text-bg-warning text-white small text-uppercase mb-0"
-                        >BS-IT</span
-                      >
-                    </p>
-                  </div>
-                  <div class="flex-fill text-center">
-                    <p class="mb-0">
-                      <span
-                        class="badge text-bg-primary small text-uppercase mb-0"
-                        >Dr. Richards V.</span
-                      >
-                    </p>
-                  </div>
-                  <div class="flex-fill text-center">
-                    <p class="mb-0">
-                      <span
-                        class="badge text-bg-danger text-white small text-uppercase mb-0"
-                        >Request</span
-                      >
-                    </p>
-                  </div>
-                </div>
+            <!-- Data Rows -->
+            <?php foreach ($teams as $i => $team): ?>
+            <div class="row py-3 align-items-center text-center <?php echo $i < $teamCount - 1 ? 'border-bottom' : ''; ?>">
+              <div class="col-3">
+                <p class="text fw-bold small text-uppercase mb-0">
+                  <?php echo htmlspecialchars($team['group_name']); ?>
+                </p>
+              </div>
+              <div class="col-3">
+                <p class="mb-0">
+                  <span class="badge text-bg-warning text-white small text-uppercase">
+                    <?php echo htmlspecialchars($team['course_code']); ?>
+                  </span>
+                </p>
+              </div>
+              <div class="col-3">
+                <p class="mb-0">
+                  <span class="badge text-bg-primary small text-uppercase">
+                    <?php echo $team['adviser_id']
+                      ? htmlspecialchars($team['adviser_firstname'] . ' ' . $team['adviser_lastname'])
+                      : 'Unassigned'; ?>
+                  </span>
+                </p>
+              </div>
+              <div class="col-3">
+                <p class="mb-0">
+                  <button
+                    type="button"
+                    class="badge text-bg-danger text-white small text-uppercase mb-0 border-0"
+                    onclick="assignAdviser(<?php echo (int)$team['team_id']; ?>, <?php echo $team['adviser_id'] ? (int)$team['adviser_id'] : 'null'; ?>)"
+                  >
+                    <?php echo $team['adviser_id'] ? 'Reassign' : 'Request'; ?>
+                  </button>
+                </p>
               </div>
             </div>
+            <?php endforeach; ?>
           </div>
 
           <div class="box mb-4">
@@ -292,6 +317,28 @@ try {
           if (window.innerWidth < 992) toggleSidebar();
         });
       });
+
+
+      async function assignAdviser(teamId, adviserId) {
+  try {
+    const res = await fetch("../../api/coordinator/adviser_assignment.php", {
+      method: "POST",
+      credentials: "same-origin",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ team_id: teamId, adviser_id: adviserId }),
+    });
+    const data = await res.json();
+    if (!data.success) {
+      alert(data.error || "Failed to assign adviser");
+      return;
+    }
+    location.reload(); // or update the DOM in place
+  } catch (err) {
+    console.error("Error assigning adviser", err);
+  }
+}
     </script>
+
+    
   </body>
 </html>

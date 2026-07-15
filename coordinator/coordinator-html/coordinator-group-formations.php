@@ -1,6 +1,6 @@
 <?php
 // 1. Include the PDO database connection
-require_once '..\..\api\db.php'; 
+require_once '../../api/db.php';
 
 // 2. Fetch coordinator name safely using PDO
 try {
