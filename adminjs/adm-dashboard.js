@@ -1,9 +1,3 @@
-/* ==========================================================================
-   Admin Dashboard — greeting, quick stats, pending approvals, deadlines,
-   recent activity, announcement preview, recent submissions.
-   Chart rendering itself stays in adm-chart.js (untouched contract).
-   ========================================================================== */
-
 document.addEventListener("DOMContentLoaded", () => {
     fetch("../configuration/adm-dashboard-data.php")
         .then(res => {
@@ -97,7 +91,7 @@ function renderRecentSubmissions(items) {
     `).join("");
 }
 
-/* --- helpers -------------------------------------------------------------- */
+
 
 function escapeHtml(str) {
     if (str === null || str === undefined) return "";

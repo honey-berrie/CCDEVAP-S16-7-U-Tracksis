@@ -1,13 +1,7 @@
 <?php
-/*
-|--------------------------------------------------------------------------
-| Settings Actions Endpoint (POST)
-|--------------------------------------------------------------------------
-| action=update_profile  -> firstname, lastname, email, password (optional)
-| action=update_settings -> maintenance_mode
-*/
 
 require_once "session.php";
+requireAdminApi();
 header("Content-Type: application/json");
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {

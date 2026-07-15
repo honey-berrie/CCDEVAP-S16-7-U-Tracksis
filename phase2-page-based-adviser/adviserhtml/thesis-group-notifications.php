@@ -18,6 +18,7 @@
     <link rel="stylesheet" href="../advisercss/adviser-overview.css?v=20260715c">
 </head>
 <body>
+    <script src="../../js/maintenance-check.js"></script>
 
     <div class="app-layout">
       

@@ -1,3 +1,23 @@
+<?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+$loggedInUser = $_SESSION['user'] ?? null;
+$adviserName = 'Adviser';
+
+if (is_array($loggedInUser)) {
+    $firstName = trim($loggedInUser['firstname'] ?? '');
+    $lastName = trim($loggedInUser['lastname'] ?? '');
+    $fullName = trim($firstName . ' ' . $lastName);
+
+    if ($fullName !== '') {
+        $adviserName = $fullName;
+    }
+}
+
+$currentDate = date('l, F j, Y');
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -68,8 +88,8 @@
 
         <header class="dashboard-header">
           <div class="greeting">
-            <p class="date">Monday, May 24, 2026</p>
-            <h2>Good Morning, Dr. Richards</h2>
+            <p class="date"><?= htmlspecialchars($currentDate) ?></p>
+            <h2>Good Morning, <?= htmlspecialchars($adviserName) ?></h2>
           </div>
           <div class="header-actions">
             <a class="btn-outline" href="thesis-adviser-submissions.php">Review submissions</a>

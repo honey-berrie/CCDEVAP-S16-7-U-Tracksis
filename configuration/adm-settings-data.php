@@ -1,13 +1,7 @@
 <?php
-/*
-|--------------------------------------------------------------------------
-| Settings Data Endpoint (GET)
-|--------------------------------------------------------------------------
-| Returns the current admin's profile fields and the system_settings
-| key/value table (site name, academic year, maintenance mode).
-*/
 
 require_once "session.php";
+requireAdminApi();
 
 $admin = getCurrentAdmin($conn);
 
@@ -24,7 +18,6 @@ echo json_encode([
         "firstname" => $admin['firstname'],
         "lastname" => $admin['lastname'],
         "email" => $admin['email'],
-        "avatarUrl" => $admin['avatar_url'],
     ],
     "settings" => [
         "siteName" => $settings['site_name'] ?? "U-Tracksis",

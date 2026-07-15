@@ -15,9 +15,10 @@ async function checkLoginStatus() {
       // redirect based on role
       const role = checkData.user.role;
       if (role === "admin")
-        window.location.href = "../../adminhtml/admin-dashboard.php";
+        window.location.href = "../../adminpages/adm-dashboard.php";
       else if (role === "adviser")
-        window.location.href = "../../adviserhtml/thesis-adviser-overview.html";
+        window.location.href =
+          "../../phase2-page-based-adviser/adviserhtml/thesis-adviser-overview.php";
       else if (role === "coordinator")
         window.location.href =
           "../../coordinator/coordinator-html/coordinator-overview.php";
@@ -50,6 +51,10 @@ async function login() {
     const data = await res.json();
 
     if (!res.ok) {
+      if (data.maintenance) {
+        window.location.href = "../../maintenance.html";
+        return;
+      }
       alert(data.error || "Login failed");
       return;
     }
@@ -58,9 +63,10 @@ async function login() {
     // redirect based on role
     const role = data.user.role;
     if (role === "admin")
-      window.location.href = "../../adminhtml/admin-dashboard.php";
-    else if (role === "adviser" || role === "panel")
-      window.location.href = "../../adviserhtml/thesis-adviser-overview.html";
+      window.location.href = "../../adminpages/adm-dashboard.php";
+    else if (role === "adviser")
+      window.location.href =
+        "../../phase2-page-based-adviser/adviserhtml/thesis-adviser-overview.php";
     else if (role === "coordinator")
       window.location.href =
         "../../coordinator/coordinator-html/coordinator-overview.php";

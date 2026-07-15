@@ -370,8 +370,9 @@ function initTheme() {
   var themeToggle = document.getElementById("themeToggle");
   var themeIcon = document.getElementById("themeIcon");
   var html = document.documentElement;
-  var moonIcon = "assets/icons/moon-stars-fill.svg";
-  var sunIcon = "assets/icons/sun-fill.svg";
+  var iconBasePath = window.location.pathname.includes("/adviserhtml/") ? "../assets/icons/" : "assets/icons/";
+  var moonIcon = iconBasePath + "moon-stars-fill.svg";
+  var sunIcon = iconBasePath + "sun-fill.svg";
 
   function setTheme(theme) {
     if (theme === "dark") {

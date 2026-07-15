@@ -1,8 +1,3 @@
-/* ==========================================================================
-   Archive — teams ready to archive, paginated archived list, detail modal,
-   archive/restore actions.
-   ========================================================================== */
-
 const archiveState = { search: "", page: 1, perPage: 9 };
 
 document.addEventListener("DOMContentLoaded", () => {

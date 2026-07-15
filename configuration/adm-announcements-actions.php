@@ -1,20 +1,7 @@
 <?php
-/*
-|--------------------------------------------------------------------------
-| Announcements Actions Endpoint (POST)
-|--------------------------------------------------------------------------
-| action=save    -> id (optional), title, message
-|                   (create if no id, update in place if id given)
-| action=delete  -> id
-|
-| No more draft/publish and no more audience -- the announcements table
-| doesn't have those columns anymore. Every announcement is posted
-| immediately and is system-wide: group_id is left NULL and is_broadcast
-| is hardcoded to 1 on insert (Admin doesn't target a single thesis group,
-| that's a Coordinator responsibility). Author is sender_id.
-*/
 
 require_once "session.php";
+requireAdminApi();
 header("Content-Type: application/json");
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {

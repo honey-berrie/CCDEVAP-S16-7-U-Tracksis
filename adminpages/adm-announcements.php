@@ -1,3 +1,7 @@
+<?php
+require_once __DIR__ . "/../configuration/session.php";
+requireAdminAuth();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

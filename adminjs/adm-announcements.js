@@ -1,8 +1,3 @@
-/* ==========================================================================
-   Announcements — single list (no drafts, no audience -- the schema no
-   longer supports either), compose, edit, delete, preview.
-   ========================================================================== */
-
 document.addEventListener("DOMContentLoaded", () => {
     loadAnnouncements();
     bindAnnouncementForm();

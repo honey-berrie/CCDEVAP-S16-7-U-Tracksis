@@ -2,6 +2,10 @@
 
 require_once __DIR__ . '/db.php';
 
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
 function adviserGetThesisGroups(PDO $pdo): array
 {
     $statement = $pdo->query(
@@ -94,7 +98,13 @@ function adviserGetMilestoneGroups(PDO $pdo): array
 
 function adviserGetSubmissions(PDO $pdo): array
 {
-    $statement = $pdo->query(
+    $currentAdviserId = (int) ($_SESSION['user']['id'] ?? 0);
+
+    if ($currentAdviserId <= 0) {
+        return [];
+    }
+
+    $statement = $pdo->prepare(
         'SELECT s.id AS submission_id,
                 s.group_id,
                 s.title,
@@ -110,8 +120,10 @@ function adviserGetSubmissions(PDO $pdo): array
                 t.group_name
          FROM submissions s
          INNER JOIN teams t ON s.group_id = t.id
+         WHERE t.adviser_id = ?
          ORDER BY t.group_name ASC, s.uploaded_at DESC, s.id DESC'
     );
+    $statement->execute([$currentAdviserId]);
 
     return $statement->fetchAll();
 }
@@ -121,6 +133,11 @@ function adviserGetConsultations(PDO $pdo, string $status): array
     $statusList = $status === 'Scheduled'
         ? ['pending', 'approved']
         : ['completed'];
+    $currentAdviserId = (int) ($_SESSION['user']['id'] ?? 0);
+
+    if ($currentAdviserId <= 0) {
+        return [];
+    }
 
     $placeholders = implode(',', array_fill(0, count($statusList), '?'));
     $statement = $pdo->prepare(
@@ -128,7 +145,10 @@ function adviserGetConsultations(PDO $pdo, string $status): array
                 c.proposed_schedule AS consultation_date,
                 c.consultation_end,
                 c.meeting_link,
-                COALESCE(NULLIF(c.topic, ""), c.agenda, "Consultation") AS notes,
+                CASE
+                    WHEN c.status = "completed" THEN COALESCE(NULLIF(c.adviser_notes, ""), NULLIF(c.topic, ""), c.agenda, "Consultation")
+                    ELSE COALESCE(NULLIF(c.topic, ""), c.agenda, "Consultation")
+                END AS notes,
                 c.reschedule_reason,
                 CASE
                     WHEN c.status = "completed" THEN "Completed"
@@ -139,9 +159,10 @@ function adviserGetConsultations(PDO $pdo, string $status): array
          FROM consultations c
          INNER JOIN teams t ON c.group_id = t.id
          WHERE c.status IN (' . $placeholders . ')
+           AND (c.recipient_id = ? OR c.user_id = ?)
          ORDER BY c.proposed_schedule ' . ($status === 'Scheduled' ? 'ASC' : 'DESC')
     );
-    $statement->execute($statusList);
+    $statement->execute(array_merge($statusList, [$currentAdviserId, $currentAdviserId]));
 
     return $statement->fetchAll();
 }
@@ -239,6 +260,28 @@ function adviserHandlePost(PDO $pdo, string $redirectPage): void
             trim($_POST['consultation_end_time'] ?? '')
         );
 
+        $groupId = (int) ($_POST['group_id'] ?? 0);
+        $adviserUserId = (int) ($_SESSION['user']['id'] ?? 0);
+
+        if ($adviserUserId <= 0) {
+            $adviserUserId = (int) $pdo->query('SELECT id FROM users WHERE role = "adviser" AND is_active = 1 ORDER BY id ASC LIMIT 1')->fetchColumn();
+        }
+
+        $recipientStatement = $pdo->prepare(
+            'SELECT gm.user_id
+             FROM group_members gm
+             INNER JOIN users u ON u.id = gm.user_id
+             WHERE gm.group_id = :group_id AND u.role = "student"
+             ORDER BY gm.member_role = "Leader" DESC, gm.user_id ASC
+             LIMIT 1'
+        );
+        $recipientStatement->execute(['group_id' => $groupId]);
+        $recipientId = (int) $recipientStatement->fetchColumn();
+
+        if ($recipientId <= 0) {
+            $recipientId = (int) $pdo->query('SELECT id FROM users WHERE role = "student" AND is_active = 1 ORDER BY id ASC LIMIT 1')->fetchColumn();
+        }
+
         $statement = $pdo->prepare(
             'INSERT INTO consultations (
                 group_id, user_id, recipient_id, topic, agenda, proposed_schedule,
@@ -246,8 +289,8 @@ function adviserHandlePost(PDO $pdo, string $redirectPage): void
              )
              VALUES (
                 :group_id,
-                COALESCE((SELECT id FROM users WHERE role = "student" ORDER BY id ASC LIMIT 1), 1),
-                COALESCE((SELECT id FROM users WHERE role = "adviser" ORDER BY id ASC LIMIT 1), 1),
+                :user_id,
+                :recipient_id,
                 :topic,
                 :agenda,
                 :consultation_date,
@@ -258,7 +301,9 @@ function adviserHandlePost(PDO $pdo, string $redirectPage): void
              )'
         );
         $statement->execute([
-            'group_id' => (int) ($_POST['group_id'] ?? 0),
+            'group_id' => $groupId,
+            'user_id' => $adviserUserId,
+            'recipient_id' => $recipientId,
             'topic' => trim($_POST['agenda'] ?? ''),
             'consultation_date' => $start,
             'consultation_end' => $end,

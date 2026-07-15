@@ -1,19 +1,7 @@
 <?php
-/*
-|--------------------------------------------------------------------------
-| Announcements Data Endpoint (GET)
-|--------------------------------------------------------------------------
-| Returns every announcement, newest first.
-|
-| The announcements table now has no draft/published state and no
-| audience column (per the group's latest schema: id, sender_id, group_id,
-| is_broadcast, title, message, created_at) -- so there's nothing left to
-| split into two lists or filter by audience. Admin announcements are
-| always system-wide (group_id NULL, is_broadcast 1); author is resolved
-| via sender_id.
-*/
 
 require_once "session.php";
+requireAdminApi();
 
 $stmt = $conn->prepare("
     SELECT a.id, a.title, a.message, a.created_at,

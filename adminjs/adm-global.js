@@ -16,6 +16,46 @@ function loadAdmSideBar() {
         });
 }
 
+function renderAdminTopBar() {
+    const mainContainer = document.querySelector(".main-container");
+    if (!mainContainer) return;
+
+    const topBar = document.createElement("div");
+    topBar.className = "top-bar";
+    topBar.innerHTML = `
+        <div class="topbar-actions">
+            <button class="btn-logout" type="button" id="adminLogoutBtn">
+                <img src="../assets/icons/box-arrow-left.svg" alt="" class="bi">
+                <span>Logout</span>
+            </button>
+            <img src="../assets/images/logo.png" alt="Profile" class="topbar-avatar">
+        </div>
+    `;
+
+    mainContainer.prepend(topBar);
+
+    document.getElementById("adminLogoutBtn").addEventListener("click", logoutAdmin);
+}
+
+async function logoutAdmin() {
+    try {
+        await fetch("../api/auth/logout.php", {
+            method: "POST",
+            credentials: "include",
+        });
+    } catch (err) {
+        console.error("Logout request failed:", err);
+    }
+
+    redirectToLogin();
+}
+
+function redirectToLogin() {
+    window.location.replace("../pages/auth/auth.html");
+}
+
+renderAdminTopBar();
+
 function applyTheme(theme) {
     const themeIcon = document.getElementById("themeIcon");
 

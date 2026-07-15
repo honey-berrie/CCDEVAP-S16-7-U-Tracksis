@@ -1,8 +1,3 @@
-/* ==========================================================================
-   Thesis Records — search, adviser/status filters, card grid, pagination,
-   and a read-only detail modal (timeline, submissions, members, adviser).
-   ========================================================================== */
-
 const recordsState = {
     search: "",
     adviser: "",
@@ -20,8 +15,6 @@ document.addEventListener("DOMContentLoaded", () => {
         btn.addEventListener("click", () => document.getElementById(btn.dataset.closeModal).classList.remove("show"));
     });
 
-    // Dashboard's "Create Thesis Group" quick action links here and expects
-    // the modal to open automatically.
     const params = new URLSearchParams(window.location.search);
     if (params.get("action") === "create-group") {
         openCreateTeamModal();
@@ -143,7 +136,6 @@ function bindRecordsToolbar() {
     });
 }
 
-/* --- Detail modal ------------------------------------------------------------ */
 
 function openRecordDetail(id) {
     const overlay = document.getElementById("recordModalOverlay");
@@ -220,7 +212,6 @@ function renderRecordDetail(data) {
     `;
 }
 
-/* --- Create Thesis Group modal ------------------------------------------------ */
 
 function bindTeamModalEvents() {
     document.getElementById("openCreateTeamModal").addEventListener("click", openCreateTeamModal);
@@ -235,8 +226,7 @@ function openCreateTeamModal() {
 }
 
 function loadTeamModalLookups() {
-    // Reuses adm-users-data.php, which already returns the adviser list and
-    // unassigned-student checklist alongside the users table payload.
+
     fetch("../configuration/adm-users-data.php?perPage=5")
         .then(res => res.json())
         .then(data => {
@@ -313,7 +303,6 @@ function saveTeam() {
         });
 }
 
-/* --- Shared helpers ------------------------------------------------------------ */
 
 function escapeHtml(str) {
     if (str === null || str === undefined) return "";

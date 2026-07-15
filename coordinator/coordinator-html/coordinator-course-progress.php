@@ -98,6 +98,7 @@ if (!empty($sessUser['id'])) {
     />
   </head>
   <body>
+  <script src="../../js/maintenance-check.js"></script>
     <div class="dashboard-wrapper">
       <!-- sidebar -->
       <aside class="sidebar" id="sidebar">

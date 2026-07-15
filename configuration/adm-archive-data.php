@@ -1,6 +1,7 @@
 <?php
 
 require_once "session.php";
+requireAdminApi();
 
 header("Content-Type: application/json");
 
