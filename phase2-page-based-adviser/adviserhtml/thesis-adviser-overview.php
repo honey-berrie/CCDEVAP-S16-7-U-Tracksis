@@ -39,7 +39,6 @@ $currentDate = date('l, F j, Y');
 
 </head>
 <body>
-    <script src="../../js/maintenance-check.js"></script>
 
     <div class="app-layout">
       
