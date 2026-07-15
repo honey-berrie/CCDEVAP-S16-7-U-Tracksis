@@ -1,0 +1,44 @@
+.main-container {
+    margin-left: 240px;
+    min-height: 100vh;
+    padding: 2rem;
+}
+
+.page-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--navy-accent);
+    margin: 0;
+}
+
+.page-subtitle {
+    color: var(--text-light);
+    font-size: 0.85rem;
+    margin: 0.2rem 0 0;
+}
+
+.settings-layout {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    align-items: start;
+    gap: 1.25rem;
+}
+
+.save-confirm {
+    margin-left: 0.75rem;
+    font-size: 0.8rem;
+    color: var(--success);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.save-confirm.show {
+    opacity: 1;
+}
+
+@media (max-width: 991.98px) {
+    .main-container {
+        margin-left: 0;
+        padding: 1.25rem;
+    }
+}

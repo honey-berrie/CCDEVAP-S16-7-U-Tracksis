@@ -1,0 +1,42 @@
+.dashboard-container {
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 16px 24px 48px;
+}
+
+.chart-card {
+    height: 100%;
+    padding: 24px;
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+}
+
+.chart-title {
+    margin-bottom: 10px;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #12224a;
+}
+
+.chart-divider {
+    margin-bottom: 20px;
+    border: none;
+    border-top: 1px solid #e9e9e9;
+}
+
+canvas {
+    width: 100% !important;
+}
+
+#submissionStatsChart,
+#progressStatsChart,
+#adviserWorkloadChart {
+    max-height: 300px;
+}
+
+@media (max-width: 991.98px) {
+    .dashboard-container {
+        padding: 16px;
+    }
+}
