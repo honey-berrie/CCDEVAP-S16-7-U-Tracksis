@@ -35,3 +35,32 @@
 .box .row:last-child {
   border-bottom: none !important;
 }
+
+attention-list {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* Modern browser native theme compatibility */
+[data-theme="dark"] .attention-list {
+  color-scheme: dark;
+}
+[data-theme="light"] .attention-list {
+  color-scheme: light;
+}
+
+/* Webkit layout scrollbar styling matching your existing active color palette */
+.attention-list::-webkit-scrollbar {
+  width: 6px;
+}
+.attention-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+[data-theme="dark"] .attention-list::-webkit-scrollbar-thumb {
+  background-color: #182e58; /* Matching active dark mode highlight */
+  border-radius: 10px;
+}
+[data-theme="light"] .attention-list::-webkit-scrollbar-thumb {
+  background-color: #cbd5e1; /* Matching light mode gray */
+  border-radius: 10px;
+}

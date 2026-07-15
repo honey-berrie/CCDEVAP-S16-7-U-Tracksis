@@ -45,12 +45,15 @@ if ($userId) {
     $handledCount = 0;
   }
 }
-
-// Fetch group counts (total groups for coordinator's courses, and pending groups)
+// Fetch group counts (total groups, pending, and off-track groups for coordinator's courses)
 $totalGroups = 0;
 $pendingGroups = 0;
+$offTrackGroups = 0;
+$attentionGroups = []; // New array to store groups requiring attention
+
 if ($userId) {
   try {
+    // 1. Total Groups
     $sql = "SELECT COUNT(*) FROM teams t
             LEFT JOIN sections s ON t.section_id = s.id
             LEFT JOIN courses c ON s.course_id = c.id
@@ -59,6 +62,7 @@ if ($userId) {
     $stmt->execute([$userId]);
     $totalGroups = (int)$stmt->fetchColumn();
 
+    // 2. Pending Groups
     $sql = "SELECT COUNT(*) FROM teams t
             LEFT JOIN sections s ON t.section_id = s.id
             LEFT JOIN courses c ON s.course_id = c.id
@@ -66,9 +70,36 @@ if ($userId) {
     $stmt = $pdo->prepare($sql);
     $stmt->execute([$userId]);
     $pendingGroups = (int)$stmt->fetchColumn();
+
+    // 3. Off-Track Groups (progress_status = 'falling behind')
+    $sql = "SELECT COUNT(*) FROM teams t
+            LEFT JOIN sections s ON t.section_id = s.id
+            LEFT JOIN courses c ON s.course_id = c.id
+            WHERE c.coordinator_id = ? AND t.progress_status = 'falling behind'";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([$userId]);
+    $offTrackGroups = (int)$stmt->fetchColumn();
+
+    // 4. Fetch the specific groups for the Attention Scrollable Container
+    $sql = "SELECT t.id AS team_id, t.group_name, c.course_code, t.approval_status, t.progress_status,
+                   u.firstname AS adviser_firstname, u.lastname AS adviser_lastname
+            FROM teams t
+            LEFT JOIN sections s ON t.section_id = s.id
+            LEFT JOIN courses c ON s.course_id = c.id
+            LEFT JOIN users u ON t.adviser_id = u.id
+            WHERE c.coordinator_id = ? 
+              AND ((t.approval_status = 'pending' OR t.approval_status IS NULL) 
+                   OR t.progress_status = 'falling behind')
+            ORDER BY t.group_name";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([$userId]);
+    $attentionGroups = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
   } catch (PDOException $e) {
     $totalGroups = 0;
     $pendingGroups = 0;
+    $offTrackGroups = 0;
+    $attentionGroups = [];
   }
 }
 ?>
@@ -104,6 +135,8 @@ if ($userId) {
       rel="stylesheet"
       href="../../css/coordinator/coordinator-dashboard.css"
     />
+
+    <link rel="stylesheet" href="../coordinator-css/coordinator.css" />
   </head>
   <body>
     <div class="dashboard-wrapper">
@@ -236,7 +269,7 @@ if ($userId) {
         <!-- 4 cards layout, In a row when Big, 2x2 grid when small -->
         <div class="row g-4 mb-4">
           <!-- Handled Courses -->
-          <div class="col-lg-6">
+          <div class="col-lg-3 col-md-6">
             <div class="box mb-4 h-100">
               <p class="box-label">Handled Courses</p>
               <h3 class="fw-bold mb-3"><?php echo (int)$handledCount; ?></h3>
@@ -253,10 +286,26 @@ if ($userId) {
           </div>
 
           <!-- Active Groups -->
-          <div class="col-lg-6">
+          <div class="col-lg-3 col-md-6">
             <div class="box mb-4 h-100">
               <p class="box-label">Active Groups</p>
               <h3 class="fw-bold mb-3"><?php echo (int)$totalGroups; ?></h3>
+            </div>
+          </div>
+
+          <!-- Pending Formations -->
+          <div class="col-lg-3 col-md-6">
+            <div class="box mb-4 h-100">
+              <p class="box-label">Pending Formations</p>
+              <h3 class="fw-bold mb-3"><?php echo (int)$pendingGroups; ?></h3>
+            </div>
+          </div>
+
+          <!-- Off-Track Groups -->
+          <div class="col-lg-3 col-md-6">
+            <div class="box mb-4 h-100">
+              <p class="box-label">Off-Track Groups</p>
+              <h3 class="fw-bold mb-3"><?php echo (int)$offTrackGroups; ?></h3>
             </div>
           </div>
 
@@ -268,19 +317,8 @@ if ($userId) {
                   class="d-flex justify-content-between align-items-center mb-2"
                 >
                   <p class="box-label">Handled Courses</p>
-                  <h4 class="fw-bold mb-3">Avg. 27%</h4>
                 </div>
-                <h2 class="display-5 fw-bold mb-0">Thesis Writing 2</h2>
-                <div class="progress mt-3 rounded-pill" style="height: 10px">
-                  <div
-                    class="progress-bar bg-primary"
-                    role="progressbar"
-                    style="width: 27%"
-                    aria-valuenow="45"
-                    aria-valuemin="0"
-                    aria-valuemax="100"
-                  ></div>
-                </div>
+                
 
                 <div
                   id="chart"
@@ -306,15 +344,49 @@ if ($userId) {
               </div>
             </div>
 
-            <div class="col-lg-6 col-md-12">
-              <div class="box mb-4 h-100">
+           <div class="col-lg-6 col-md-12">
+              <div class="box mb-4 h-100 d-flex flex-column">
                 <p class="box-label">Needs your attention!</p>
-                <div class="d-flex justify-content-between align-items-center">
-                  <h2 class="fw-bold mb-0">Pending Group formations to review</h2>
-                  <h3 class="fw-bold mb-0"><?php echo (int)$pendingGroups; ?></h3>
+                <div class="d-flex justify-content-between align-items-center mb-2 pb-2 border-bottom">
+                  <h2 class="fw-bold mb-0" style="font-size: 1.5rem;">Group formations to review</h2>
+                  <h3 class="fw-bold mb-0"><?php echo (int)($pendingGroups + $offTrackGroups); ?></h3>
+                </div>
+                
+                <!-- Scrollable Attention Container -->
+                <div class="attention-list flex-grow-1" style="height: 0; overflow-y: auto; padding-right: 8px;">
+                  <?php if (!empty($attentionGroups)): ?>
+                    <?php foreach ($attentionGroups as $g): ?>
+                      <!-- Switched to .row class to match your border-bottom css perfectly -->
+                      <div class="row py-2 border-bottom align-items-center">
+                        <div class="col-8">
+                          <!-- Removed 'text-white' to inherit light/dark mode colors -->
+                          <p class="fw-bold mb-0" style="font-size: 0.95rem;">
+                            <?php echo htmlspecialchars($g['group_name']); ?>
+                          </p>
+                          <p class="text-muted mb-0" style="font-size: 0.8rem;">
+                            Course: <span class="fw-bold text-warning"><?php echo htmlspecialchars($g['course_code']); ?></span> | 
+                            Adviser: <span class="fw-bold"><?php echo $g['adviser_firstname'] ? htmlspecialchars($g['adviser_firstname'] . ' ' . $g['adviser_lastname']) : 'Unassigned'; ?></span>
+                          </p>
+                        </div>
+                        <div class="col-4 text-end">
+                          <?php
+                          if ($g['approval_status'] === 'pending' || is_null($g['approval_status'])) {
+                              echo '<span class="badge text-bg-warning text-white small text-uppercase me-1">Pending</span>';
+                          }
+                          if ($g['progress_status'] === 'falling behind') {
+                              echo '<span class="badge text-bg-danger text-white small text-uppercase">Off-Track</span>';
+                          }
+                          ?>
+                        </div>
+                      </div>
+                    <?php endforeach; ?>
+                  <?php else: ?>
+                    <p class="text-muted small mt-3 mb-0">No groups currently require attention.</p>
+                  <?php endif; ?>
                 </div>
               </div>
             </div>
+
           </div>
         </div>
 
