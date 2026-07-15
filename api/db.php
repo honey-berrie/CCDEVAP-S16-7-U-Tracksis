@@ -1,6 +1,7 @@
 <?php
 
 session_start();
+date_default_timezone_set('Asia/Manila');
 
 $DB_HOST = 'localhost';
 $DB_NAME = 'u_tracksis';

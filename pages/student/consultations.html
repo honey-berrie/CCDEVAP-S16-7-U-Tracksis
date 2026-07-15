@@ -84,21 +84,6 @@
           <img src="../../assets/icons/list.svg" alt="" class="bi">
         </button>
 
-        <div class="topbar-search">
-          <svg
-            class="bi search-icon"
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            fill="currentColor"
-            viewBox="0 0 16 16"
-            aria-hidden="true"
-          >
-            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
-          </svg>
-          <input type="text" class="form-control" placeholder="Search...">
-        </div>
-
         <div class="topbar-actions">
           <span class="topbar-user" id="topbar-user">User Name</span>
           <button class="btn-logout" type="button" onclick="logout()">
@@ -108,39 +93,34 @@
         </div>
       </div>
 
-      <!-- page header -->
       <div class="page-header">
         <p class="page-eyebrow">SCHEDULE</p>
         <h1 class="page-title">Request a Consultation</h1>
         <p class="page-subtitle">Comments and revisions from your adviser and panel members.</p>
       </div>
 
-      <!-- to field -->
+      <!-- recipient field -->
       <div class="to-field">
         <label class="form-label-sm">To:</label>
         <div class="to-input">
           <img src="../../assets/icons/person-circle.svg" alt="" class="to-avatar bi">
-          <input type="text" class="form-control" placeholder="Select adviser or panel member">
+          <input type="text" class="form-control" id="recipientInput" placeholder="Select adviser or panel member">
         </div>
       </div>
 
-      <!-- slots and details row -->
       <div class="row g-3 mb-3">
-        <!-- available slots box -->
+
+        <!-- schedule picker box -->
         <div class="col-lg-6">
           <div class="box h-100">
-            <p class="box-label">Available Slots</p>
-            <div class="slots-grid">
-              <div class="slot-card">
-                <p class="slot-day">Day of the week</p>
-                <p class="slot-date">Month Day</p>
-                <p class="slot-time">Time</p>
-              </div>
-              <div class="slot-card">
-                <p class="slot-day">Day of the week</p>
-                <p class="slot-date">Month Day</p>
-                <p class="slot-time">Time</p>
-              </div>
+            <p class="box-label">Schedule</p>
+            <div class="mb-3">
+              <label class="form-label-sm">Date</label>
+              <input type="date" id="scheduledDate" class="form-control">
+            </div>
+            <div class="mb-3">
+              <label class="form-label-sm">Time</label>
+              <input type="time" id="scheduledTime" class="form-control">
             </div>
           </div>
         </div>
@@ -152,11 +132,11 @@
             <form id="consultationForm">
               <div class="mb-3">
                 <label class="form-label-sm">Topic</label>
-                <input type="text" class="form-control" placeholder="Enter consultation topic">
+                <input type="text" class="form-control" id="topicInput" placeholder="Enter consultation topic">
               </div>
               <div class="mb-3">
                 <label class="form-label-sm">Agenda</label>
-                <textarea class="form-control agenda-textarea" rows="3" placeholder="List items to discuss..."></textarea>
+                <textarea class="form-control agenda-textarea" id="agendaInput" rows="3" placeholder="List items to discuss..."></textarea>
               </div>
               <div class="d-flex justify-content-end">
                 <button type="submit" class="btn-action-primary">Send Request</button>
@@ -167,47 +147,8 @@
       </div>
 
       <!-- consultation history box -->
-      <div class="box">
+      <div class="box" id="historyBox">
         <p class="box-label">Consultation History</p>
-
-        <!-- history item 1 -->
-        <div class="history-item">
-          <div class="history-date">
-            <p class="history-date-main">Month Day, Year</p>
-            <p class="history-date-sub">Time</p>
-          </div>
-          <div class="history-body">
-            <p class="history-chapter">Chapter <span>--</span></p>
-            <p class="history-comments">"Comments...."</p>
-            <div class="history-actions">
-              <button class="btn-link-action" type="button">Update</button>
-              <button class="btn-link-action" type="button">Send Revisions</button>
-            </div>
-          </div>
-          <div class="history-side">
-            <span class="badge-status badge-approved">Completed</span>
-          </div>
-        </div>
-
-        <!-- history item 2 -->
-        <div class="history-item">
-          <div class="history-date">
-            <p class="history-date-main">Month Day, Year</p>
-            <p class="history-date-sub">Time</p>
-          </div>
-          <div class="history-body">
-            <p class="history-chapter">Chapter <span>--</span></p>
-            <p class="history-comments">"Comments...."</p>
-            <div class="history-actions">
-              <button class="btn-link-action" type="button">Update</button>
-              <button class="btn-link-action" type="button">Send Revisions</button>
-            </div>
-          </div>
-          <div class="history-side">
-            <span class="badge-status badge-approved">Completed</span>
-          </div>
-        </div>
-
       </div>
 
     </main>
@@ -216,6 +157,7 @@
   <script src="../../js/bootstrap.bundle.min.js"></script>
   <script src="../../js/student/theme.js"></script>
   <script src="../../js/student/dashboard.js"></script>
+  <script src="../../js/student/consultations.js"></script>
   <script>
     /* sidebar toggle */
     const sidebar = document.getElementById('sidebar');
@@ -237,13 +179,6 @@
       });
     });
 
-    /* slot card selection */
-    document.querySelectorAll('.slot-card').forEach(card => {
-      card.addEventListener('click', () => {
-        document.querySelectorAll('.slot-card').forEach(c => c.classList.remove('selected'));
-        card.classList.add('selected');
-      });
-    });
   </script>
 </body>
 </html>

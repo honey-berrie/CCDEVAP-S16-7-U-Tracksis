@@ -6,7 +6,7 @@ require_once __DIR__ . '/../helpers.php';
 
 $in = getInput();
 $email = trim($in['email'] ?? '');
-$pass  = $in['password'] ?? '';
+$pass = $in['password'] ?? '';
 
 if (!$email || !$pass) error('Email and password required', 422);
 

@@ -154,8 +154,6 @@ async function uploadFile(file) {
 
         console.log('Upload successful:', data);
 
-        // await loadSubmissions();
-
         alert(`Uploaded: ${file.name}`);
 
         await loadSubmissions();
@@ -183,19 +181,19 @@ function getTitle(v) {
 
 function statusBadgeClass(s) {
     return {
-        in_review: 'badge-review',
-        approved: 'badge-approved',
-        rejected: 'badge-rejected',
-        revision_requested: 'badge-progress',
+        'in-review': 'badge-review',
+        'approved': 'badge-approved',
+        'rejected': 'badge-rejected',
+        'revision-requested': 'badge-progress',
     }[s] || '';
 }
 
 function prettyStatus(s) {
     return {
-        in_review: 'In Review',
-        approved: 'Approved',
-        rejected: 'Rejected',
-        revision_requested: 'Revision Requested',
+        'in-review': 'In Review',
+        'approved': 'Approved',
+        'rejected': 'Rejected',
+        'revision-requested': 'Revision Requested',
     }[s] || s;
 }
 
@@ -222,6 +220,8 @@ async function loadSubmissions() {
             alert('Failed to fetch submissions: ' + res.statusText);
             return;
         }
+
+        console.log('Fetched submissions:', data);
 
         const submissions = Array.isArray(data.submissions) ? data.submissions : [];
         const recent = submissions.slice(0, 3);
@@ -272,6 +272,7 @@ function buildRecentItem(s) {
     div.dataset.statusClass = statusBadgeClass(s.status);
     div.dataset.uploader = s.uploader_name || '';
     div.dataset.fileUrl = '/' + (s.file_path || '');
+    div.dataset.file_name = s.file_name || '';
 
     div.innerHTML = `
         <div class="submission-thumb">
@@ -301,6 +302,7 @@ function buildHistoryRow(s) {
     div.dataset.statusClass = statusBadgeClass(s.status);
     div.dataset.uploader = s.uploader_name || '';
     div.dataset.fileUrl = '/' + (s.file_path || '');
+    div.dataset.file_name = s.file_name || '';
 
     div.innerHTML = `
         <div class="history-bullet"></div>
@@ -334,14 +336,14 @@ function bindPreviewButtons() {
 }
 
 function openPreview(item) {
-    const title = item.dataset.title;
+    const title = item.dataset.file_name || item.dataset.title || 'Document';
     const date = item.dataset.date;
     const size = item.dataset.size;
     const uploader = item.dataset.uploader;
     const status = item.dataset.status;
     const statusClass = item.dataset.statusClass;
 
-    document.getElementById('previewTitle').textContent = title;
+    document.getElementById('previewTitle').textContent = item.dataset.title;
     document.getElementById('previewDate').textContent = date;
     document.getElementById('previewSize').textContent = size;
     document.getElementById('previewUploader').textContent = uploader;
@@ -349,10 +351,10 @@ function openPreview(item) {
     statusEl.textContent = status;
     statusEl.className = 'badge-status ' + statusClass;
     document.getElementById('previewFileName').textContent =
-        title.toLowerCase().replace(/\s+/g, '-') + '.pdf';
+        title.toLowerCase().replace(/\s+/g, '-');
     document.getElementById('previewFileMeta').textContent = 'PDF Document • ' + size;
 
-    // open the actual PDF in a new tab
+    
     const fileUrl = item.dataset.fileUrl;
     const closeBtn = document.getElementById('previewCloseBtn');
     const downBtn = document.getElementById('previewDownload');

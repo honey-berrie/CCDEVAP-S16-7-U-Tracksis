@@ -61,6 +61,20 @@ if ($method === 'POST') {
         $user['id'],
     ]);
 
+    // log activity
+    $stmt = $pdo->prepare("
+        INSERT INTO activities
+            (group_id, user_id, type, description)
+        VALUES (?, ?, ?, ?)
+    ");
+    $stmt->execute([
+        $groupId,
+        $user['id'],
+        'submission_uploaded',
+        $user['firstname'] . ' ' . $user['lastname'] . ' uploaded ' . $title,
+    ]);
+    
+
     json(['success' => true, 'message' => 'Submission uploaded successfully']);
 }
 
@@ -95,6 +109,9 @@ else if ($method === 'GET') {
                 break;
             case 'rejected':
                 $submission['status_class'] = 'badge-rejected';
+                break;
+            case 'revision-requested':
+                $submission['status_class'] = 'badge-progress';
                 break;
             default:
                 $submission['status_class'] = '';

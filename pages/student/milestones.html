@@ -84,21 +84,6 @@
           <img src="../../assets/icons/list.svg" alt="" class="bi">
         </button>
 
-        <div class="topbar-search">
-          <svg
-            class="bi search-icon"
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            fill="currentColor"
-            viewBox="0 0 16 16"
-            aria-hidden="true"
-          >
-            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
-          </svg>
-          <input type="text" class="form-control" placeholder="Search...">
-        </div>
-
         <div class="topbar-actions">
           <span class="topbar-user" id="topbar-user">User Name</span>
           <button class="btn-logout" type="button" onclick="logout()">
@@ -116,54 +101,7 @@
       </div>
 
       <!-- timeline box -->
-      <div class="box">
-        <!-- milestone 1 -->
-        <div class="timeline-item">
-          <div class="timeline-number">1</div>
-          <div class="timeline-body">
-            <p class="timeline-name">Chapter 1 <span>--</span></p>
-            <p class="timeline-date">due Month Day, Year</p>
-            <div class="progress timeline-progress">
-              <div class="progress-bar" style="width: 100%;"></div>
-            </div>
-          </div>
-          <div class="timeline-side">
-            <span class="badge-status badge-approved">Approved</span>
-            <a href="#" class="timeline-details">Details &gt;</a>
-          </div>
-        </div>
-
-        <!-- milestone 2 -->
-        <div class="timeline-item">
-          <div class="timeline-number">2</div>
-          <div class="timeline-body">
-            <p class="timeline-name">Chapter 2 <span>--</span></p>
-            <p class="timeline-date">due Month Day, Year</p>
-            <div class="progress timeline-progress">
-              <div class="progress-bar" style="width: 100%;"></div>
-            </div>
-          </div>
-          <div class="timeline-side">
-            <span class="badge-status badge-approved">Approved</span>
-            <a href="#" class="timeline-details">Details &gt;</a>
-          </div>
-        </div>
-
-        <!-- milestone 3 -->
-        <div class="timeline-item">
-          <div class="timeline-number">3</div>
-          <div class="timeline-body">
-            <p class="timeline-name">Chapter 3 <span>--</span></p>
-            <p class="timeline-date">due Month Day, Year</p>
-            <div class="progress timeline-progress">
-              <div class="progress-bar" style="width: 60%; background: var(--warning);"></div>
-            </div>
-          </div>
-          <div class="timeline-side">
-            <span class="badge-status badge-review">In Review</span>
-            <a href="#" class="timeline-details">Details &gt;</a>
-          </div>
-        </div>  
+      <div class="box" id="timeline-box"></div>
 
     </main>
   </div>
@@ -171,6 +109,7 @@
   <script src="../../js/bootstrap.bundle.min.js"></script>
   <script src="../../js/student/theme.js"></script>
   <script src="../../js/student/dashboard.js"></script>
+  <script src="../../js/student/milestones.js"></script>
 
   <script>
     /* sidebar toggle */

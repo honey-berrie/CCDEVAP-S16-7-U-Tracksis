@@ -22,7 +22,7 @@ if ($pass !== $passConfirm) {
 }
 
 // validate role
-$allowedRoles = ['student', 'adviser', 'panel', 'admin'];
+$allowedRoles = ['student', 'adviser', 'coordinator', 'admin'];
 $role = 'student';
 if (!in_array($role, $allowedRoles, true)) {
     error('Invalid role', 422);

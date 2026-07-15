@@ -1,6 +1,5 @@
 
 
-
 async function updateGroupData() {
     const groupName = document.getElementById('groupName').value.trim();
     const thesisTitle = document.getElementById('thesisTitle').value.trim();
@@ -71,23 +70,47 @@ async function fetchGroupData() {
 
             // clear existing members except the template
             membersBox.querySelectorAll('.member-item').forEach(item => {
-                if (item !== memberTemplate) {
-                    item.remove();
-                }
+                item.remove();
             });
 
             groupMembers.forEach(member => {
-                const memberItem = memberTemplate.cloneNode(true);
-                memberItem.style.display = 'flex';
-                memberItem.querySelector('.member-name').textContent = `${member.firstname} ${member.lastname}`;
-                memberItem.querySelector('.member-role').textContent = String(member.role).charAt(0).toUpperCase() + String(member.role).slice(1);
+
+                var memberItem = document.createElement('div');
+                memberItem.className = 'member-item';
+
+                memberItem.innerHTML = `
+                    <div class="member-avatar">${member.initials}</div>
+                    <div class="member-info">
+                        <p class="member-name">${member.firstname + ' ' + member.lastname}</p>
+                        <p class="member-role">${String(member.role).charAt(0).toUpperCase() + String(member.role).slice(1)}</p>
+                    </div>
+                `;
+
                 membersBox.appendChild(memberItem);
             });
 
             // display adviser
             console.log('Adviser:', adviser);
             if (adviser) {
-                adviserNameElement.textContent = `${adviser.firstname} ${adviser.lastname}`;
+
+                var adviserBox = document.getElementById('adviserBox');
+
+                adviserBox.querySelectorAll('.member-item').forEach(item => {
+                    item.remove();
+                });
+
+                var adviserItem = document.createElement('div');
+                adviserItem.className = 'member-item';
+
+                adviserItem.innerHTML = `
+                    <div class="member-avatar">${adviser.initials}</div>
+                    <div class="member-info">
+                        <p class="member-name">${adviser.firstname + ' ' + adviser.lastname}</p>
+                        <p class="member-role">${String(adviser.role).charAt(0).toUpperCase() + String(adviser.role).slice(1)}</p>
+                    </div>
+                `;
+
+                adviserBox.appendChild(adviserItem);
             }
 
             groupProfileContent.style.display = 'flex';

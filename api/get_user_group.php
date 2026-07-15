@@ -32,7 +32,20 @@ function getGroupMembers($groupId) {
         WHERE gm.group_id = ?
     ");
     $stmt->execute([$groupId]);
-    return $stmt->fetchAll();
+
+    $rows = $stmt->fetchAll();
+
+    $array = [];
+    foreach ($rows as $r) {
+        $array[] = [
+            'initials' => initialsOf($r['firstname'] ?? '', $r['lastname'] ?? ''),
+            'firstname' => $r['firstname'],
+            'lastname' => $r['lastname'],
+            'role' => $r['role']
+        ];
+    }
+
+    return $array;
 }
 
 // fetch adviser for the group
@@ -45,7 +58,13 @@ function getGroupAdviser($groupId) {
         WHERE g.id = ? LIMIT 1
     ");
     $stmt->execute([$groupId]);
-    return $stmt->fetch();
+    $adviser = $stmt->fetch();
+
+    if ($adviser) {
+        $adviser['initials'] = initialsOf($adviser['firstname'] ?? '', $adviser['lastname'] ?? '');
+    }
+
+    return $adviser;
 }
 
 json(['group' => $group, 'members' => getGroupMembers($group['id']), 'adviser' => getGroupAdviser($group['id'])]);

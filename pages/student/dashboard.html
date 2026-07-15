@@ -81,21 +81,6 @@
           <img src="../../assets/icons/list.svg" alt="" class="bi">
         </button>
 
-        <div class="topbar-search">
-          <svg
-            class="bi search-icon"
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            fill="currentColor"
-            viewBox="0 0 16 16"
-            aria-hidden="true"
-          >
-            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
-          </svg>
-          <input type="text" class="form-control" placeholder="Search...">
-        </div>
-
         <div class="topbar-actions">
           <span class="topbar-user" id="topbar-user">User Name</span>
           <button class="btn-logout" type="button" onclick="logout()">
@@ -112,11 +97,11 @@
 
       <div class="box mb-4">
         <p class="box-label">OVERALL THESIS PROGRESS</p>
-        <h2 class="display-5 fw-bold mb-0">--%</h2>
+        <h2 class="display-5 fw-bold mb-0" id="dashProgressPercent">--%</h2>
         <div class="progress mt-2" style="height: 10px;">
-          <div class="progress-bar" style="width: 45%;"></div>
+          <div class="progress-bar" id="dashProgressBar" style="width: 0%;"></div>
         </div>
-        <p class="stat-label-sm mt-2">-- of -- milestones done &nbsp; next deadline in -- days</p>
+        <p class="stat-label-sm mt-2" id="dashProgressSummary">Loading...</p>
       </div>
 
       <div class="row g-3 mb-4">
@@ -126,8 +111,8 @@
               <p class="box-label mb-0">DAYS TO DEFENSE</p>
               <img src="../../assets/icons/calendar-event.svg" alt="" class="bi text-muted">
             </div>
-            <div class="stat-value">00</div>
-            <p class="stat-label-sm">Month Day, Year</p>
+            <div class="stat-value" id="dashDefenseDays">--</div>
+            <p class="stat-label-sm" id="dashDefenseDate">Loading...</p>
           </div>
         </div>
         <div class="col-md-6">
@@ -136,75 +121,22 @@
               <p class="box-label mb-0">EXPECTED TURNAROUND</p>
               <img src="../../assets/icons/hourglass-split.svg" alt="" class="bi text-muted">
             </div>
-            <div class="stat-value" style="font-size: 1.5rem;">Date</div>
-            <p class="stat-label-sm">Adviser's Feedback</p>
+            <div class="stat-value" style="font-size: 1.5rem;" id="dashTurnaround">--</div>
+            <p class="stat-label-sm">Next Deadline</p>
           </div>
         </div>
       </div>
 
-      <div class="box mb-4">
+      <div class="box mb-4" id="dashMilestoneList">
         <p class="box-label">MILESTONES</p>
-        <p class="text-muted small mb-3">Super thesis management system</p>
-
-        <div class="milestone-item">
-          <p class="milestone-name">Chapter 1</p>
-          <div class="d-flex justify-content-between align-items-center">
-            <p class="milestone-date">Month Day, Year</p>
-            <span class="badge-status badge-approved">Approved</span>
-          </div>
-        </div>
-        <div class="milestone-item">
-          <p class="milestone-name">Chapter 2</p>
-          <div class="d-flex justify-content-between align-items-center">
-            <p class="milestone-date">Month Day, Year</p>
-            <span class="badge-status badge-approved">Approved</span>
-          </div>
-        </div>
-        <div class="milestone-item">
-          <p class="milestone-name">Chapter 3</p>
-          <div class="d-flex justify-content-between align-items-center">
-            <p class="milestone-date">Month Day, Year</p>
-            <span class="badge-status badge-review">In Review</span>
-          </div>
-        </div>
-        <div class="milestone-item">
-          <p class="milestone-name">Chapter 4</p>
-          <div class="d-flex justify-content-between align-items-center">
-            <p class="milestone-date">Month Day, Year</p>
-            <span class="badge-status badge-progress">In progress</span>
-          </div>
-        </div>
       </div>
 
-      <div class="box mb-4">
+      <div class="box mb-4" id="recentActivitiesBox">
         <p class="box-label">RECENT ACTIVITY</p>
-        <div class="activity-item">
-          <img src="../../assets/icons/image.svg" alt="" class="activity-avatar">
-          <span>Super thesis management system hello hello</span>
-        </div>
-        <div class="activity-item">
-          <img src="../../assets/icons/image.svg" alt="" class="activity-avatar">
-          <span>Super thesis management system hello hello</span>
-        </div>
-        <div class="activity-item">
-          <img src="../../assets/icons/image.svg" alt="" class="activity-avatar">
-          <span>Super thesis management system hello hello</span>
-        </div>
       </div>
 
-      <div class="box">
+      <div class="box" id="dashFeedbackBox">
         <p class="box-label">LATEST ADVISER FEEDBACK</p>
-        <div class="feedback-card">
-          <img src="../../assets/images/placeholder.png" alt="Adviser" class="feedback-avatar">
-          <div>
-            <p class="feedback-meta">Prof. Main Adviser</p>
-            <p class="feedback-date">Date</p>
-            <p class="feedback-text">
-              "Super thesis management system hello hello, super thesis management system hello hello,
-              super thesis management system hello hello, super thesis management system hello hello."
-            </p>
-          </div>
-        </div>
       </div>
 
     </main>

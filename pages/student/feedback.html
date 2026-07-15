@@ -84,21 +84,6 @@
           <img src="../../assets/icons/list.svg" alt="" class="bi">
         </button>
 
-        <div class="topbar-search">
-          <svg
-            class="bi search-icon"
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            fill="currentColor"
-            viewBox="0 0 16 16"
-            aria-hidden="true"
-          >
-            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
-          </svg>
-          <input type="text" class="form-control" placeholder="Search...">
-        </div>
-
         <div class="topbar-actions">
           <span class="topbar-user" id="topbar-user">User Name</span>
           <button class="btn-logout" type="button" onclick="logout()">
@@ -179,6 +164,7 @@
   <script src="../../js/bootstrap.bundle.min.js"></script>
   <script src="../../js/student/theme.js"></script>
   <script src="../../js/student/dashboard.js"></script>
+  <script src="../../js/student/feedback.js"></script>
 
   <script>
     /* sidebar toggle */
@@ -200,97 +186,7 @@
         if (window.innerWidth < 992) toggleSidebar();
       });
     });
-
-    /* feedback data per chapter */
-    const feedbackData = {
-      'Chapter 1': [
-        {
-          name: 'Dr. Catua',
-          role: 'Main Adviser',
-          time: '2 weeks ago',
-          message: 'The problem statement is clear and well-articulated. Make sure to specify the locale of the study and the target respondents in the scope and delimitation section.'
-        }
-      ],
-      'Title Proposal': [
-        {
-          name: 'Dr. Catua',
-          role: 'Main Adviser',
-          time: '1 month ago',
-          message: 'The title is acceptable but consider making it more specific. Instead of a general topic, narrow it down to a particular context or industry to add more depth to your research.'
-        },
-        {
-          name: 'Dr. Richard',
-          role: 'Panel Member',
-          time: '1 month ago',
-          message: 'Approved with minor revisions. Please align the title with the objectives stated in the proposal. The current wording may confuse readers about the actual scope.'
-        }
-      ]
-    };
-
-    /* feedback modal */
-    const fbOverlay = document.getElementById('fbOverlay');
-    const fbClose = document.getElementById('fbClose');
-    const fbCloseBtn = document.getElementById('fbCloseBtn');
-    const fbChapter = document.getElementById('fbChapter');
-    const fbBody = document.getElementById('fbBody');
-
-    function getInitials(name) {
-      const parts = name.replace(/^(Dr\.|Prof\.|Mr\.|Ms\.|Mrs\.)\s*/i, '').split(' ');
-      if (parts.length >= 2) {
-        return (parts[0][0] + parts[1][0]).toUpperCase();
-      }
-      return parts[0].substring(0, 2).toUpperCase();
-    }
-
-    function escapeHtml(text) {
-      const div = document.createElement('div');
-      div.textContent = text;
-      return div.innerHTML;
-    }
-
-    function openFeedback(chapter) {
-      fbChapter.textContent = chapter;
-      const items = feedbackData[chapter] || [];
-
-      if (items.length === 0) {
-        fbBody.innerHTML = '<p class="fb-empty">No feedback.</p>';
-      } else {
-        fbBody.innerHTML = items.map(item => `
-          <div class="fb-item">
-            <div class="fb-item-header">
-              <div class="fb-avatar">${getInitials(item.name)}</div>
-              <div class="fb-author">
-                <p class="fb-name">${escapeHtml(item.name)} <span>. ${escapeHtml(item.role)}</span></p>
-                <p class="fb-time">${escapeHtml(item.time)}</p>
-              </div>
-            </div>
-            <p class="fb-message">"${escapeHtml(item.message)}"</p>
-          </div>
-        `).join('');
-      }
-
-      fbOverlay.classList.add('show');
-      document.body.style.overflow = 'hidden';
-    }
-
-    function closeFeedback() {
-      fbOverlay.classList.remove('show');
-      document.body.style.overflow = '';
-    }
-
-    document.querySelectorAll('.chapter-card').forEach(card => {
-      card.addEventListener('click', () => openFeedback(card.dataset.chapter));
-    });
-
-    fbClose.addEventListener('click', closeFeedback);
-    fbCloseBtn.addEventListener('click', closeFeedback);
-    fbOverlay.addEventListener('click', (e) => {
-      if (e.target === fbOverlay) closeFeedback();
-    });
-
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && fbOverlay.classList.contains('show')) closeFeedback();
-    });
   </script>
+  
 </body>
 </html>
