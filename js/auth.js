@@ -61,7 +61,7 @@ async function login() {
     // redirect based on role
     const role = data.user.role;
     if (role === 'admin')
-      window.location.href = '../../adminpages/admin-dashboard.php';
+      window.location.href = '../../adminpages/adm-dashboard.php';
     else if (role === 'adviser') 
       window.location.href = '../../phase2-page-based-adviser/adviserhtml/thesis-adviser-overview.php';
     else
