@@ -27,6 +27,24 @@ try {
     // Fallback if the database table doesn't exist yet
     $first_name = "Coordinator"; 
 }
+
+// Fetch handled courses for this coordinator
+$handledCount = 0;
+$handledCourses = [];
+$userId = (int)($_SESSION['user']['id'] ?? 0);
+if ($userId) {
+  try {
+    // include progress column (expected 0-100)
+    $stmt = $pdo->prepare("SELECT id, course_code, course_name, COALESCE(progress,0) AS progress FROM courses WHERE coordinator_id = ? ORDER BY course_code");
+    $stmt->execute([$userId]);
+    $handledCourses = $stmt->fetchAll();
+    $handledCount = count($handledCourses);
+  } catch (PDOException $e) {
+    // leave empty on error
+    $handledCourses = [];
+    $handledCount = 0;
+  }
+}
 ?>
 <!doctype html>
 <html lang="en">
@@ -195,7 +213,16 @@ try {
           <div class="col-lg-3 col-md-6">
             <div class="box mb-4 h-100">
               <p class="box-label">Handled Courses</p>
-              <h3 class="fw-bold mb-3">4</h3>
+              <h3 class="fw-bold mb-3"><?php echo (int)$handledCount; ?></h3>
+              <?php if (!empty($handledCourses)): ?>
+                <ul class="list-unstyled small mb-0">
+                  <?php foreach ($handledCourses as $c): ?>
+                    <li><?php echo htmlspecialchars($c['course_code'] . ' — ' . $c['course_name']); ?></li>
+                  <?php endforeach; ?>
+                </ul>
+              <?php else: ?>
+                <p class="small text-muted mb-0">No courses assigned</p>
+              <?php endif; ?>
             </div>
           </div>
 
@@ -252,6 +279,18 @@ try {
 
                 <!-- Scripts -->
                 <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.5.0/echarts.min.js" integrity="sha384-o5uz97et3bErHvpKfD4Jz4n0JfhJDWABFuF4NP+iEEDxE1VwMWJ19QGR0lqFZnr6" crossorigin="anonymous"></script>
+                <?php if (!empty($handledCourses)): ?>
+                  <script>
+                    window.COORDINATOR_COURSE_CHART = <?php
+                      echo json_encode(array_map(function($c){
+                        return [
+                          'name'  => $c['course_code'],
+                          'value' => isset($c['progress']) ? (int)$c['progress'] : 0,
+                        ];
+                      }, $handledCourses));
+                    ?>;
+                  </script>
+                <?php endif; ?>
                 <script src="../coordinator-back-end/pictogram.js"></script>
                 <script src="../../js/logout.js"></script>
               </div>

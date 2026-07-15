@@ -3,11 +3,15 @@ const chart = echarts.init(document.getElementById("chart"));
 const docuSymbol =
   "path://M9.293 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.707A1 1 0 0 0 13.707 4L10 .293A1 1 0 0 0 9.293 0M9.5 3.5v-2l3 3h-2a1 1 0 0 1-1-1M4.5 9a.5.5 0 0 1 0-1h7a.5.5 0 0 1 0 1zM4 10.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m.5 2.5a.5.5 0 0 1 0-1h4a.5.5 0 0 1 0 1z";
 
-const data = [
-  { name: "CCRESME", value: 80 },
-  { name: "THSCC02", value: 53 },
-  { name: "THSCC03", value: 33 },
-];
+// Use server-provided course data when available (set by coordinator-overview.php)
+const data =
+  window.COORDINATOR_COURSE_CHART && window.COORDINATOR_COURSE_CHART.length
+    ? window.COORDINATOR_COURSE_CHART
+    : [
+        { name: "CCRESME", value: 80 },
+        { name: "THSCC02", value: 53 },
+        { name: "THSCC03", value: 33 },
+      ];
 
 const option = {
   title: {
