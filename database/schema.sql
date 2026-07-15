@@ -2,6 +2,12 @@
 -- U-Tracksis Database Schema
 -- ============================================================================
 
+CREATE SCHEMA u_tracksis
+DEFAULT CHARACTER SET utf8mb4
+DEFAULT COLLATE utf8mb4_unicode_ci;
+
+USE u_tracksis;
+
 SET FOREIGN_KEY_CHECKS = 0;
 
 DROP TABLE IF EXISTS announcement_reads;
