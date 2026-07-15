@@ -18,7 +18,7 @@ async function checkLoginStatus() {
       if (role === 'admin')
         window.location.href = '../../adminhtml/admin-dashboard.html';
       else if (role === 'adviser' || role === 'panel') 
-        window.location.href = '../../adviserhtml/thesis-adviser-overview.html';
+        window.location.href = '../../phase2-page-based-adviser/adviserhtml/thesis-adviser-overview.php';
       else
         window.location.href = '../../pages/student/dashboard.html';
       return;
