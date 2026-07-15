@@ -134,27 +134,6 @@
                 Faculty
               </button>
             </div>
-
-            <div id="facultySubrole" style="display: none; margin-top: 8px">
-              <label class="form-label d-block">Faculty Type</label>
-              <div class="role-group">
-                <button
-                  type="button"
-                  class="btn-subrole active"
-                  data-role="adviser"
-                >
-                  Thesis Adviser
-                </button>
-                <button
-                  type="button"
-                  class="btn-subrole"
-                  data-role="coordinator"
-                >
-                  Coordinator
-                </button>
-              </div>
-            </div>
-
             <input
               type="hidden"
               id="accountType"
@@ -199,38 +178,10 @@
       //  Role selection logic
       const roleButtons = document.querySelectorAll(".btn-role");
       const hiddenInput = document.getElementById("accountType");
-      const facultySubrole = document.getElementById("facultySubrole");
-      const subroleButtons = document.querySelectorAll(".btn-subrole");
-
-      function setSubroleVisibility(show) {
-        facultySubrole.style.display = show ? "block" : "none";
-      }
 
       roleButtons.forEach((btn) => {
         btn.addEventListener("click", () => {
           roleButtons.forEach((b) => b.classList.remove("active"));
-          btn.classList.add("active");
-
-          const sel = btn.dataset.role;
-          if (sel === "faculty") {
-            // show subrole and default to adviser
-            setSubroleVisibility(true);
-            subroleButtons.forEach((b) => b.classList.remove("active"));
-            const defaultBtn = document.querySelector(
-              '.btn-subrole[data-role="adviser"]',
-            );
-            if (defaultBtn) defaultBtn.classList.add("active");
-            hiddenInput.value = "adviser";
-          } else {
-            setSubroleVisibility(false);
-            hiddenInput.value = sel;
-          }
-        });
-      });
-
-      subroleButtons.forEach((btn) => {
-        btn.addEventListener("click", () => {
-          subroleButtons.forEach((b) => b.classList.remove("active"));
           btn.classList.add("active");
           hiddenInput.value = btn.dataset.role;
         });

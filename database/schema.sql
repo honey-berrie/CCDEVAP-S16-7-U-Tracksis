@@ -1,5 +1,5 @@
 -- ============================================================================
--- U-Tracksis Database Schema
+-- U-Tracksis Database Schema (Merged & Consolidated)
 -- ============================================================================
 CREATE SCHEMA IF NOT EXISTS u_tracksis
 DEFAULT CHARACTER SET utf8mb4
@@ -9,6 +9,7 @@ USE u_tracksis;
 
 SET FOREIGN_KEY_CHECKS = 0;
 
+-- Drop all tables (ordered from most dependent to least dependent)
 DROP TABLE IF EXISTS announcement_reads;
 DROP TABLE IF EXISTS announcements;
 DROP TABLE IF EXISTS activities;
@@ -18,10 +19,16 @@ DROP TABLE IF EXISTS submissions;
 DROP TABLE IF EXISTS milestones;
 DROP TABLE IF EXISTS group_members;
 DROP TABLE IF EXISTS teams;
+DROP TABLE IF EXISTS sections;
+DROP TABLE IF EXISTS courses;
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS system_settings;
 
 SET FOREIGN_KEY_CHECKS = 1;
+
+-- ============================================================================
+-- 1. STANDALONE TABLES
+-- ============================================================================
 
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -33,11 +40,43 @@ CREATE TABLE users (
     avatar_url VARCHAR(500) NULL,
     is_active TINYINT(1) NOT NULL DEFAULT 1,
     last_login_at TIMESTAMP NULL,
+    adviser_thesis_load INT NOT NULL DEFAULT 0,    -- Merged from query.sql
+    adviser_lecture_load INT NOT NULL DEFAULT 0,   -- Merged from query.sql
+    adviser_research_load INT NOT NULL DEFAULT 0,  -- Merged from query.sql
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     INDEX idx_users_role (role),
     INDEX idx_users_active (is_active)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE system_settings (
+    setting_key VARCHAR(100) NOT NULL PRIMARY KEY,
+    setting_value VARCHAR(500) NULL,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ============================================================================
+-- 2. ACADEMIC STRUCTURE TABLES (Merged from query.sql)
+-- ============================================================================
+
+CREATE TABLE courses (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    course_code VARCHAR(20) NOT NULL UNIQUE, 
+    course_name VARCHAR(100) NOT NULL,       
+    coordinator_id INT NULL,
+    CONSTRAINT fk_courses_coordinator FOREIGN KEY (coordinator_id) REFERENCES users(id) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE sections (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    section_code VARCHAR(10) NOT NULL, 
+    course_id INT NOT NULL,
+    CONSTRAINT fk_sections_course FOREIGN KEY (course_id) REFERENCES courses(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ============================================================================
+-- 3. TEAMS & MEMBERSHIP TABLES
+-- ============================================================================
 
 CREATE TABLE teams (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -45,15 +84,20 @@ CREATE TABLE teams (
     thesis_title VARCHAR(255) NOT NULL,
     abstract TEXT NULL,
     adviser_id INT NULL,
-    defense_date DATE NULL,
-    academic_year VARCHAR(20) NULL,
+    section_id INT NOT NULL,                                                                           -- Merged from query.sql
+    approval_status ENUM('pending', 'approved', 'rejected', 'coordinator-created') NOT NULL DEFAULT 'pending', -- Merged from query.sql
+    progress_status ENUM('on track', 'falling behind') NOT NULL DEFAULT 'on track',                    -- Merged from query.sql
     status ENUM('active','archived') NOT NULL DEFAULT 'active',
+    defense_date DATE NULL,
+    submission_date DATE NULL,                                                                         -- Merged from query.sql
+    academic_year VARCHAR(20) NULL,
     archived_at TIMESTAMP NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     INDEX idx_teams_adviser (adviser_id),
     INDEX idx_teams_status (status),
-    CONSTRAINT fk_teams_adviser FOREIGN KEY (adviser_id) REFERENCES users(id) ON DELETE SET NULL
+    CONSTRAINT fk_teams_adviser FOREIGN KEY (adviser_id) REFERENCES users(id) ON DELETE SET NULL,
+    CONSTRAINT fk_teams_section FOREIGN KEY (section_id) REFERENCES sections(id) ON DELETE RESTRICT   -- Merged from query.sql
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE group_members (
@@ -62,11 +106,15 @@ CREATE TABLE group_members (
     user_id INT NOT NULL,
     member_role VARCHAR(50) NOT NULL DEFAULT 'Member',
     joined_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    UNIQUE KEY uniq_gm (group_id, user_id),
+    UNIQUE KEY uniq_group_user (group_id, user_id),                                                    -- Unified naming
     INDEX idx_gm_user (user_id),
     CONSTRAINT fk_gm_group FOREIGN KEY (group_id) REFERENCES teams(id) ON DELETE CASCADE,
     CONSTRAINT fk_gm_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ============================================================================
+-- 4. MILESTONES, SUBMISSIONS, FEEDBACK & CONSULTATIONS
+-- ============================================================================
 
 CREATE TABLE milestones (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -80,17 +128,17 @@ CREATE TABLE milestones (
     completed_at TIMESTAMP NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    INDEX idx_ms_group (group_id),
-    INDEX idx_ms_status (status),
-    CONSTRAINT fk_ms_group FOREIGN KEY (group_id) REFERENCES teams(id) ON DELETE CASCADE,
-    CONSTRAINT chk_ms_progress CHECK (progress <= 100)
+    INDEX idx_milestones_group (group_id),
+    INDEX idx_milestones_status (status),
+    CONSTRAINT fk_milestones_group FOREIGN KEY (group_id) REFERENCES teams(id) ON DELETE CASCADE,
+    CONSTRAINT fk_milestones_chk_progress CHECK (progress <= 100)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE submissions (
     id INT AUTO_INCREMENT PRIMARY KEY,
     group_id INT NOT NULL,
     milestone_id INT NULL,
-    document_type ENUM( 'title-proposal','chapter-1','chapter-2','chapter-3', 'chapter-4','chapter-5','final-thesis','revision','other') NOT NULL,
+    document_type ENUM('title-proposal','chapter-1','chapter-2','chapter-3','chapter-4','chapter-5','final-thesis','revision','other') NOT NULL,
     title VARCHAR(255) NOT NULL,
     file_name VARCHAR(255) NOT NULL,
     file_path VARCHAR(500) NOT NULL,
@@ -102,14 +150,14 @@ CREATE TABLE submissions (
     reviewed_at TIMESTAMP NULL,
     review_notes TEXT NULL,
     uploaded_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    INDEX idx_sub_group (group_id),
-    INDEX idx_sub_status (status),
-    INDEX idx_sub_uploaded (uploaded_at),
-    INDEX idx_sub_uploader (uploaded_by),
-    CONSTRAINT fk_sub_group FOREIGN KEY (group_id) REFERENCES teams(id) ON DELETE CASCADE,
-    CONSTRAINT fk_sub_ms FOREIGN KEY (milestone_id) REFERENCES milestones(id) ON DELETE SET NULL,
-    CONSTRAINT fk_sub_uploader FOREIGN KEY (uploaded_by) REFERENCES users(id) ON DELETE CASCADE,
-    CONSTRAINT fk_sub_reviewer FOREIGN KEY (reviewed_by) REFERENCES users(id) ON DELETE SET NULL
+    INDEX idx_subs_group (group_id),
+    INDEX idx_subs_status (status),
+    INDEX idx_subs_uploaded_at (uploaded_at),
+    INDEX idx_subs_uploader (uploaded_by),
+    CONSTRAINT fk_subs_group FOREIGN KEY (group_id) REFERENCES teams(id) ON DELETE CASCADE,
+    CONSTRAINT fk_subs_milestone FOREIGN KEY (milestone_id) REFERENCES milestones(id) ON DELETE SET NULL,
+    CONSTRAINT fk_subs_uploader FOREIGN KEY (uploaded_by) REFERENCES users(id) ON DELETE CASCADE,
+    CONSTRAINT fk_subs_reviewer FOREIGN KEY (reviewed_by) REFERENCES users(id) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE feedback (
@@ -126,31 +174,6 @@ CREATE TABLE feedback (
     CONSTRAINT fk_fb_group FOREIGN KEY (group_id) REFERENCES teams(id) ON DELETE CASCADE,
     CONSTRAINT fk_fb_submission FOREIGN KEY (submission_id) REFERENCES submissions(id) ON DELETE CASCADE,
     CONSTRAINT fk_fb_giver FOREIGN KEY (given_by) REFERENCES users(id) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-CREATE TABLE announcements (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    sender_id INT NOT NULL,
-    group_id INT NULL,
-    is_broadcast TINYINT(1) NOT NULL DEFAULT 0,
-    title VARCHAR(255) NOT NULL,
-    message TEXT NOT NULL,
-    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    INDEX idx_ann_created (created_at),
-    INDEX idx_ann_sender (sender_id),
-    INDEX idx_ann_group (group_id),
-    CONSTRAINT fk_ann_sender FOREIGN KEY (sender_id) REFERENCES users(id) ON DELETE CASCADE,
-    CONSTRAINT fk_ann_group FOREIGN KEY (group_id) REFERENCES teams(id) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-CREATE TABLE announcement_reads (
-    announcement_id INT NOT NULL,
-    user_id INT NOT NULL,
-    read_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (announcement_id, user_id),
-    INDEX idx_ar_user (user_id),
-    CONSTRAINT fk_ar_ann FOREIGN KEY (announcement_id) REFERENCES announcements(id) ON DELETE CASCADE,
-    CONSTRAINT fk_ar_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE consultations (
@@ -178,6 +201,42 @@ CREATE TABLE consultations (
     CONSTRAINT fk_cons_recipient FOREIGN KEY (recipient_id) REFERENCES users(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- ============================================================================
+-- 5. ANNOUNCEMENTS, READS & SYSTEM ACTIVITIES
+-- ============================================================================
+
+-- Unified Announcements Schema (handles both course-level/coordinator and global/group structures)
+CREATE TABLE announcements (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    sender_id INT NOT NULL,                                                                           -- Maps to author (coordinator/admin)
+    course_id INT NULL,                                                                               -- Nullable for non-course specific/global
+    group_id INT NULL,                                                                                -- Nullable for broad/course specific announcements
+    is_broadcast TINYINT(1) NOT NULL DEFAULT 0,
+    is_pinned TINYINT(1) NOT NULL DEFAULT 0,
+    title VARCHAR(255) NOT NULL,
+    message TEXT NOT NULL,
+    due_date DATE NULL, 
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX idx_ann_sender (sender_id),
+    INDEX idx_ann_course (course_id),
+    INDEX idx_ann_group (group_id),
+    INDEX idx_ann_created (created_at),
+    CONSTRAINT fk_ann_sender FOREIGN KEY (sender_id) REFERENCES users(id) ON DELETE CASCADE,
+    CONSTRAINT fk_ann_course FOREIGN KEY (course_id) REFERENCES courses(id) ON DELETE CASCADE,
+    CONSTRAINT fk_ann_group FOREIGN KEY (group_id) REFERENCES teams(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE announcement_reads (
+    announcement_id INT NOT NULL,
+    user_id INT NOT NULL,
+    read_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (announcement_id, user_id),
+    INDEX idx_ar_user (user_id),
+    CONSTRAINT fk_ar_ann FOREIGN KEY (announcement_id) REFERENCES announcements(id) ON DELETE CASCADE,
+    CONSTRAINT fk_ar_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 CREATE TABLE activities (
     id INT AUTO_INCREMENT PRIMARY KEY,
     group_id INT NULL,
@@ -191,14 +250,9 @@ CREATE TABLE activities (
     CONSTRAINT fk_act_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE system_settings (
-    setting_key VARCHAR(100) NOT NULL PRIMARY KEY,
-    setting_value VARCHAR(500) NULL,
-    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================================================
--- DEMO DATA
+-- DEMO DATA (Updated with relational safety constraints)
 -- ============================================================================
 
 INSERT INTO system_settings (setting_key, setting_value) VALUES
@@ -206,33 +260,45 @@ INSERT INTO system_settings (setting_key, setting_value) VALUES
   ('site_name', 'U-Tracksis'),
   ('maintenance_mode', '0');
 
-INSERT INTO users (role, firstname, lastname, email, password_hash, is_active, last_login_at) VALUES
-('admin',       'Maria Corazon', 'Reyes',       'maria.reyes@dlsu.edu.ph',       'demo1234', 1, NOW() - INTERVAL 1 DAY),
-('coordinator', 'Ramon',         'Villanueva',  'ramon.villanueva@dlsu.edu.ph',  'demo1234', 1, NOW() - INTERVAL 2 DAY),
-('coordinator', 'Angelica',      'Bautista',    'angelica.bautista@dlsu.edu.ph','demo1234', 1, NOW() - INTERVAL 5 DAY),
-('adviser',     'Ferdinand',     'Santos',      'ferdinand.santos@dlsu.edu.ph', 'demo1234', 1, NOW() - INTERVAL 1 DAY),
-('adviser',     'Liza',          'Mendoza',     'liza.mendoza@dlsu.edu.ph',     'demo1234', 1, NOW() - INTERVAL 3 DAY),
-('adviser',     'Antonio',       'Cruz',        'antonio.cruz@dlsu.edu.ph',     'demo1234', 1, NOW() - INTERVAL 7 DAY),
-('student',     'Juan Miguel',   'Dela Cruz',   'juan.delacruz@dlsu.edu.ph',    'demo1234', 1, NOW() - INTERVAL 1 DAY),
-('student',     'Ana Bianca',    'Santos',      'ana.santos@dlsu.edu.ph',       'demo1234', 1, NOW() - INTERVAL 2 DAY),
-('student',     'Carlo Jandino', 'Ramos',       'carlo.ramos@dlsu.edu.ph',      'demo1234', 1, NOW() - INTERVAL 4 DAY),
-('student',     'Kristine Joy',  'Aquino',      'kristine.aquino@dlsu.edu.ph',  'demo1234', 1, NOW() - INTERVAL 2 DAY),
-('student',     'Paolo Gabriel', 'Reyes',       'paolo.reyes@dlsu.edu.ph',      'demo1234', 1, NOW() - INTERVAL 3 DAY),
-('student',     'Samantha Nicole','Garcia',     'samantha.garcia@dlsu.edu.ph',  'demo1234', 1, NOW() - INTERVAL 6 DAY),
-('student',     'Marc Anthony',  'Torres',      'marc.torres@dlsu.edu.ph',      'demo1234', 1, NOW() - INTERVAL 10 DAY),
-('student',     'Bea Alexandra', 'Lim',         'bea.lim@dlsu.edu.ph',          'demo1234', 1, NOW() - INTERVAL 10 DAY),
-('student',     'Joshua Daniel', 'Fernandez',   'joshua.fernandez@dlsu.edu.ph', 'demo1234', 1, NOW() - INTERVAL 10 DAY);
+INSERT INTO users (role, firstname, lastname, email, password_hash, is_active, last_login_at, adviser_thesis_load, adviser_lecture_load, adviser_research_load) VALUES
+('admin',       'Maria Corazon', 'Reyes',       'maria.reyes@dlsu.edu.ph',       '$2a$10$g86TLJk8OCTC6FUfmQ/kButsTfpCXqRHQbLreqM131F4qgF8qhKS2', 1, NOW() - INTERVAL 1 DAY, 0, 0, 0),
+('coordinator', 'Ramon',         'Villanueva',  'ramon.villanueva@dlsu.edu.ph',  '$2a$10$BQ48TEdpbZj4xzYoGdiwKe4EROyAfxUH1QV/q/qIZ.YnLTYLKhooO', 1, NOW() - INTERVAL 2 DAY, 0, 0, 0),
+('coordinator', 'Angelica',      'Bautista',    'angelica.bautista@dlsu.edu.ph','$2a$10$nwO2HVEbLFCAhnCh.Ls3PenmjBh6EmFuxuX9L1s/WGMm4cve9hLDS', 1, NOW() - INTERVAL 5 DAY, 0, 0, 0),
+('adviser',     'Ferdinand',     'Santos',      'ferdinand.santos@dlsu.edu.ph', '$2a$10$0OnS.BkvfffaSvE575he/u15wKg1Mq17V1sfB1TNpK9BAd49B1/jq', 1, NOW() - INTERVAL 1 DAY, 3, 6, 2),
+('adviser',     'Liza',          'Mendoza',     'liza.mendoza@dlsu.edu.ph',     '$2a$10$0OnS.BkvfffaSvE575he/u15wKg1Mq17V1sfB1TNpK9BAd49B1/jq', 1, NOW() - INTERVAL 3 DAY, 2, 9, 0),
+('adviser',     'Antonio',       'Cruz',        'antonio.cruz@dlsu.edu.ph',     '$2a$10$0R8vYDgPLif3rHYvpo847OfdpZ9KJ.rXW1tA42y.c9nzErdqky75i', 1, NOW() - INTERVAL 7 DAY, 4, 3, 4),
+('student',     'Juan Miguel',   'Dela Cruz',   'juan.delacruz@dlsu.edu.ph',    '$2a$10$Uk./6y/rlBQn/YE/w8RJcexmr4NtrYQDHFrlZtShk1P98apLoaL9O', 1, NOW() - INTERVAL 1 DAY, 0, 0, 0),
+('student',     'Ana Bianca',    'Santos',      'ana.santos@dlsu.edu.ph',       '$2a$10$iJ.c2D3c8Ged.M7AYgtyqOFs2p98PMcuTmq/83SppDCEqQ/0/F6/W', 1, NOW() - INTERVAL 2 DAY, 0, 0, 0),
+('student',     'Carlo Jandino', 'Ramos',       'carlo.ramos@dlsu.edu.ph',      '$2a$10$QVo2dqgEpGkCLuYHKgpM3eBqeOReKFzTKDpsh0ZXtuJqNTD3iSV66', 1, NOW() - INTERVAL 4 DAY, 0, 0, 0),
+('student',     'Kristine Joy',  'Aquino',      'kristine.aquino@dlsu.edu.ph',  '$2a$10$i91fE6cRiZktXnxcwt7InOUai.GsCdoe8TdaTUiobsfyzjhz6d0bS', 1, NOW() - INTERVAL 2 DAY, 0, 0, 0),
+('student',     'Paolo Gabriel', 'Reyes',       'paolo.reyes@dlsu.edu.ph',      '$2a$10$ltq04JLTPB3b2kw2g8ZypODbGVGzm7ysVvW5zmzYoXUC0Qyp1rX2m', 1, NOW() - INTERVAL 3 DAY, 0, 0, 0),
+('student',     'Samantha Nicole','Garcia',     'samantha.garcia@dlsu.edu.ph',  '$2a$10$KT2PgsKY6z7DX2Na8E8ZWeH.hkYeXUCa4rXbpXhHUL00UGZSvjUSS', 1, NOW() - INTERVAL 6 DAY, 0, 0, 0),
+('student',     'Marc Anthony',  'Torres',      'marc.torres@dlsu.edu.ph',      '$2a$10$Rs3NzrhWILDAKS8jmVZ9zOLv2f6Py0eHbVXBBOFwFxXFJgWYSvlN2', 1, NOW() - INTERVAL 10 DAY, 0, 0, 0),
+('student',     'Bea Alexandra', 'Lim',         'bea.lim@dlsu.edu.ph',          '$2a$10$/6hlkXkt2l5uEt2r5cVM7uZdFxCZfnXbTxynqsT/MUNI/YWRE/G6S', 1, NOW() - INTERVAL 10 DAY, 0, 0, 0),
+('student',     'Joshua Daniel', 'Fernandez',   'joshua.fernandez@dlsu.edu.ph', '$2a$10$0.XHbs6GVOmHwXnu0uy25.KvAn.RQQdTFdXQW19CZUeVJUILxV3HK', 1, NOW() - INTERVAL 10 DAY, 0, 0, 0);
 
-INSERT INTO teams (group_name, thesis_title, abstract, adviser_id, defense_date, academic_year, status, archived_at) VALUES
+-- Insert Demo Courses (Needed for Sections)
+INSERT INTO courses (course_code, course_name, coordinator_id) VALUES
+('THESIS1', 'Thesis Writing 1', 2),
+('THESIS2', 'Thesis Writing 2', 3);
+
+-- Insert Demo Sections (Needed for Teams)
+INSERT INTO sections (section_code, course_id) VALUES
+('S11', 1),
+('S12', 1),
+('S21', 2);
+
+-- Insert Demo Teams (Equipped with integrated track columns and foreign sections)
+INSERT INTO teams (group_name, thesis_title, abstract, adviser_id, section_id, approval_status, progress_status, status, defense_date, submission_date, academic_year, archived_at) VALUES
 ('Cortana', 'AI-Powered Attendance Monitoring System Using Facial Recognition',
  'A facial-recognition based attendance system for university classrooms that reduces proxy attendance and manual record-keeping.',
- 4, DATE_ADD(CURDATE(), INTERVAL 45 DAY), '2025-2026', 'active', NULL),
+ 4, 1, 'approved', 'on track', 'active', DATE_ADD(CURDATE(), INTERVAL 45 DAY), NULL, '2025-2026', NULL),
 ('ByteForce', 'Barangay Health Record Management System',
  'A digital health record system for barangay health centers to replace paper-based patient records and improve reporting.',
- 5, DATE_ADD(CURDATE(), INTERVAL 60 DAY), '2025-2026', 'active', NULL),
+ 5, 2, 'approved', 'falling behind', 'active', DATE_ADD(CURDATE(), INTERVAL 60 DAY), NULL, '2025-2026', NULL),
 ('NexGen', 'IoT-Based Flood Monitoring and Early Warning System',
  'A low-cost IoT sensor network that monitors water levels in flood-prone areas and sends real-time alerts to residents.',
- 6, CURDATE() - INTERVAL 20 DAY, '2025-2026', 'archived', NOW() - INTERVAL 5 DAY);
+ 6, 3, 'approved', 'on track', 'archived', CURDATE() - INTERVAL 20 DAY, CURDATE() - INTERVAL 22 DAY, '2025-2026', NOW() - INTERVAL 5 DAY);
 
 INSERT INTO group_members (group_id, user_id, member_role) VALUES
 (1, 7, 'Leader'), (1, 8, 'Member'), (1, 9, 'Member'),
@@ -275,7 +341,9 @@ INSERT INTO submissions (group_id, milestone_id, document_type, title, file_name
 (3, 14, 'chapter-3',      'Chapter 3 - NexGen',      'nexgen_chapter3.pdf',       '/uploads/nexgen/chapter3.pdf',      1183400, 'application/pdf', 13, 'approved', 6, CURDATE() - INTERVAL 45 DAY,  'Approved.', CURDATE() - INTERVAL 48 DAY),
 (3, 15, 'final-thesis',   'Final Thesis - NexGen',   'nexgen_final.pdf',          '/uploads/nexgen/final_thesis.pdf', 3021500, 'application/pdf', 14, 'approved', 6, CURDATE() - INTERVAL 20 DAY,  'Approved by the panel. Congratulations!', CURDATE() - INTERVAL 22 DAY);
 
-INSERT INTO announcements (sender_id, group_id, is_broadcast, title, message, created_at) VALUES
-(1, NULL, 1, 'Final Defense Schedule', 'All groups with an approved final chapter must confirm their defense slot with the coordinator by the end of the month.', NOW() - INTERVAL 3 DAY),
-(1, NULL, 1, 'Submission Deadline Reminder', 'Chapter 3 submissions are due within two weeks. Late submissions will need adviser approval for an extension.', NOW() - INTERVAL 1 DAY),
-(1, NULL, 1, 'Portal Maintenance Notice', 'The submission portal will be briefly unavailable for maintenance next weekend. Draft content will not be affected.', NOW() - INTERVAL 7 DAY);
+-- Insert Demo Announcements (Using the unified course/group announcement schema)
+INSERT INTO announcements (sender_id, course_id, group_id, is_broadcast, is_pinned, title, message, created_at) VALUES
+(1, NULL, NULL, 1, 0, 'Final Defense Schedule', 'All groups with an approved final chapter must confirm their defense slot with the coordinator by the end of the month.', NOW() - INTERVAL 3 DAY),
+(1, NULL, NULL, 1, 0, 'Submission Deadline Reminder', 'Chapter 3 submissions are due within two weeks. Late submissions will need adviser approval for an extension.', NOW() - INTERVAL 1 DAY),
+(1, NULL, NULL, 1, 0, 'Portal Maintenance Notice', 'The submission portal will be briefly unavailable for maintenance next weekend. Draft content will not be affected.', NOW() - INTERVAL 7 DAY),
+(2, 1, NULL, 0, 1, 'Thesis 1 Defense Guidelines', 'Please check the uploaded PDF for details on the presentation format.', NOW() - INTERVAL 2 DAY);
