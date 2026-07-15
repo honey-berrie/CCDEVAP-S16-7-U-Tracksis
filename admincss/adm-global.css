@@ -70,14 +70,7 @@ body {
   color: var(--text-light);
 }
 
-/* ==========================================================================
-   Shared Admin Components
-   Used across every adm-*.php page (stat cards, panels, tables, badges,
-   buttons, modals, pagination, forms). Kept in the global stylesheet since
-   it's already imported everywhere via adm-links.css.
-   ========================================================================== */
-
-/* --- Page header / greeting -------------------------------------------- */
+/* --- Page header / greeting ---- */
 .page-header {
   display: flex;
   flex-wrap: wrap;
@@ -142,7 +135,7 @@ body {
   filter: brightness(0) invert(1);
 }
 
-/* --- Stat cards ---------------------------------------------------------- */
+/* --- Stat cards ---- */
 .stat-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -174,7 +167,7 @@ body {
   color: var(--navy-accent);
 }
 
-/* --- Panels (used for pending approvals, deadlines, activity, etc.) ----- */
+/* --- Panels --- */
 .panel-card {
   background: var(--bg-box);
   border-radius: 14px;
@@ -248,9 +241,7 @@ body {
   margin: 0;
 }
 
-/* --- Status badges -------------------------------------------------------
-   Modifiers map 1:1 to ENUM values from query.sql so JS can just do
-   `status-badge status-${row.status}` without translation tables. */
+/* --- Status badges ---*/
 .status-badge {
   display: inline-block;
   padding: 0.25rem 0.65rem;
@@ -299,7 +290,7 @@ body {
   border-radius: 999px;
 }
 
-/* --- Data tables ---------------------------------------------------------- */
+/* --- Data tables ---- */
 .table-responsive {
   overflow-x: auto;
 }
@@ -335,7 +326,7 @@ body {
   background: rgba(255, 255, 255, 0.03);
 }
 
-/* --- Buttons --------------------------------------------------------------- */
+/* --- Buttons ---- */
 .btn-primary-admin,
 .btn-secondary-admin,
 .btn-danger-admin {

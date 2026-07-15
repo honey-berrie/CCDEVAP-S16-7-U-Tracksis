@@ -16,7 +16,7 @@ async function checkLoginStatus() {
       // redirect based on role
       const role = checkData.user.role;
       if (role === 'admin')
-        window.location.href = '../../adminhtml/admin-dashboard.html';
+        window.location.href = '../../adminpages/admin-dashboard.php';
       else if (role === 'adviser' || role === 'panel') 
          window.location.href = '../../adviserhtml/thesis-adviser-overview.html';
       else
