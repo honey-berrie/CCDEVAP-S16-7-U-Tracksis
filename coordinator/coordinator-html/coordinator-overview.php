@@ -45,6 +45,32 @@ if ($userId) {
     $handledCount = 0;
   }
 }
+
+// Fetch group counts (total groups for coordinator's courses, and pending groups)
+$totalGroups = 0;
+$pendingGroups = 0;
+if ($userId) {
+  try {
+    $sql = "SELECT COUNT(*) FROM teams t
+            LEFT JOIN sections s ON t.section_id = s.id
+            LEFT JOIN courses c ON s.course_id = c.id
+            WHERE c.coordinator_id = ?";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([$userId]);
+    $totalGroups = (int)$stmt->fetchColumn();
+
+    $sql = "SELECT COUNT(*) FROM teams t
+            LEFT JOIN sections s ON t.section_id = s.id
+            LEFT JOIN courses c ON s.course_id = c.id
+            WHERE c.coordinator_id = ? AND (t.approval_status = 'pending' OR t.approval_status IS NULL)";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([$userId]);
+    $pendingGroups = (int)$stmt->fetchColumn();
+  } catch (PDOException $e) {
+    $totalGroups = 0;
+    $pendingGroups = 0;
+  }
+}
 ?>
 <!doctype html>
 <html lang="en">
@@ -210,7 +236,7 @@ if ($userId) {
         <!-- 4 cards layout, In a row when Big, 2x2 grid when small -->
         <div class="row g-4 mb-4">
           <!-- Handled Courses -->
-          <div class="col-lg-3 col-md-6">
+          <div class="col-lg-6">
             <div class="box mb-4 h-100">
               <p class="box-label">Handled Courses</p>
               <h3 class="fw-bold mb-3"><?php echo (int)$handledCount; ?></h3>
@@ -227,26 +253,10 @@ if ($userId) {
           </div>
 
           <!-- Active Groups -->
-          <div class="col-lg-3 col-md-6">
+          <div class="col-lg-6">
             <div class="box mb-4 h-100">
               <p class="box-label">Active Groups</p>
-              <h3 class="fw-bold mb-3">9</h3>
-            </div>
-          </div>
-
-          <!-- Pending Formations -->
-          <div class="col-lg-3 col-md-6">
-            <div class="box mb-4 h-100">
-              <p class="box-label">Pending Formations</p>
-              <h3 class="fw-bold mb-3">3</h3>
-            </div>
-          </div>
-
-          <!-- Off-Track Groups -->
-          <div class="col-lg-3 col-md-6">
-            <div class="box mb-4 h-100">
-              <p class="box-label">Off-Track Groups</p>
-              <h3 class="fw-bold mb-3">2</h3>
+              <h3 class="fw-bold mb-3"><?php echo (int)$totalGroups; ?></h3>
             </div>
           </div>
 
@@ -300,8 +310,8 @@ if ($userId) {
               <div class="box mb-4 h-100">
                 <p class="box-label">Needs your attention!</p>
                 <div class="d-flex justify-content-between align-items-center">
-                  <h2 class="fw-bold mb-0">Group formations to review</h2>
-                  <h3 class="fw-bold mb-0">5</h3>
+                  <h2 class="fw-bold mb-0">Pending Group formations to review</h2>
+                  <h3 class="fw-bold mb-0"><?php echo (int)$pendingGroups; ?></h3>
                 </div>
               </div>
             </div>
