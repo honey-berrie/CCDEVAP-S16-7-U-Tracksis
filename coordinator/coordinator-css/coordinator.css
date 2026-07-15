@@ -1,3 +1,13 @@
+:root {
+  /* Text color for canvas-rendered charts (ECharts titles/labels can't
+     inherit CSS, so widgets read this variable via getComputedStyle). */
+  --chart-text-color: #212529;
+}
+
+[data-theme="dark"] {
+  --chart-text-color: #cbd5e1;
+}
+
 .navigationBar-Header {
   background-color: #0c1a32 !important;
 }

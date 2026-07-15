@@ -30,13 +30,30 @@ try {
 
 // Fetch dynamic group progress data for the bullet chart
 $bulletData = [];
+
+// Summary card values
+$averageProgress = 0;
+$onTrackCount = 0;
+$fallingBehindCount = 0;
+
 if (!empty($sessUser['id'])) {
     try {
-        // Query teams connected to the coordinator's courses and compute average milestone progress
+        // Query teams connected to the coordinator's courses and compute:
+        //  - measure: average actual progress across the group's milestones
+        //  - target:  average *expected* progress across the group's milestones,
+        //             where each milestone contributes 100 if its due_date has
+        //             already passed (or is today) and 0 if it's still upcoming
         $sql = "
             SELECT 
+                t.id AS team_id,
                 t.group_name AS name,
-                COALESCE(AVG(m.progress), 0) AS measure
+                COALESCE(AVG(m.progress), 0) AS measure,
+                COALESCE(AVG(
+                    CASE 
+                        WHEN m.due_date IS NOT NULL AND m.due_date <= CURDATE() THEN 100
+                        ELSE 0
+                    END
+                ), 0) AS target
             FROM teams t
             JOIN sections s ON t.section_id = s.id
             JOIN courses c ON s.course_id = c.id
@@ -49,18 +66,52 @@ if (!empty($sessUser['id'])) {
         $stmt->execute(['coord_id' => $sessUser['id']]);
         $groups = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        // Map data to the format expected by ECharts
+        // Prepared statement to persist the computed status back to each team
+        $updateStatusStmt = $pdo->prepare(
+            "UPDATE teams SET progress_status = :status WHERE id = :team_id"
+        );
+
+        $totalMeasure = 0;
+
+        // Map data to the format expected by ECharts, tally On Track / Falling Behind,
+        // and sync each team's progress_status column to reflect the computed status
         foreach ($groups as $group) {
+            $measure = round((float)$group['measure']);
+            $targetValue = round((float)$group['target']);
+            $totalMeasure += $measure;
+
+            if ($measure >= $targetValue) {
+                $status = 'on track';
+                $onTrackCount++;
+            } else {
+                $status = 'falling behind';
+                $fallingBehindCount++;
+            }
+
+            // Auto-update the group's progress_status in the database
+            $updateStatusStmt->execute([
+                'status' => $status,
+                'team_id' => $group['team_id'],
+            ]);
+
             $bulletData[] = [
                 'name' => $group['name'],
                 'ranges' => [40, 70, 100],
-                'measure' => round((float)$group['measure']),
-                'target' => 100 // Target is fixed at 100% (overall completion goal)
+                'measure' => $measure,
+                'target' => $targetValue,
             ];
         }
+
+        $groupCount = count($groups);
+        if ($groupCount > 0) {
+            $averageProgress = round($totalMeasure / $groupCount);
+        }
     } catch (PDOException $e) {
-        // Fallback to empty array if query fails
+        // Fallback to empty/zero values if query fails
         $bulletData = [];
+        $averageProgress = 0;
+        $onTrackCount = 0;
+        $fallingBehindCount = 0;
     }
 }
 ?>
@@ -235,13 +286,13 @@ if (!empty($sessUser['id'])) {
           <div class="col-lg-4 col-md-4">
             <div class="box mb-4 h-100">
               <div class="box-label">Average Progress</div>
-              <div class="box-value">27%</div>
+              <div class="box-value"><?php echo htmlspecialchars($averageProgress); ?>%</div>
               <div class="progress mt-3 rounded-pill" style="height: 10px">
                 <div
                   class="progress-bar bg-warning"
                   role="progressbar"
-                  style="width: 27%"
-                  aria-valuenow="45"
+                  style="width: <?php echo htmlspecialchars($averageProgress); ?>%"
+                  aria-valuenow="<?php echo htmlspecialchars($averageProgress); ?>"
                   aria-valuemin="0"
                   aria-valuemax="100"
                 ></div>
@@ -253,7 +304,7 @@ if (!empty($sessUser['id'])) {
           <div class="col-lg-4 col-md-4">
             <div class="box mb-4 h-100">
               <div class="box-label">On Track</div>
-              <div class="box-value">3</div>
+              <div class="box-value"><?php echo htmlspecialchars($onTrackCount); ?></div>
             </div>
           </div>
 
@@ -261,7 +312,7 @@ if (!empty($sessUser['id'])) {
           <div class="col-lg-4 col-md-4">
             <div class="box mb-4 h-100">
               <div class="box-label">Falling Behind</div>
-              <div class="box-value">0</div>
+              <div class="box-value"><?php echo htmlspecialchars($fallingBehindCount); ?></div>
             </div>
           </div>
         </div>

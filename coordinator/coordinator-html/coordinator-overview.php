@@ -34,8 +34,23 @@ $handledCourses = [];
 $userId = (int)($_SESSION['user']['id'] ?? 0);
 if ($userId) {
   try {
-    // include progress column (expected 0-100)
-    $stmt = $pdo->prepare("SELECT id, course_code, course_name, COALESCE(progress,0) AS progress FROM courses WHERE coordinator_id = ? ORDER BY course_code");
+    // courses has no progress column of its own — derive each course's
+    // progress from the average milestone progress across its teams.
+    $sql = "
+      SELECT 
+        c.id,
+        c.course_code,
+        c.course_name,
+        COALESCE(AVG(m.progress), 0) AS progress
+      FROM courses c
+      LEFT JOIN sections s ON s.course_id = c.id
+      LEFT JOIN teams t ON t.section_id = s.id
+      LEFT JOIN milestones m ON m.group_id = t.id
+      WHERE c.coordinator_id = ?
+      GROUP BY c.id, c.course_code, c.course_name
+      ORDER BY c.course_code
+    ";
+    $stmt = $pdo->prepare($sql);
     $stmt->execute([$userId]);
     $handledCourses = $stmt->fetchAll();
     $handledCount = count($handledCourses);
@@ -334,7 +349,7 @@ if ($userId) {
                       echo json_encode(array_map(function($c){
                         return [
                           'name'  => $c['course_code'],
-                          'value' => isset($c['progress']) ? (int)$c['progress'] : 0,
+                          'value' => isset($c['progress']) ? (int)round((float)$c['progress']) : 0,
                         ];
                       }, $handledCourses));
                     ?>;
