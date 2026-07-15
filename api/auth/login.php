@@ -3,6 +3,7 @@
 
 require_once __DIR__ . '/../db.php';
 require_once __DIR__ . '/../helpers.php';
+require_once __DIR__ . '/../maintenance.php';
 
 $in = getInput();
 $email = trim($in['email'] ?? '');
@@ -16,6 +17,10 @@ $user = $stmt->fetch();
 
 if (!$user || !password_verify($pass, $user['password_hash'])) {
   error('Invalid email or password', 401);
+}
+
+if ($user['role'] !== 'admin' && isMaintenanceModeOn($pdo)) {
+  error('U-Tracksis is currently under maintenance. Please try again later.', 503, ['maintenance' => true]);
 }
 
 $pdo->prepare("UPDATE users SET last_login_at = NOW() WHERE id = ?")

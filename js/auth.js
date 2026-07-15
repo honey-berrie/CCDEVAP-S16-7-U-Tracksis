@@ -16,7 +16,7 @@ async function checkLoginStatus() {
       // redirect based on role
       const role = checkData.user.role;
       if (role === 'admin')
-        window.location.href = '../../adminpages/admin-dashboard.php';
+        window.location.href = '../../adminpages/adm-dashboard.php';
       else if (role === 'adviser') 
          window.location.href = '../../phase2-page-based-adviser/adviserhtml/thesis-adviser-overview.php';
       else
@@ -49,6 +49,10 @@ async function login() {
     const data = await res.json();
 
     if (!res.ok) {
+      if (data.maintenance) {
+        window.location.href = '../../maintenance.html';
+        return;
+      }
       alert(data.error || 'Login failed');
       return;
     }

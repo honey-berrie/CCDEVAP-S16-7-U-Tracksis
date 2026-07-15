@@ -1,35 +1,18 @@
 <?php
-/*
-|--------------------------------------------------------------------------
-| Dashboard Data Endpoint (GET)
-|--------------------------------------------------------------------------
-| Feeds adm-dashboard.js. Every query below matches query.sql exactly:
-| users.id/firstname/lastname, teams (not "groups"), milestones.status
-| ('in-progress','in-review','approved','rejected'), submissions.status
-| ('in-review','approved','rejected','revision-requested').
-*/
 
 require_once "session.php";
 requireAdminApi();
 
 $response = [];
 
-/*
-|--------------------------------------------------------------------------
-| Current User (for the greeting header)
-|--------------------------------------------------------------------------
-*/
+
 $admin = getCurrentAdmin($conn);
 $response['currentUser'] = [
     "firstname" => $admin['firstname'],
     "lastname"  => $admin['lastname'],
 ];
 
-/*
-|--------------------------------------------------------------------------
-| Quick Statistics
-|--------------------------------------------------------------------------
-*/
+
 $stats = [
     "students" => 0,
     "advisers" => 0,
@@ -51,7 +34,7 @@ if ($row = $conn->query("SELECT COUNT(*) c FROM teams WHERE status='active'")->f
 if ($row = $conn->query("SELECT COUNT(*) c FROM teams WHERE status='archived'")->fetch_assoc()) {
     $stats['approvedTheses'] = (int) $row['c'];
 }
-// A team is "ready to archive" once every milestone it owns is approved.
+
 $pendingArchiveQuery = "
     SELECT COUNT(*) c FROM teams t
     WHERE t.status = 'active'
@@ -70,11 +53,7 @@ if ($row = $conn->query("SELECT ROUND(AVG(progress)) c FROM milestones")->fetch_
 
 $response['stats'] = $stats;
 
-/*
-|--------------------------------------------------------------------------
-| Submission Statistics Chart (per month, on-time vs late)
-|--------------------------------------------------------------------------
-*/
+
 $submissionQuery = "
     SELECT
         MONTH(uploaded_at) AS month,
@@ -99,11 +78,7 @@ $response['submissionData'] = [
     "late" => $late,
 ];
 
-/*
-|--------------------------------------------------------------------------
-| Progress Statistics Chart (milestone status distribution)
-|--------------------------------------------------------------------------
-*/
+
 $progressQuery = "SELECT status, COUNT(*) total FROM milestones GROUP BY status";
 $result = $conn->query($progressQuery);
 $progress = [
@@ -120,11 +95,7 @@ $response['progressData'] = [
     "values" => array_values($progress),
 ];
 
-/*
-|--------------------------------------------------------------------------
-| Adviser Workload Chart
-|--------------------------------------------------------------------------
-*/
+
 $workloadQuery = "
     SELECT
         CONCAT(u.firstname, ' ', u.lastname) adviser,
@@ -147,11 +118,7 @@ $response['adviserData'] = [
     "groups" => $groups,
 ];
 
-/*
-|--------------------------------------------------------------------------
-| Pending Approvals (teams ready for the admin to review/archive)
-|--------------------------------------------------------------------------
-*/
+
 $pendingQuery = "
     SELECT
         t.id, t.group_name, t.thesis_title,
@@ -180,11 +147,6 @@ while ($row = $result->fetch_assoc()) {
 }
 $response['pendingApprovals'] = $pending;
 
-/*
-|--------------------------------------------------------------------------
-| Recent Activity (latest submission + milestone events, merged)
-|--------------------------------------------------------------------------
-*/
 $activityQuery = "
     (SELECT
         s.uploaded_at AS event_time,
@@ -214,11 +176,6 @@ while ($row = $result->fetch_assoc()) {
 }
 $response['recentActivity'] = $activity;
 
-/*
-|--------------------------------------------------------------------------
-| Recent Submissions (table preview)
-|--------------------------------------------------------------------------
-*/
 $recentSubsQuery = "
     SELECT s.id, s.title, s.document_type, s.status, s.uploaded_at, t.group_name
     FROM submissions s
