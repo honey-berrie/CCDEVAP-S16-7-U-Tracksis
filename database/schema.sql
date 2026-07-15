@@ -2,7 +2,7 @@
 -- U-Tracksis Database Schema
 -- ============================================================================
 
-CREATE SCHEMA u_tracksis
+CREATE SCHEMA IF NOT EXISTS u_tracksis
 DEFAULT CHARACTER SET utf8mb4
 DEFAULT COLLATE utf8mb4_unicode_ci;
 
