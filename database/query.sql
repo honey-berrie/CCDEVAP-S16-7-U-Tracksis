@@ -96,3 +96,22 @@ CREATE TABLE IF NOT EXISTS submissions (
   CONSTRAINT fk_subs_uploader FOREIGN KEY (uploaded_by) REFERENCES users(id) ON DELETE CASCADE,
   CONSTRAINT fk_subs_reviewer FOREIGN KEY (reviewed_by) REFERENCES users(id) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS consultations (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  group_id INT NOT NULL,
+  adviser_id INT NULL,
+  consultation_start DATETIME NOT NULL,
+  consultation_end DATETIME NULL,
+  meeting_link VARCHAR(500) NULL,
+  agenda TEXT NULL,
+  reschedule_reason TEXT NULL,
+  status ENUM('scheduled','completed','cancelled') NOT NULL DEFAULT 'scheduled',
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_consultations_group (group_id),
+  INDEX idx_consultations_adviser (adviser_id),
+  INDEX idx_consultations_status (status),
+  CONSTRAINT fk_consultations_group FOREIGN KEY (group_id) REFERENCES teams(id) ON DELETE CASCADE,
+  CONSTRAINT fk_consultations_adviser FOREIGN KEY (adviser_id) REFERENCES users(id) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
