@@ -1,8 +1,3 @@
-/* ==========================================================================
-   User Management — search, role/status filters, pagination, CRUD modals,
-   and Create Thesis Group modal.
-   ========================================================================== */
-
 const usersState = {
     search: "",
     role: "",
@@ -17,7 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
     bindUserModalEvents();
 });
 
-/* --- Data loading ---------------------------------------------------------- */
+
 
 function loadUsers() {
     const params = new URLSearchParams({
@@ -63,7 +58,6 @@ function renderUsersTable(users) {
         </tr>
     `).join("");
 
-    // Cache latest page of users so Edit doesn't need another request.
     window.__usersCache = users;
 }
 
@@ -98,7 +92,6 @@ function goToPage(page) {
     loadUsers();
 }
 
-/* --- Toolbar (search / filter chips / status / rows per page) ------------- */
 
 function bindToolbarEvents() {
     let searchTimer;
@@ -134,7 +127,6 @@ function bindToolbarEvents() {
     });
 }
 
-/* --- Add / Edit Account modal ---------------------------------------------- */
 
 function bindUserModalEvents() {
     document.getElementById("openCreateUserModal").addEventListener("click", openCreateUserModal);
@@ -246,7 +238,6 @@ function deleteUser(id, name) {
         });
 }
 
-/* --- Modal helpers ----------------------------------------------------------- */
 
 function openModal(id) {
     document.getElementById(id).classList.add("show");
@@ -256,7 +247,6 @@ function closeModal(id) {
     document.getElementById(id).classList.remove("show");
 }
 
-/* --- Shared helpers ----------------------------------------------------------- */
 
 function escapeHtml(str) {
     if (str === null || str === undefined) return "";

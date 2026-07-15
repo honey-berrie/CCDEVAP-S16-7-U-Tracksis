@@ -1,6 +1,7 @@
 <?php
 
 require_once "session.php";
+requireAdminApi();
 
 $groupId   = isset($_GET['group']) ? (int) $_GET['group'] : 0;
 $adviserId = isset($_GET['adviser']) ? (int) $_GET['adviser'] : 0;

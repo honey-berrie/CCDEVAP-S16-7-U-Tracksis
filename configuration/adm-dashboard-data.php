@@ -10,6 +10,7 @@
 */
 
 require_once "session.php";
+requireAdminApi();
 
 $response = [];
 

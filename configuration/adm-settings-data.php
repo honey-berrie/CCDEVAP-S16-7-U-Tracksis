@@ -8,6 +8,7 @@
 */
 
 require_once "session.php";
+requireAdminApi();
 
 $admin = getCurrentAdmin($conn);
 
@@ -24,7 +25,6 @@ echo json_encode([
         "firstname" => $admin['firstname'],
         "lastname" => $admin['lastname'],
         "email" => $admin['email'],
-        "avatarUrl" => $admin['avatar_url'],
     ],
     "settings" => [
         "siteName" => $settings['site_name'] ?? "U-Tracksis",

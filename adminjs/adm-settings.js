@@ -1,9 +1,3 @@
-/* ==========================================================================
-   Settings — profile (name, email, password) and maintenance mode.
-   The theme toggle lives only in the sidebar (adm-global.js); this page
-   does not duplicate it.
-   ========================================================================== */
-
 document.addEventListener("DOMContentLoaded", () => {
     loadSettings();
     bindProfileForm();

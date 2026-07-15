@@ -9,7 +9,6 @@ const colors = {
     gridLine: "#e9e9e9"
 };
 
-// Fetch dashboard data from PHP
 fetch("../configuration/adm-dashboard-data.php")
     .then(response => {
         if (!response.ok) {
@@ -28,9 +27,6 @@ fetch("../configuration/adm-dashboard-data.php")
         console.error("Dashboard Error:", error);
     });
 
-/* ==========================================
-   Submission Statistics Chart
-========================================== */
 
 function createSubmissionChart(submissionData) {
 
@@ -90,9 +86,6 @@ function createSubmissionChart(submissionData) {
 
 }
 
-/* ==========================================
-   Progress Statistics Chart
-========================================== */
 
 function createProgressChart(progressData) {
 
@@ -134,10 +127,6 @@ function createProgressChart(progressData) {
     });
 
 }
-
-/* ==========================================
-   Adviser Workload Chart
-========================================== */
 
 function createAdviserChart(adviserData) {
 

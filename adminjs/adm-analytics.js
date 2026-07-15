@@ -1,7 +1,3 @@
-/* ==========================================================================
-   Analytics — summary cards + 3 charts, filterable by group/adviser/status.
-   ========================================================================== */
-
 const analyticsColors = {
     approved: "#16a34a",
     inReview: "#f59e0b",

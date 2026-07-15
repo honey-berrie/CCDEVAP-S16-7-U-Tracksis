@@ -70,7 +70,61 @@ body {
   color: var(--text-light);
 }
 
-/* --- Page header / greeting ---- */
+.top-bar {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-bottom: 1.25rem;
+}
+
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.btn-logout {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.55rem 1rem;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--bg-box);
+  color: var(--text);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-logout:hover {
+  background: var(--navy-accent);
+  color: #fff;
+  border-color: var(--navy-accent);
+}
+
+.btn-logout .bi {
+  width: 16px;
+  height: 16px;
+  filter: none;
+}
+
+.btn-logout:hover .bi {
+  filter: brightness(0) invert(1);
+}
+
+.topbar-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: contain;
+  padding: 4px;
+  border: 1px solid var(--border);
+  background: var(--bg-box);
+}
+
+/* --- Page header ---- */
 .page-header {
   display: flex;
   flex-wrap: wrap;
@@ -135,7 +189,7 @@ body {
   filter: brightness(0) invert(1);
 }
 
-/* --- Stat cards ---- */
+/* --- Stat cards--- */
 .stat-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -167,7 +221,7 @@ body {
   color: var(--navy-accent);
 }
 
-/* --- Panels --- */
+/* --- Panels---- */
 .panel-card {
   background: var(--bg-box);
   border-radius: 14px;
@@ -241,7 +295,7 @@ body {
   margin: 0;
 }
 
-/* --- Status badges ---*/
+/* --- Status badges --- */
 .status-badge {
   display: inline-block;
   padding: 0.25rem 0.65rem;
@@ -290,7 +344,7 @@ body {
   border-radius: 999px;
 }
 
-/* --- Data tables ---- */
+/* --- Data tables --- */
 .table-responsive {
   overflow-x: auto;
 }
@@ -326,7 +380,7 @@ body {
   background: rgba(255, 255, 255, 0.03);
 }
 
-/* --- Buttons ---- */
+/* --- Buttons ------*/
 .btn-primary-admin,
 .btn-secondary-admin,
 .btn-danger-admin {
@@ -369,7 +423,7 @@ body {
   cursor: not-allowed;
 }
 
-/* --- Toolbar (search/filter row shared by list pages) ---------------------- */
+/* --- Toolbar---------- */
 .toolbar {
   display: flex;
   flex-wrap: wrap;
@@ -412,7 +466,7 @@ body {
   border-color: var(--navy-accent);
 }
 
-/* --- Pagination -------------------------------------------------------------- */
+/* --- Pagination ------------ */
 .pagination-bar {
   display: flex;
   flex-wrap: wrap;
@@ -459,7 +513,7 @@ body {
   color: var(--text);
 }
 
-/* --- Forms ------------------------------------------------------------------- */
+/* --- Forms ---- */
 .form-group {
   margin-bottom: 1rem;
 }
@@ -513,7 +567,7 @@ textarea.form-control-admin {
   display: block;
 }
 
-/* --- Modals ------------------------------------------------------------------- */
+/* --- Modals ----- */
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -574,7 +628,7 @@ textarea.form-control-admin {
   margin-top: 1.25rem;
 }
 
-/* --- Card grid (used by Thesis Records / Archive) --------------------------- */
+/* --- Card grid ----- */
 .card-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));

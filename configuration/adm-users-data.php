@@ -15,6 +15,7 @@
 */
 
 require_once "session.php";
+requireAdminApi();
 
 $search  = isset($_GET['search']) ? trim($_GET['search']) : "";
 $role    = isset($_GET['role']) ? trim($_GET['role']) : "";

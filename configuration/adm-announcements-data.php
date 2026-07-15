@@ -14,6 +14,7 @@
 */
 
 require_once "session.php";
+requireAdminApi();
 
 $stmt = $conn->prepare("
     SELECT a.id, a.title, a.message, a.created_at,
