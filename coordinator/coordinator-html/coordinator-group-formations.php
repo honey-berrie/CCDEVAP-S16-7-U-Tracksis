@@ -27,6 +27,35 @@ try {
     // Fallback if the database table doesn't exist yet
     $first_name = "Coordinator"; 
 }
+// Fetch handled courses for this coordinator (for display under Group Registry)
+$handledCount = 0;
+$handledCourses = [];
+$userId = (int)($_SESSION['user']['id'] ?? 0);
+if ($userId) {
+  try {
+    $stmt = $pdo->prepare("SELECT id, course_code, course_name FROM courses WHERE coordinator_id = ? ORDER BY course_code");
+    $stmt->execute([$userId]);
+    $handledCourses = $stmt->fetchAll();
+    $handledCount = count($handledCourses);
+  } catch (PDOException $e) {
+    $handledCourses = [];
+    $handledCount = 0;
+  }
+}
+// Fetch teams to display
+$teams = [];
+try {
+    $sql = "SELECT t.*, s.section_code, c.course_code, CONCAT(u.firstname, ' ', u.lastname) AS adviser_name
+            FROM teams t
+            LEFT JOIN sections s ON t.section_id = s.id
+            LEFT JOIN courses c ON s.course_id = c.id
+            LEFT JOIN users u ON t.adviser_id = u.id
+            ORDER BY t.created_at DESC";
+    $stmt = $pdo->query($sql);
+    $teams = $stmt->fetchAll();
+} catch (PDOException $e) {
+    $teams = [];
+}
 ?>
 <!doctype html>
 <html lang="en">
@@ -209,8 +238,17 @@ try {
             <div class="row align-items-center">
               <div class="col-lg-8">
                 <p class="text medium mb-0">
-                  Courses handled (3): Thesis Writing 1, Thesis Writing 2,
-                  Thesis Writing 3
+                  <?php if ($handledCount > 0): ?>
+                    Courses handled (<?php echo (int)$handledCount; ?>):
+                    <?php
+                      $names = array_map(function($c){
+                        return htmlspecialchars($c['course_code']);
+                      }, $handledCourses);
+                      echo implode(', ', $names);
+                    ?>
+                  <?php else: ?>
+                    <span class="text-muted">No courses assigned</span>
+                  <?php endif; ?>
                 </p>
               </div>
               <div class="col-lg-4">
@@ -242,40 +280,55 @@ try {
               <div class="col-lg-4 md-6 sm-12 mb-4">
                 <div class="form-group">
                   <label for="GroupFilter">Group Filter</label>
-                  <select class="form-control" id="CourseSelect">
-                    <option>Pending</option>
-                    <option>Approved</option>
-                    <option>Coordinator-Created</option>
-                    <option>All</option>
+                  <select class="form-control" id="GroupFilter">
+                    <option value="pending">Pending</option>
+                    <option value="approved">Approved</option>
+                    <option value="rejected">Rejected</option>
+                    <option value="all">All</option>
                   </select>
                 </div>
               </div>
 
               <!-- One box per group -->
-              <div class="box">
-                <div class="card-body">
-                  <div class="d-flex bd-highlight mb-4">
-                    <div class="me-auto p-2 bd-highlight">
-                      <h5 class="card-title">Group A</h5>
-                    </div>
-                    <div class="p-2 bd-highlight"><h3><span class="badge text-bg-secondary">S13</span></h1></h3></div>
-                    <div class="p-2 bd-highlight"><h3><span class="badge text-bg-warning">Pending</span></h1></h3></div>
-                  </div>
+              <?php if (!empty($teams)): ?>
+                <?php foreach ($teams as $team): ?>
+                  <div class="box mb-3 team-card" data-approval="<?php echo htmlspecialchars($team['approval_status'] ?? 'pending'); ?>">
+                    <div class="card-body">
+                      <div class="d-flex bd-highlight mb-4">
+                        <div class="me-auto p-2 bd-highlight">
+                          <h5 class="card-title"><?php echo htmlspecialchars($team['group_name']); ?></h5>
+                        </div>
+                        <div class="p-2 bd-highlight"><h3><span class="badge text-bg-secondary"><?php echo htmlspecialchars($team['section_code'] ?? $team['section_id']); ?></span></h1></h3></div>
+                        <div class="p-2 bd-highlight"><h3><span class="badge <?php echo ($team['approval_status'] === 'approved') ? 'text-bg-success' : 'text-bg-warning'; ?>"><?php echo htmlspecialchars(ucfirst($team['approval_status'] ?? 'pending')); ?></span></h1></h3></div>
+                      </div>
 
-                  <h6 class="card-subtitle mb-2 text">Thesis Title</h6>
-                   <p class="box-label">Submitted on: July 28, 2027</p>
-                  <div class="d-flex bd-highlight mb-4">
-                    <div class="p-2 bd-highlight"><span class="badge text-bg-primary">Person 1</span></div>
-                    <div class="p-2 bd-highlight"><span class="badge text-bg-secondary">Person 2</span></div>
-                    <div class="p-2 bd-highlight"><span class="badge text-bg-secondary">Person 3</span></div>
-                    <div class="p-2 bd-highlight"><span class="badge text-bg-secondary">Person 4</span></div>
-                    <div class="ms-auto p-2 bd-highlight">
-                        <a href="#" class="badge text-bg-success text-decoration-none" onclick="alert('Placeholder: Approve Group')">Approve</a>
-                        <a href="#" class="badge text-bg-danger text-decoration-none" onclick="alert('Placeholder: Reject Group')">Reject</a>
+                      <h6 class="card-subtitle mb-2 text"><?php echo htmlspecialchars($team['thesis_title'] ?? 'Thesis Title'); ?></h6>
+                      <p class="box-label">Submitted on: <?php echo !empty($team['submission_date']) ? htmlspecialchars($team['submission_date']) : '—'; ?></p>
+                      <div class="d-flex bd-highlight mb-4">
+                        <?php
+                          // fetch members for this team
+                          $mStmt = $pdo->prepare("SELECT u.firstname, u.lastname FROM group_members gm JOIN users u ON gm.user_id = u.id WHERE gm.group_id = ? LIMIT 10");
+                          $mStmt->execute([(int)$team['id']]);
+                          $members = $mStmt->fetchAll();
+                          if (!empty($members)) {
+                            foreach ($members as $m) {
+                              echo '<div class="p-2 bd-highlight"><span class="badge text-bg-primary">' . htmlspecialchars($m['firstname'] . ' ' . $m['lastname']) . '</span></div>';
+                            }
+                          } else {
+                            echo '<div class="p-2 bd-highlight"><span class="text-muted">No members</span></div>';
+                          }
+                        ?>
+                        <div class="ms-auto p-2 bd-highlight">
+                          <a href="#" class="badge text-bg-success text-decoration-none" onclick="alert('Placeholder: Approve Group')">Approve</a>
+                          <a href="#" class="badge text-bg-danger text-decoration-none" onclick="alert('Placeholder: Reject Group')">Reject</a>
+                        </div>
+                      </div>
                     </div>
-                    </div>
-                </div>
-              </div>
+                  </div>
+                <?php endforeach; ?>
+              <?php else: ?>
+                <p class="text-muted">No teams yet</p>
+              <?php endif; ?>
             </div>
           </div>
         </div>
@@ -287,6 +340,24 @@ try {
     <script src="../coordinator-back-end/coordinator-logout.js"></script>
 
     <script>
+      // Group filter logic: show/hide team cards by approval status
+      (function(){
+        const filter = document.getElementById('GroupFilter');
+        if (!filter) return;
+        filter.addEventListener('change', () => {
+          const val = filter.value;
+          const cards = document.querySelectorAll('.team-card');
+          cards.forEach(card => {
+            if (val === 'all') {
+              card.style.display = '';
+            } else {
+              const ap = (card.dataset.approval || '').toLowerCase();
+              card.style.display = (ap === val) ? '' : 'none';
+            }
+          });
+        });
+      })();
+
       /* sidebar toggle */
       const sidebar = document.getElementById("sidebar");
       const menuBtn = document.getElementById("menuBtn");
