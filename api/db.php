@@ -5,7 +5,7 @@ session_start();
 $DB_HOST = 'localhost';
 $DB_NAME = 'u_tracksis';
 $DB_USER = 'root';
-$DB_PASS = 'offshore31LIME_';
+$DB_PASS = ''; // password by HONEYBERRY is 'offshore31LIME_', I am using the default XAMPP password ''
 
 try {
     $pdo = new PDO("mysql:host=$DB_HOST;dbname=$DB_NAME;charset=utf8mb4", $DB_USER, $DB_PASS,
