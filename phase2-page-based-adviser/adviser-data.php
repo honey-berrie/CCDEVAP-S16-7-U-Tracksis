@@ -128,7 +128,10 @@ function adviserGetConsultations(PDO $pdo, string $status): array
                 c.proposed_schedule AS consultation_date,
                 c.consultation_end,
                 c.meeting_link,
-                COALESCE(NULLIF(c.topic, ""), c.agenda, "Consultation") AS notes,
+                CASE
+                    WHEN c.status = "completed" THEN COALESCE(NULLIF(c.adviser_notes, ""), NULLIF(c.topic, ""), c.agenda, "Consultation")
+                    ELSE COALESCE(NULLIF(c.topic, ""), c.agenda, "Consultation")
+                END AS notes,
                 c.reschedule_reason,
                 CASE
                     WHEN c.status = "completed" THEN "Completed"
