@@ -206,22 +206,22 @@ INSERT INTO system_settings (setting_key, setting_value) VALUES
   ('site_name', 'U-Tracksis'),
   ('maintenance_mode', '0');
 
-INSERT INTO users (role, firstname, lastname, email, password_hash, is_active, last_login_at) VALUES
-('admin',       'Maria Corazon', 'Reyes',       'maria.reyes@dlsu.edu.ph',       'demo1234', 1, NOW() - INTERVAL 1 DAY),
-('coordinator', 'Ramon',         'Villanueva',  'ramon.villanueva@dlsu.edu.ph',  'demo1234', 1, NOW() - INTERVAL 2 DAY),
-('coordinator', 'Angelica',      'Bautista',    'angelica.bautista@dlsu.edu.ph','demo1234', 1, NOW() - INTERVAL 5 DAY),
-('adviser',     'Ferdinand',     'Santos',      'ferdinand.santos@dlsu.edu.ph', 'demo1234', 1, NOW() - INTERVAL 1 DAY),
-('adviser',     'Liza',          'Mendoza',     'liza.mendoza@dlsu.edu.ph',     'demo1234', 1, NOW() - INTERVAL 3 DAY),
-('adviser',     'Antonio',       'Cruz',        'antonio.cruz@dlsu.edu.ph',     'demo1234', 1, NOW() - INTERVAL 7 DAY),
-('student',     'Juan Miguel',   'Dela Cruz',   'juan.delacruz@dlsu.edu.ph',    'demo1234', 1, NOW() - INTERVAL 1 DAY),
-('student',     'Ana Bianca',    'Santos',      'ana.santos@dlsu.edu.ph',       'demo1234', 1, NOW() - INTERVAL 2 DAY),
-('student',     'Carlo Jandino', 'Ramos',       'carlo.ramos@dlsu.edu.ph',      'demo1234', 1, NOW() - INTERVAL 4 DAY),
-('student',     'Kristine Joy',  'Aquino',      'kristine.aquino@dlsu.edu.ph',  'demo1234', 1, NOW() - INTERVAL 2 DAY),
-('student',     'Paolo Gabriel', 'Reyes',       'paolo.reyes@dlsu.edu.ph',      'demo1234', 1, NOW() - INTERVAL 3 DAY),
-('student',     'Samantha Nicole','Garcia',     'samantha.garcia@dlsu.edu.ph',  'demo1234', 1, NOW() - INTERVAL 6 DAY),
-('student',     'Marc Anthony',  'Torres',      'marc.torres@dlsu.edu.ph',      'demo1234', 1, NOW() - INTERVAL 10 DAY),
-('student',     'Bea Alexandra', 'Lim',         'bea.lim@dlsu.edu.ph',          'demo1234', 1, NOW() - INTERVAL 10 DAY),
-('student',     'Joshua Daniel', 'Fernandez',   'joshua.fernandez@dlsu.edu.ph', 'demo1234', 1, NOW() - INTERVAL 10 DAY);
+INSERT INTO users (role, firstname, lastname, email, password_hash, is_active, last_login_at, adviser_thesis_load, adviser_lecture_load, adviser_research_load) VALUES
+('admin',       'Maria Corazon', 'Reyes',       'maria.reyes@dlsu.edu.ph',       '$2a$10$g86TLJk8OCTC6FUfmQ/kButsTfpCXqRHQbLreqM131F4qgF8qhKS2', 1, NOW() - INTERVAL 1 DAY, 0, 0, 0),
+('coordinator', 'Ramon',         'Villanueva',  'ramon.villanueva@dlsu.edu.ph',  '$2a$10$BQ48TEdpbZj4xzYoGdiwKe4EROyAfxUH1QV/q/qIZ.YnLTYLKhooO', 1, NOW() - INTERVAL 2 DAY, 0, 0, 0),
+('coordinator', 'Angelica',      'Bautista',    'angelica.bautista@dlsu.edu.ph','$2a$10$nwO2HVEbLFCAhnCh.Ls3PenmjBh6EmFuxuX9L1s/WGMm4cve9hLDS', 1, NOW() - INTERVAL 5 DAY, 0, 0, 0),
+('adviser',     'Ferdinand',     'Santos',      'ferdinand.santos@dlsu.edu.ph', '$2a$10$0OnS.BkvfffaSvE575he/u15wKg1Mq17V1sfB1TNpK9BAd49B1/jq', 1, NOW() - INTERVAL 1 DAY, 3, 6, 2),
+('adviser',     'Liza',          'Mendoza',     'liza.mendoza@dlsu.edu.ph',     '$2a$10$0OnS.BkvfffaSvE575he/u15wKg1Mq17V1sfB1TNpK9BAd49B1/jq', 1, NOW() - INTERVAL 3 DAY, 2, 9, 0),
+('adviser',     'Antonio',       'Cruz',        'antonio.cruz@dlsu.edu.ph',     '$2a$10$0R8vYDgPLif3rHYvpo847OfdpZ9KJ.rXW1tA42y.c9nzErdqky75i', 1, NOW() - INTERVAL 7 DAY, 4, 3, 4),
+('student',     'Juan Miguel',   'Dela Cruz',   'juan.delacruz@dlsu.edu.ph',    '$2a$10$Uk./6y/rlBQn/YE/w8RJcexmr4NtrYQDHFrlZtShk1P98apLoaL9O', 1, NOW() - INTERVAL 1 DAY, 0, 0, 0),
+('student',     'Ana Bianca',    'Santos',      'ana.santos@dlsu.edu.ph',       '$2a$10$iJ.c2D3c8Ged.M7AYgtyqOFs2p98PMcuTmq/83SppDCEqQ/0/F6/W', 1, NOW() - INTERVAL 2 DAY, 0, 0, 0),
+('student',     'Carlo Jandino', 'Ramos',       'carlo.ramos@dlsu.edu.ph',      '$2a$10$QVo2dqgEpGkCLuYHKgpM3eBqeOReKFzTKDpsh0ZXtuJqNTD3iSV66', 1, NOW() - INTERVAL 4 DAY, 0, 0, 0),
+('student',     'Kristine Joy',  'Aquino',      'kristine.aquino@dlsu.edu.ph',  '$2a$10$i91fE6cRiZktXnxcwt7InOUai.GsCdoe8TdaTUiobsfyzjhz6d0bS', 1, NOW() - INTERVAL 2 DAY, 0, 0, 0),
+('student',     'Paolo Gabriel', 'Reyes',       'paolo.reyes@dlsu.edu.ph',      '$2a$10$ltq04JLTPB3b2kw2g8ZypODbGVGzm7ysVvW5zmzYoXUC0Qyp1rX2m', 1, NOW() - INTERVAL 3 DAY, 0, 0, 0),
+('student',     'Samantha Nicole','Garcia',     'samantha.garcia@dlsu.edu.ph',  '$2a$10$KT2PgsKY6z7DX2Na8E8ZWeH.hkYeXUCa4rXbpXhHUL00UGZSvjUSS', 1, NOW() - INTERVAL 6 DAY, 0, 0, 0),
+('student',     'Marc Anthony',  'Torres',      'marc.torres@dlsu.edu.ph',      '$2a$10$Rs3NzrhWILDAKS8jmVZ9zOLv2f6Py0eHbVXBBOFwFxXFJgWYSvlN2', 1, NOW() - INTERVAL 10 DAY, 0, 0, 0),
+('student',     'Bea Alexandra', 'Lim',         'bea.lim@dlsu.edu.ph',          '$2a$10$/6hlkXkt2l5uEt2r5cVM7uZdFxCZfnXbTxynqsT/MUNI/YWRE/G6S', 1, NOW() - INTERVAL 10 DAY, 0, 0, 0),
+('student',     'Joshua Daniel', 'Fernandez',   'joshua.fernandez@dlsu.edu.ph', '$2a$10$0.XHbs6GVOmHwXnu0uy25.KvAn.RQQdTFdXQW19CZUeVJUILxV3HK', 1, NOW() - INTERVAL 10 DAY, 0, 0, 0);
 
 INSERT INTO teams (group_name, thesis_title, abstract, adviser_id, defense_date, academic_year, status, archived_at) VALUES
 ('Cortana', 'AI-Powered Attendance Monitoring System Using Facial Recognition',
