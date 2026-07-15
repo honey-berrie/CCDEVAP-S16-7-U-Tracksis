@@ -96,3 +96,44 @@ CREATE TABLE IF NOT EXISTS submissions (
   CONSTRAINT fk_subs_uploader FOREIGN KEY (uploaded_by) REFERENCES users(id) ON DELETE CASCADE,
   CONSTRAINT fk_subs_reviewer FOREIGN KEY (reviewed_by) REFERENCES users(id) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS courses (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  course_code VARCHAR(20) NOT NULL UNIQUE, -- e.g., 'THSCC02', 'CCRESME'
+  course_name VARCHAR(100) NOT NULL,       -- e.g., 'Thesis Writing 2'
+  coordinator_id INT NULL,
+  FOREIGN KEY (coordinator_id) REFERENCES users(id) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS sections (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  section_code VARCHAR(10) NOT NULL, -- e.g., 'S11', 'S13'
+  course_id INT NOT NULL,
+  FOREIGN KEY (course_id) REFERENCES courses(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS announcements (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  course_id INT NOT NULL,
+  coordinator_id INT NOT NULL,
+  title VARCHAR(150) NOT NULL,
+  message TEXT NOT NULL,
+  is_pinned TINYINT(1) NOT NULL DEFAULT 0,
+  due_date DATE NULL, -- e.g., 'Due on July 28, 2027'
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  FOREIGN KEY (course_id) REFERENCES courses(id) ON DELETE CASCADE,
+  FOREIGN KEY (coordinator_id) REFERENCES users(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+ALTER TABLE teams 
+  ADD COLUMN section_id INT NOT NULL AFTER thesis_title,
+  ADD COLUMN approval_status ENUM('pending', 'approved', 'rejected', 'coordinator-created') NOT NULL DEFAULT 'pending' AFTER adviser_id,
+  ADD COLUMN progress_status ENUM('on track', 'falling behind') NOT NULL DEFAULT 'on track' AFTER approval_status,
+  ADD COLUMN submission_date DATE NULL AFTER defense_date, -- Tracks 'Submitted on: July 28, 2027'
+  ADD CONSTRAINT fk_teams_section FOREIGN KEY (section_id) REFERENCES sections(id) ON DELETE RESTRICT;
+
+  ALTER TABLE users 
+  ADD COLUMN adviser_thesis_load INT NOT NULL DEFAULT 0,
+  ADD COLUMN adviser_lecture_load INT NOT NULL DEFAULT 0,
+  ADD COLUMN adviser_research_load INT NOT NULL DEFAULT 0;
