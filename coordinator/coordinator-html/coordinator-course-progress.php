@@ -27,6 +27,42 @@ try {
     // Fallback if the database table doesn't exist yet
     $first_name = "Coordinator"; 
 }
+
+// Fetch dynamic group progress data for the bullet chart
+$bulletData = [];
+if (!empty($sessUser['id'])) {
+    try {
+        // Query teams connected to the coordinator's courses and compute average milestone progress
+        $sql = "
+            SELECT 
+                t.group_name AS name,
+                COALESCE(AVG(m.progress), 0) AS measure
+            FROM teams t
+            JOIN sections s ON t.section_id = s.id
+            JOIN courses c ON s.course_id = c.id
+            LEFT JOIN milestones m ON t.id = m.group_id
+            WHERE c.coordinator_id = :coord_id
+            GROUP BY t.id, t.group_name
+            ORDER BY t.group_name ASC
+        ";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute(['coord_id' => $sessUser['id']]);
+        $groups = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        // Map data to the format expected by ECharts
+        foreach ($groups as $group) {
+            $bulletData[] = [
+                'name' => $group['name'],
+                'ranges' => [40, 70, 100],
+                'measure' => round((float)$group['measure']),
+                'target' => 100 // Target is fixed at 100% (overall completion goal)
+            ];
+        }
+    } catch (PDOException $e) {
+        // Fallback to empty array if query fails
+        $bulletData = [];
+    }
+}
 ?>
 <!doctype html>
 <html lang="en">
@@ -235,16 +271,110 @@ try {
             <div class="card-body">
               <div class="d-flex justify-content-between align-items-center">
                 <h5 class="card-title">
-                  Group A <span class="badge text-bg-success">On Track</span>
+                  Groups
                 </h5>
               </div>
 
               <!-- BULLET CHART: chart container. Give it a unique id so bulletchart.js can target it -->
+              <!-- BULLET CHART: chart container. Give it a unique id so bulletchart.js can target it -->
               <div id="bulletchart" style="width: 100%; height: 300px"></div>
-              <!-- BULLET CHART: echarts core is already loaded above for the pictogram chart, -->
-              <!-- so we only need to load our bullet-chart-specific script here -->
+              
+              <!-- Load ECharts -->
               <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.5.0/echarts.min.js" integrity="sha384-o5uz97et3bErHvpKfD4Jz4n0JfhJDWABFuF4NP+iEEDxE1VwMWJ19QGR0lqFZnr6" crossorigin="anonymous"></script>
-              <script src="../coordinator-back-end/bulletchart.js"></script>
+              
+              <!-- Inline dynamic initialization -->
+              <script>
+                const bulletChart = echarts.init(document.getElementById("bulletchart"));
+
+                // Inject PHP data directly into JS
+                const bulletData = <?php echo json_encode($bulletData); ?>;
+
+                if (bulletData.length > 0) {
+                    const categories = bulletData.map((d) => d.name);
+                    const axisMax = Math.max(...bulletData.map((d) => d.ranges[d.ranges.length - 1]));
+
+                    const bulletOption = {
+                      title: {
+                        text: "Submission Progress",
+                        left: "center",
+                        textStyle: { fontSize: 16, color: "#FFFF" },
+                      },
+                      tooltip: {
+                        trigger: "axis",
+                        axisPointer: { type: "shadow" },
+                        formatter: (params) => {
+                          const d = bulletData[params[0].dataIndex];
+                          return `${d.name}<br/>Progress: ${d.measure}%<br/>Target: ${d.target}%`;
+                        },
+                      },
+                      grid: { left: 90, right: 30, top: 60, bottom: 30 },
+                      xAxis: {
+                        max: axisMax,
+                        splitLine: { show: false },
+                      },
+                      yAxis: {
+                        type: "category",
+                        data: categories,
+                        axisTick: { show: false },
+                      },
+                      series: [
+                        {
+                          name: "High range",
+                          type: "bar",
+                          barWidth: 22,
+                          data: bulletData.map((d) => d.ranges[2]),
+                          itemStyle: { color: "#eee" },
+                          barGap: "-100%",
+                          z: 1,
+                          silent: true,
+                        },
+                        {
+                          name: "Medium range",
+                          type: "bar",
+                          barWidth: 22,
+                          data: bulletData.map((d) => d.ranges[1]),
+                          itemStyle: { color: "#ddd" },
+                          barGap: "-100%",
+                          z: 2,
+                          silent: true,
+                        },
+                        {
+                          name: "Low range",
+                          type: "bar",
+                          barWidth: 22,
+                          data: bulletData.map((d) => d.ranges[0]),
+                          itemStyle: { color: "#ccc" },
+                          barGap: "-100%",
+                          z: 3,
+                          silent: true,
+                        },
+                        {
+                          name: "Progress",
+                          type: "bar",
+                          barWidth: 8,
+                          data: bulletData.map((d) => d.measure),
+                          itemStyle: { color: "#5B8FF9" },
+                          barGap: "-100%",
+                          z: 4,
+                        },
+                        {
+                          name: "Target",
+                          type: "scatter",
+                          symbol: "rect",
+                          symbolSize: [3, 24],
+                          data: bulletData.map((d, i) => [d.target, i]),
+                          itemStyle: { color: "#333" },
+                          z: 5,
+                        },
+                      ],
+                    };
+
+                    bulletChart.setOption(bulletOption);
+                    window.addEventListener("resize", () => bulletChart.resize());
+                } else {
+                    document.getElementById("bulletchart").innerHTML = "<p class='text-center text-muted mt-5'>No group data available.</p>";
+                }
+              </script>
             </div>
           </div>
         </div>

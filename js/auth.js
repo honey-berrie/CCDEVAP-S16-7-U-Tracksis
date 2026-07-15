@@ -16,9 +16,12 @@ async function checkLoginStatus() {
       const role = checkData.user.role;
       if (role === "admin")
         window.location.href = "../../adminhtml/admin-dashboard.php";
-      else if (role === "adviser" || role === "panel")
-        window.location.href = "../../adviserhtml/thesis-adviser-overview.php";
-      else window.location.href = "../../pages/student/dashboard.php";
+      else if (role === "adviser")
+        window.location.href = "../../adviserhtml/thesis-adviser-overview.html";
+      else if (role === "coordinator")
+        window.location.href =
+          "../../coordinator/coordinator-html/coordinator-overview.php";
+      else window.location.href = "../../pages/student/dashboard.html";
       return;
     }
   } catch (err) {
@@ -55,12 +58,12 @@ async function login() {
     // redirect based on role
     const role = data.user.role;
     if (role === "admin")
-      window.location.href = "../../adminhtml/admin-dashboard.html";
+      window.location.href = "../../adminhtml/admin-dashboard.php";
+    else if (role === "adviser" || role === "panel")
+      window.location.href = "../../adviserhtml/thesis-adviser-overview.html";
     else if (role === "coordinator")
       window.location.href =
         "../../coordinator/coordinator-html/coordinator-overview.php";
-    else if (role === "adviser" || role === "panel")
-      window.location.href = "../../adviserhtml/thesis-adviser-overview.html";
     else window.location.href = "../../pages/student/dashboard.html";
   } catch (err) {
     alert("Network error: " + err.message);

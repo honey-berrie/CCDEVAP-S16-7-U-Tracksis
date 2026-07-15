@@ -27,6 +27,8 @@ try {
     // Fallback if the database table doesn't exist yet
     $first_name = "Coordinator"; 
 }
+
+
 ?>
 <!doctype html>
 <html lang="en">

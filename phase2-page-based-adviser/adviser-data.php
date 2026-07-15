@@ -5,8 +5,8 @@ require_once __DIR__ . '/db.php';
 function adviserGetThesisGroups(PDO $pdo): array
 {
     $statement = $pdo->query(
-        'SELECT group_id, group_name, thesis_title, status
-         FROM thesis_groups
+        'SELECT id AS group_id, group_name, thesis_title, "Active" AS status
+         FROM teams
          ORDER BY group_name ASC'
     );
 
@@ -16,21 +16,21 @@ function adviserGetThesisGroups(PDO $pdo): array
 function adviserGetGroupSummaries(PDO $pdo): array
 {
     $statement = $pdo->query(
-        'SELECT tg.group_id, tg.group_name, tg.thesis_title, tg.status,
-                COUNT(m.milestone_id) AS total_milestones,
-                SUM(CASE WHEN m.status = "Completed" THEN 1 ELSE 0 END) AS completed_milestones,
+        'SELECT t.id AS group_id, t.group_name, t.thesis_title, "Active" AS status,
+                COUNT(m.id) AS total_milestones,
+                SUM(CASE WHEN m.status = "approved" THEN 1 ELSE 0 END) AS completed_milestones,
                 (
-                    SELECT m2.milestone_name
+                    SELECT m2.name
                     FROM milestones m2
-                    WHERE m2.group_id = tg.group_id
-                      AND m2.status <> "Completed"
-                    ORDER BY m2.due_date ASC, m2.milestone_id ASC
+                    WHERE m2.group_id = t.id
+                      AND m2.status <> "approved"
+                    ORDER BY m2.due_date ASC, m2.display_order ASC, m2.id ASC
                     LIMIT 1
                 ) AS next_milestone
-         FROM thesis_groups tg
-         LEFT JOIN milestones m ON tg.group_id = m.group_id
-         GROUP BY tg.group_id, tg.group_name, tg.thesis_title, tg.status
-         ORDER BY tg.group_name ASC'
+         FROM teams t
+         LEFT JOIN milestones m ON t.id = m.group_id
+         GROUP BY t.id, t.group_name, t.thesis_title
+         ORDER BY t.group_name ASC'
     );
 
     return array_map(function ($group) {
@@ -46,11 +46,21 @@ function adviserGetGroupSummaries(PDO $pdo): array
 function adviserGetMilestoneGroups(PDO $pdo): array
 {
     $statement = $pdo->query(
-        'SELECT tg.group_id, tg.group_name, tg.thesis_title,
-                m.milestone_id, m.milestone_name, m.status, m.due_date, m.submitted_at, m.comments
-         FROM thesis_groups tg
-         LEFT JOIN milestones m ON tg.group_id = m.group_id
-         ORDER BY tg.group_name ASC, m.due_date ASC, m.milestone_id ASC'
+        'SELECT t.id AS group_id, t.group_name, t.thesis_title,
+                m.id AS milestone_id,
+                m.name AS milestone_name,
+                CASE
+                    WHEN m.status = "approved" THEN "Completed"
+                    WHEN m.status = "rejected" THEN "Revision"
+                    WHEN m.status = "in-review" THEN "In Progress"
+                    ELSE "Pending"
+                END AS status,
+                m.due_date,
+                DATE(m.completed_at) AS submitted_at,
+                m.description AS comments
+         FROM teams t
+         LEFT JOIN milestones m ON t.id = m.group_id
+         ORDER BY t.group_name ASC, m.due_date ASC, m.display_order ASC, m.id ASC'
     );
 
     $groups = [];
@@ -85,11 +95,22 @@ function adviserGetMilestoneGroups(PDO $pdo): array
 function adviserGetSubmissions(PDO $pdo): array
 {
     $statement = $pdo->query(
-        'SELECT s.submission_id, s.group_id, s.title, s.file_name, s.status, s.submitted_at, s.adviser_feedback,
-                tg.group_name
+        'SELECT s.id AS submission_id,
+                s.group_id,
+                s.title,
+                s.file_name,
+                CASE
+                    WHEN s.status = "approved" THEN "Approved"
+                    WHEN s.status = "rejected" THEN "Rejected"
+                    WHEN s.status = "revision-requested" THEN "Revision"
+                    ELSE "Pending"
+                END AS status,
+                s.uploaded_at AS submitted_at,
+                s.review_notes AS adviser_feedback,
+                t.group_name
          FROM submissions s
-         INNER JOIN thesis_groups tg ON s.group_id = tg.group_id
-         ORDER BY tg.group_name ASC, s.submitted_at DESC, s.submission_id DESC'
+         INNER JOIN teams t ON s.group_id = t.id
+         ORDER BY t.group_name ASC, s.uploaded_at DESC, s.id DESC'
     );
 
     return $statement->fetchAll();
@@ -97,15 +118,30 @@ function adviserGetSubmissions(PDO $pdo): array
 
 function adviserGetConsultations(PDO $pdo, string $status): array
 {
+    $statusList = $status === 'Scheduled'
+        ? ['pending', 'approved']
+        : ['completed'];
+
+    $placeholders = implode(',', array_fill(0, count($statusList), '?'));
     $statement = $pdo->prepare(
-        'SELECT c.consultation_id, c.consultation_date, c.consultation_end, c.meeting_link,
-                c.notes, c.reschedule_reason, c.status, tg.group_name, tg.thesis_title
+        'SELECT c.id AS consultation_id,
+                c.proposed_schedule AS consultation_date,
+                c.consultation_end,
+                c.meeting_link,
+                COALESCE(NULLIF(c.topic, ""), c.agenda, "Consultation") AS notes,
+                c.reschedule_reason,
+                CASE
+                    WHEN c.status = "completed" THEN "Completed"
+                    ELSE "Scheduled"
+                END AS status,
+                t.group_name,
+                t.thesis_title
          FROM consultations c
-         INNER JOIN thesis_groups tg ON c.group_id = tg.group_id
-         WHERE c.status = :status
-         ORDER BY c.consultation_date ' . ($status === 'Scheduled' ? 'ASC' : 'DESC')
+         INNER JOIN teams t ON c.group_id = t.id
+         WHERE c.status IN (' . $placeholders . ')
+         ORDER BY c.proposed_schedule ' . ($status === 'Scheduled' ? 'ASC' : 'DESC')
     );
-    $statement->execute(['status' => $status]);
+    $statement->execute($statusList);
 
     return $statement->fetchAll();
 }
@@ -131,14 +167,23 @@ function adviserHandlePost(PDO $pdo, string $redirectPage): void
     $action = $_POST['action'] ?? '';
 
     if ($action === 'update-submission-status') {
+        $statusMap = [
+            'Approved' => 'approved',
+            'Rejected' => 'rejected',
+            'Revision' => 'revision-requested',
+            'Pending' => 'in-review',
+        ];
+        $postedStatus = $_POST['status'] ?? 'Pending';
+
         $statement = $pdo->prepare(
             'UPDATE submissions
              SET status = :status,
-                 adviser_feedback = :feedback
-             WHERE submission_id = :submission_id'
+                 review_notes = :feedback,
+                 reviewed_at = NOW()
+             WHERE id = :submission_id'
         );
         $statement->execute([
-            'status' => $_POST['status'] ?? 'Pending',
+            'status' => $statusMap[$postedStatus] ?? 'in-review',
             'feedback' => trim($_POST['feedback'] ?? ''),
             'submission_id' => (int) ($_POST['submission_id'] ?? 0),
         ]);
@@ -150,8 +195,8 @@ function adviserHandlePost(PDO $pdo, string $redirectPage): void
     if ($action === 'update-consultation-comment') {
         $statement = $pdo->prepare(
             'UPDATE consultations
-             SET notes = :comment
-             WHERE consultation_id = :consultation_id'
+             SET adviser_notes = :comment
+             WHERE id = :consultation_id'
         );
         $statement->execute([
             'comment' => trim($_POST['comment'] ?? ''),
@@ -171,10 +216,10 @@ function adviserHandlePost(PDO $pdo, string $redirectPage): void
 
         $statement = $pdo->prepare(
             'UPDATE consultations
-             SET consultation_date = :consultation_date,
+             SET proposed_schedule = :consultation_date,
                  consultation_end = :consultation_end,
                  reschedule_reason = :reason
-             WHERE consultation_id = :consultation_id'
+             WHERE id = :consultation_id'
         );
         $statement->execute([
             'consultation_date' => $start,
@@ -195,16 +240,31 @@ function adviserHandlePost(PDO $pdo, string $redirectPage): void
         );
 
         $statement = $pdo->prepare(
-            'INSERT INTO consultations (group_id, consultation_date, consultation_end, meeting_link, notes, reschedule_reason, status)
-             VALUES (:group_id, :consultation_date, :consultation_end, :meeting_link, :notes, NULL, :status)'
+            'INSERT INTO consultations (
+                group_id, user_id, recipient_id, topic, agenda, proposed_schedule,
+                consultation_end, meeting_link, reschedule_reason, status
+             )
+             VALUES (
+                :group_id,
+                COALESCE((SELECT id FROM users WHERE role = "student" ORDER BY id ASC LIMIT 1), 1),
+                COALESCE((SELECT id FROM users WHERE role = "adviser" ORDER BY id ASC LIMIT 1), 1),
+                :topic,
+                :agenda,
+                :consultation_date,
+                :consultation_end,
+                :meeting_link,
+                NULL,
+                :status
+             )'
         );
         $statement->execute([
             'group_id' => (int) ($_POST['group_id'] ?? 0),
+            'topic' => trim($_POST['agenda'] ?? ''),
             'consultation_date' => $start,
             'consultation_end' => $end,
             'meeting_link' => trim($_POST['meeting_link'] ?? ''),
-            'notes' => trim($_POST['agenda'] ?? ''),
-            'status' => 'Scheduled',
+            'agenda' => trim($_POST['agenda'] ?? ''),
+            'status' => 'approved',
         ]);
 
         header('Location: ' . $redirectPage . '?saved=created');
