@@ -16,6 +16,7 @@ DROP TABLE IF EXISTS activities;
 DROP TABLE IF EXISTS consultations;
 DROP TABLE IF EXISTS feedback;
 DROP TABLE IF EXISTS submissions;
+DROP TABLE IF EXISTS consultations;
 DROP TABLE IF EXISTS milestones;
 DROP TABLE IF EXISTS group_members;
 DROP TABLE IF EXISTS teams;
@@ -158,26 +159,31 @@ CREATE TABLE announcement_reads (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- CONSULTATIONS
-CREATE TABLE consultations (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    group_id INT NOT NULL,
-    user_id INT NOT NULL,
-    recipient_id INT NOT NULL,
-    topic VARCHAR(255) NOT NULL,
-    agenda TEXT NULL,
-    proposed_schedule DATETIME NULL,
-    status ENUM('pending','approved','completed','cancelled') NOT NULL DEFAULT 'pending',
-    adviser_notes TEXT NULL,
-    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    INDEX idx_cons_group (group_id),
-    INDEX idx_cons_user (user_id),
-    INDEX idx_cons_recipient (recipient_id),
-    INDEX idx_cons_status (status),
-    INDEX idx_cons_created (created_at),
-    CONSTRAINT fk_cons_group FOREIGN KEY (group_id) REFERENCES teams(id) ON DELETE CASCADE,
-    CONSTRAINT fk_cons_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-    CONSTRAINT fk_cons_recipient FOREIGN KEY (recipient_id) REFERENCES users(id) ON DELETE CASCADE
+CREATE TABLE IF NOT EXISTS consultations (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  group_id INT NOT NULL,
+  user_id INT NOT NULL,
+  recipient_id INT NOT NULL,
+  topic VARCHAR(255) NOT NULL,
+  agenda TEXT NULL,
+  proposed_schedule DATETIME NULL,
+  consultation_end DATETIME NULL,
+  meeting_link VARCHAR(500) NULL,
+  status ENUM('pending','approved','completed','cancelled') NOT NULL DEFAULT 'pending',
+  adviser_notes TEXT NULL,
+  reschedule_reason TEXT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
+  INDEX idx_cons_group (group_id),
+  INDEX idx_cons_user (user_id),
+  INDEX idx_cons_recipient (recipient_id),
+  INDEX idx_cons_status (status),
+  INDEX idx_cons_created (created_at),
+
+  CONSTRAINT fk_cons_group FOREIGN KEY (group_id) REFERENCES teams(id) ON DELETE CASCADE,
+  CONSTRAINT fk_cons_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  CONSTRAINT fk_cons_recipient FOREIGN KEY (recipient_id) REFERENCES users(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ACTIVITIES
