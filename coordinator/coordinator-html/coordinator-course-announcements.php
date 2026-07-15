@@ -1,3 +1,23 @@
+<?php
+// 1. Include the PDO database connection
+require_once 'db.php'; 
+
+// 2. Fetch coordinator name safely using PDO
+try {
+    // Temporary hardcoded ID until you wire up your login system's $_SESSION['user_id']
+    $user_id = 1; 
+    
+    $stmt = $pdo->prepare("SELECT firstname FROM users WHERE id = :id");
+    $stmt->execute(['id' => $user_id]);
+    $user = $stmt->fetch();
+    
+    // Fallback to "Coordinator" if user isn't found
+    $first_name = $user ? $user['firstname'] : "Coordinator";
+} catch (PDOException $e) {
+    // Fallback if the database table doesn't exist yet
+    $first_name = "Coordinator"; 
+}
+?>
 <!doctype html>
 <html lang="en">
   <head>
@@ -160,7 +180,7 @@
 
         <div class="page-header">
           <h1 class="page-title">Adviser Assignments</h1>
-          <p class="page-subtitle">Good day, {coordinator_first_name}.</p>
+          <p class="page-subtitle">Good day, <?php echo htmlspecialchars($first_name); ?>.</p>
         </div>
 
         <div class="row g-4 mb-4">

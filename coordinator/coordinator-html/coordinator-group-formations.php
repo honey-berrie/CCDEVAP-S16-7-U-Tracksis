@@ -1,9 +1,29 @@
+<?php
+// 1. Include the PDO database connection
+require_once 'db.php'; 
+
+// 2. Fetch coordinator name safely using PDO
+try {
+    // Temporary hardcoded ID until you wire up your login system's $_SESSION['user_id']
+    $user_id = 1; 
+    
+    $stmt = $pdo->prepare("SELECT firstname FROM users WHERE id = :id");
+    $stmt->execute(['id' => $user_id]);
+    $user = $stmt->fetch();
+    
+    // Fallback to "Coordinator" if user isn't found
+    $first_name = $user ? $user['firstname'] : "Coordinator";
+} catch (PDOException $e) {
+    // Fallback if the database table doesn't exist yet
+    $first_name = "Coordinator"; 
+}
+?>
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Coordinator Course Progress | U-Tracksis</title>
+    <title>Coordinator Group Formations | U-Tracksis</title>
 
     <!-- Apply theme immediately -->
     <script>
@@ -56,7 +76,7 @@
             />
             Overview
           </a>
-          <a class="nav-link" href="coordinator-group-formations.html">
+          <a class="nav-link active" href="coordinator-group-formations.html">
             <img src="../../assets/icons/people-fill.svg" alt="" class="bi" />
             Group Formations
           </a>
@@ -76,7 +96,7 @@
             />
             Announcements
           </a>
-          <a class="nav-link active" href="coordinator-course-progress.html">
+          <a class="nav-link" href="coordinator-course-progress.html">
             <img src="../../assets/icons/flag-fill.svg" alt="" class="bi" />
             Course Progress
           </a>
@@ -115,16 +135,13 @@
             <svg
               class="bi search-icon"
               xmlns="http://www.w3.org/2000/svg"
-              xmlns="http://www.w3.org/2000/svg"
               width="16"
               height="16"
               fill="currentColor"
               viewBox="0 0 16 16"
               aria-hidden="true"
             >
-              <path
-                d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"
-              />
+              <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
             </svg>
             <input type="text" class="form-control" placeholder="Search..." />
           </div>
@@ -159,63 +176,97 @@
         </div>
 
         <div class="page-header">
-          <h1 class="page-title">Course Progress</h1>
-          <p class="page-subtitle">Good day, {coordinator_first_name}.</p>
+          <h1 class="page-title">Group Formations</h1>
+          <p class="page-subtitle">Good day, <?php echo htmlspecialchars($first_name); ?>.</p>
         </div>
 
-        <!-- 3x1 display for Average Progress, On Track, and Falling Behind -->
-        <!-- Average Progress -->
+        <!-- Group Creation and Searching -->
         <div class="row g-4 mb-4">
-          <div class="col-lg-4 col-md-4">
-            <div class="box mb-4 h-100">
-              <div class="box-label">Average Progress</div>
-              <div class="box-value">27%</div>
-              <div class="progress mt-3 rounded-pill" style="height: 10px">
-                <div
-                  class="progress-bar bg-warning"
-                  role="progressbar"
-                  style="width: 27%"
-                  aria-valuenow="45"
-                  aria-valuemin="0"
-                  aria-valuemax="100"
-                ></div>
+          <!-- Groups -->
+          <div class="box mb-4">
+            <div class="d-flex justify-content-between mb-4">
+              <div class="box-label">Group Registry</div>
+              <button
+                class="btn-new-submission"
+                type="button"
+                onclick="
+                  window.location.href = 'coordinator-course-announcements.html'
+                "
+              >
+                <img src="../../assets/icons/plus-lg.svg" alt="" class="bi" />
+                <span>Create Group</span>
+              </button>
+            </div>
+            <div class="row align-items-center">
+              <div class="col-lg-8">
+                <p class="text medium mb-0">
+                  Courses handled (3): Thesis Writing 1, Thesis Writing 2,
+                  Thesis Writing 3
+                </p>
+              </div>
+              <div class="col-lg-4">
+                <div class="topbar-search">
+                  <svg
+                    class="bi search-icon"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    viewBox="0 0 16 16"
+                    aria-hidden="true"
+                  >
+                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06q.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
+                  </svg>
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Search Group"
+                  />
+                </div>
               </div>
             </div>
           </div>
 
-          <!-- On Track -->
-          <div class="col-lg-4 col-md-4">
-            <div class="box mb-4 h-100">
-              <div class="box-label">On Track</div>
-              <div class="box-value">3</div>
-            </div>
-          </div>
-
-          <!-- Falling Behind -->
-          <div class="col-lg-4 col-md-4">
-            <div class="box mb-4 h-100">
-              <div class="box-label">Falling Behind</div>
-              <div class="box-value">0</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="box mb-4 h-100">
-          <p class="box-label">Group Submission Progress</p>
+          <!-- Group List and Group Filter -->
           <div class="box">
-            <div class="card-body">
-              <div class="d-flex justify-content-between align-items-center">
-                <h5 class="card-title">
-                  Group A <span class="badge text-bg-success">On Track</span>
-                </h5>
+            <div class="row">
+              <div class="col-lg-4 md-6 sm-12 mb-4">
+                <div class="form-group">
+                  <label for="GroupFilter">Group Filter</label>
+                  <select class="form-control" id="CourseSelect">
+                    <option>Pending</option>
+                    <option>Approved</option>
+                    <option>Coordinator-Created</option>
+                    <option>All</option>
+                  </select>
+                </div>
               </div>
 
-              <!-- BULLET CHART: chart container. Give it a unique id so bulletchart.js can target it -->
-              <div id="bulletchart" style="width: 100%; height: 300px"></div>
-              <!-- BULLET CHART: echarts core is already loaded above for the pictogram chart, -->
-              <!-- so we only need to load our bullet-chart-specific script here -->
-              <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.5.0/echarts.min.js" integrity="sha384-o5uz97et3bErHvpKfD4Jz4n0JfhJDWABFuF4NP+iEEDxE1VwMWJ19QGR0lqFZnr6" crossorigin="anonymous"></script>
-              <script src="../coordinator-back-end/bulletchart.js"></script>
+              <!-- One box per group -->
+              <div class="box">
+                <div class="card-body">
+                  <div class="d-flex bd-highlight mb-4">
+                    <div class="me-auto p-2 bd-highlight">
+                      <h5 class="card-title">Group A</h5>
+                    </div>
+                    <div class="p-2 bd-highlight"><h3><span class="badge text-bg-secondary">S13</span></h1></h3></div>
+                    <div class="p-2 bd-highlight"><h3><span class="badge text-bg-warning">Pending</span></h1></h3></div>
+                  </div>
+
+                  <h6 class="card-subtitle mb-2 text">Thesis Title</h6>
+                   <p class="box-label">Submitted on: July 28, 2027</p>
+                  <div class="d-flex bd-highlight mb-4">
+                    <div class="p-2 bd-highlight"><span class="badge text-bg-primary">Person 1</span></div>
+                    <div class="p-2 bd-highlight"><span class="badge text-bg-secondary">Person 2</span></div>
+                    <div class="p-2 bd-highlight"><span class="badge text-bg-secondary">Person 3</span></div>
+                    <div class="p-2 bd-highlight"><span class="badge text-bg-secondary">Person 4</span></div>
+                    <div class="ms-auto p-2 bd-highlight">
+                        <a href="#" class="badge text-bg-success text-decoration-none" onclick="alert('Placeholder: Approve Group')">Approve</a>
+                        <a href="#" class="badge text-bg-danger text-decoration-none" onclick="alert('Placeholder: Reject Group')">Reject</a>
+                    </div>
+                    </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>

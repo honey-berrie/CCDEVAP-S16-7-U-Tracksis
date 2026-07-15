@@ -1,9 +1,29 @@
+<?php
+// 1. Include the PDO database connection
+require_once 'db.php'; 
+
+// 2. Fetch coordinator name safely using PDO
+try {
+    // Temporary hardcoded ID until you wire up your login system's $_SESSION['user_id']
+    $user_id = 1; 
+    
+    $stmt = $pdo->prepare("SELECT firstname FROM users WHERE id = :id");
+    $stmt->execute(['id' => $user_id]);
+    $user = $stmt->fetch();
+    
+    // Fallback to "Coordinator" if user isn't found
+    $first_name = $user ? $user['firstname'] : "Coordinator";
+} catch (PDOException $e) {
+    // Fallback if the database table doesn't exist yet
+    $first_name = "Coordinator"; 
+}
+?>
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Coordinator Overview | U-Tracksis</title>
+    <title>Coordinator Course Progress | U-Tracksis</title>
 
     <!-- Apply theme immediately -->
     <script>
@@ -48,7 +68,7 @@
         </div>
 
         <nav class="sidebar-nav">
-          <a class="nav-link active" href="coordinator-overview.html">
+          <a class="nav-link" href="coordinator-overview.html">
             <img
               src="../../assets/icons/binoculars-fill.svg"
               alt=""
@@ -76,7 +96,7 @@
             />
             Announcements
           </a>
-          <a class="nav-link" href="coordinator-course-progress.html">
+          <a class="nav-link active" href="coordinator-course-progress.html">
             <img src="../../assets/icons/flag-fill.svg" alt="" class="bi" />
             Course Progress
           </a>
@@ -114,6 +134,7 @@
           <div class="topbar-search">
             <svg
               class="bi search-icon"
+              xmlns="http://www.w3.org/2000/svg"
               xmlns="http://www.w3.org/2000/svg"
               width="16"
               height="16"
@@ -158,97 +179,64 @@
         </div>
 
         <div class="page-header">
-          <h1 class="page-title">Overview</h1>
-          <p class="page-subtitle">Good day, {coordinator_first_name}.</p>
+          <h1 class="page-title">Course Progress</h1>
+          <p class="page-subtitle">Good day, <?php echo htmlspecialchars($first_name); ?>.</p>
         </div>
 
-        <!-- 4 cards layout, In a row when Big, 2x2 grid when small -->
+        <!-- 3x1 display for Average Progress, On Track, and Falling Behind -->
+        <!-- Average Progress -->
         <div class="row g-4 mb-4">
-          <!-- Handled Courses -->
-          <div class="col-lg-3 col-md-6">
+          <div class="col-lg-4 col-md-4">
             <div class="box mb-4 h-100">
-              <p class="box-label">Handled Courses</p>
-              <h3 class="fw-bold mb-3">4</h3>
-            </div>
-          </div>
-
-          <!-- Active Groups -->
-          <div class="col-lg-3 col-md-6">
-            <div class="box mb-4 h-100">
-              <p class="box-label">Active Groups</p>
-              <h3 class="fw-bold mb-3">9</h3>
-            </div>
-          </div>
-
-          <!-- Pending Formations -->
-          <div class="col-lg-3 col-md-6">
-            <div class="box mb-4 h-100">
-              <p class="box-label">Pending Formations</p>
-              <h3 class="fw-bold mb-3">3</h3>
-            </div>
-          </div>
-
-          <!-- Off-Track Groups -->
-          <div class="col-lg-3 col-md-6">
-            <div class="box mb-4 h-100">
-              <p class="box-label">Off-Track Groups</p>
-              <h3 class="fw-bold mb-3">2</h3>
-            </div>
-          </div>
-
-          <!-- container for side-by-side cards -->
-          <div class="row g-4 mb-4">
-            <div class="col-lg-6 col-md-12">
-              <div class="box mb-4 h-100">
+              <div class="box-label">Average Progress</div>
+              <div class="box-value">27%</div>
+              <div class="progress mt-3 rounded-pill" style="height: 10px">
                 <div
-                  class="d-flex justify-content-between align-items-center mb-2"
-                >
-                  <p class="box-label">Handled Courses</p>
-                  <h4 class="fw-bold mb-3">Avg. 27%</h4>
-                </div>
-                <h2 class="display-5 fw-bold mb-0">Thesis Writing 2</h2>
-                <div class="progress mt-3 rounded-pill" style="height: 10px">
-                  <div
-                    class="progress-bar bg-primary"
-                    role="progressbar"
-                    style="width: 27%"
-                    aria-valuenow="45"
-                    aria-valuemin="0"
-                    aria-valuemax="100"
-                  ></div>
-                </div>
-
-                <div
-                  id="chart"
-                  style="width: 100%; height: 300px; margin-top: 20px"
+                  class="progress-bar bg-warning"
+                  role="progressbar"
+                  style="width: 27%"
+                  aria-valuenow="45"
+                  aria-valuemin="0"
+                  aria-valuemax="100"
                 ></div>
-
-                <!-- Scripts -->
-                <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.5.0/echarts.min.js" integrity="sha384-o5uz97et3bErHvpKfD4Jz4n0JfhJDWABFuF4NP+iEEDxE1VwMWJ19QGR0lqFZnr6" crossorigin="anonymous"></script>
-                <script src="../coordinator-back-end/pictogram.js"></script>
               </div>
             </div>
+          </div>
 
-            <div class="col-lg-6 col-md-12">
-              <div class="box mb-4 h-100">
-                <p class="box-label">Needs your attention!</p>
-                <div class="d-flex justify-content-between align-items-center">
-                  <h2 class="fw-bold mb-0">Group formations to review</h2>
-                  <h3 class="fw-bold mb-0">5</h3>
-                </div>
-              </div>
+          <!-- On Track -->
+          <div class="col-lg-4 col-md-4">
+            <div class="box mb-4 h-100">
+              <div class="box-label">On Track</div>
+              <div class="box-value">3</div>
+            </div>
+          </div>
+
+          <!-- Falling Behind -->
+          <div class="col-lg-4 col-md-4">
+            <div class="box mb-4 h-100">
+              <div class="box-label">Falling Behind</div>
+              <div class="box-value">0</div>
             </div>
           </div>
         </div>
 
-        <div class="box mb-4">
-          <p class="box-label">Recent Announcements</p>
-          <div class="d-flex justify-content-between align-items-center">
-            <p class="fw-bold mb-0">
-              Title Proposal Defense Week
-              <span class="badge text-bg-primary ms-2 fw-normal">Pinned</span>
-            </p>
-            <p class="text small mb-2">Due on July 28, 2027</p>
+        <div class="box mb-4 h-100">
+          <p class="box-label">Group Submission Progress</p>
+          <div class="box">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center">
+                <h5 class="card-title">
+                  Group A <span class="badge text-bg-success">On Track</span>
+                </h5>
+              </div>
+
+              <!-- BULLET CHART: chart container. Give it a unique id so bulletchart.js can target it -->
+              <div id="bulletchart" style="width: 100%; height: 300px"></div>
+              <!-- BULLET CHART: echarts core is already loaded above for the pictogram chart, -->
+              <!-- so we only need to load our bullet-chart-specific script here -->
+              <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.5.0/echarts.min.js" integrity="sha384-o5uz97et3bErHvpKfD4Jz4n0JfhJDWABFuF4NP+iEEDxE1VwMWJ19QGR0lqFZnr6" crossorigin="anonymous"></script>
+              <script src="../coordinator-back-end/bulletchart.js"></script>
+            </div>
           </div>
         </div>
       </main>
