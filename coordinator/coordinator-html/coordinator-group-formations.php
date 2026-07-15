@@ -42,19 +42,29 @@ if ($userId) {
     $handledCount = 0;
   }
 }
-// Fetch teams to display
+// Fetch teams to display — only from courses handled by this coordinator
 $teams = [];
 try {
+  if (!empty($handledCourses)) {
+    // build a list of course ids for the IN clause
+    $courseIds = array_map(function($c){ return (int)$c['id']; }, $handledCourses);
+    $placeholders = implode(',', array_fill(0, count($courseIds), '?'));
     $sql = "SELECT t.*, s.section_code, c.course_code, CONCAT(u.firstname, ' ', u.lastname) AS adviser_name
-            FROM teams t
-            LEFT JOIN sections s ON t.section_id = s.id
-            LEFT JOIN courses c ON s.course_id = c.id
-            LEFT JOIN users u ON t.adviser_id = u.id
-            ORDER BY t.created_at DESC";
-    $stmt = $pdo->query($sql);
+        FROM teams t
+        LEFT JOIN sections s ON t.section_id = s.id
+        LEFT JOIN courses c ON s.course_id = c.id
+        LEFT JOIN users u ON t.adviser_id = u.id
+        WHERE c.id IN ($placeholders)
+        ORDER BY t.created_at DESC";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute($courseIds);
     $teams = $stmt->fetchAll();
-} catch (PDOException $e) {
+  } else {
+    // Coordinator has no assigned courses, so no teams to show
     $teams = [];
+  }
+} catch (PDOException $e) {
+  $teams = [];
 }
 ?>
 <!doctype html>
@@ -281,10 +291,10 @@ try {
                 <div class="form-group">
                   <label for="GroupFilter">Group Filter</label>
                   <select class="form-control" id="GroupFilter">
-                    <option value="pending">Pending</option>
-                    <option value="approved">Approved</option>
-                    <option value="rejected">Rejected</option>
                     <option value="all">All</option>
+                    <option value="approved">Approved</option>
+                    <option value="pending">Pending</option>
+                    <option value="rejected">Rejected</option>
                   </select>
                 </div>
               </div>
