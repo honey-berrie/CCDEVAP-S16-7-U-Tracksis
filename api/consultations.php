@@ -26,7 +26,7 @@ if ($method === 'GET') {
 
     // consultations for this group
     $stmt = $pdo->prepare(
-        "SELECT c.id, c.group_id, c.user_id, c.recipient_id, c.topic, c.agenda, c.proposed_schedule, c.status, c.adviser_notes, c.created_at, c.updated_at,
+        "SELECT c.id, c.group_id, c.user_id, c.recipient_id, c.topic, c.agenda, c.proposed_schedule, c.consultation_end, c.meeting_link, c.status, c.adviser_notes, c.created_at, c.updated_at,
                 u_req.firstname AS requester_firstname, u_req.lastname AS requester_lastname,
                 u_rec.firstname AS recipient_firstname, u_rec.lastname AS recipient_lastname,
                 u_rec.role AS recipient_role
@@ -47,6 +47,8 @@ if ($method === 'GET') {
         $r['status_class'] = statusClass($r['status']);
         $r['date_formatted'] = $r['proposed_schedule'] ? date('M j, Y', strtotime($r['proposed_schedule'])) : null;
         $r['time_formatted'] = $r['proposed_schedule'] ? date('g:i A', strtotime($r['proposed_schedule'])) : null;
+        $r['end_time_formatted'] = $r['consultation_end'] ? date('g:i A', strtotime($r['consultation_end'])) : null;
+        $r['time_range_formatted'] = $r['time_formatted'] ? $r['time_formatted'] . ($r['end_time_formatted'] ? ' - ' . $r['end_time_formatted'] : '') : null;
         unset($r['requester_firstname'], $r['requester_lastname'], $r['recipient_firstname'], $r['recipient_lastname']);
     }
     unset($r);
@@ -103,12 +105,13 @@ if ($method === 'POST') {
     }
 
     $slotValue = $proposedSchedule ?: null;
+    $endValue = $slotValue ? date('Y-m-d H:i:s', strtotime($slotValue . ' +1 hour')) : null;
 
     $ins = $pdo->prepare(
-        "INSERT INTO consultations (group_id, user_id, recipient_id, topic, agenda, proposed_schedule)
-         VALUES (?, ?, ?, ?, ?, ?)"
+        "INSERT INTO consultations (group_id, user_id, recipient_id, topic, agenda, proposed_schedule, consultation_end)
+         VALUES (?, ?, ?, ?, ?, ?, ?)"
     );
-    $ins->execute([$gid, $userId, $recipientId, $topic, $agenda ?: null, $slotValue]);
+    $ins->execute([$gid, $userId, $recipientId, $topic, $agenda ?: null, $slotValue, $endValue]);
     $newId = $pdo->lastInsertId();
 
     // log activity
