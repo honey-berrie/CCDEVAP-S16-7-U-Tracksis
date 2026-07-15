@@ -9,6 +9,7 @@ $lastname = trim($in['lastname'] ?? '');
 $email = trim($in['email'] ?? '');
 $pass = $in['password'] ?? '';
 $passConfirm = $in['confirm'] ?? '';
+// accountType comes from the frontend and may be: student, adviser, coordinator
 $role = $in['accountType'] ?? 'student';
 
 // validate input
@@ -22,7 +23,7 @@ if ($pass !== $passConfirm) {
 }
 
 // validate role
-$allowedRoles = ['student', 'adviser', 'coordinator', 'admin'];
+$allowedRoles = ['student', 'adviser', 'coordinator', 'panel', 'admin'];
 $role = 'student';
 if (!in_array($role, $allowedRoles, true)) {
     error('Invalid role', 422);
