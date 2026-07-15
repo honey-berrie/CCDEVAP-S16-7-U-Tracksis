@@ -197,28 +197,28 @@ body {
 }
 
 /* subrole buttons use the same styling as role buttons */
-.btn-subrole {
+.role-group .btn-subrole {
   flex: 1;
   height: 40px;
-  background: var(--white);
-  border: 1px solid var(--gray);
+  background: var(--white) !important;
+  border: 1px solid var(--gray) !important;
   border-radius: 8px;
   font-size: 0.875rem;
-  color: var(--text);
+  color: var(--text) !important;
   cursor: pointer;
   font-weight: 500;
   transition: all 0.2s;
 }
 
-.btn-subrole:hover {
-  border-color: var(--primary);
-  color: var(--primary);
+.role-group .btn-subrole:hover {
+  border-color: var(--primary) !important;
+  color: var(--primary) !important;
 }
 
-.btn-subrole.active {
-  background: var(--primary);
-  color: var(--white);
-  border-color: var(--primary);
+.role-group .btn-subrole.active {
+  background: var(--primary) !important;
+  color: var(--white) !important;
+  border-color: var(--primary) !important;
 }
 
 .footer-text {
