@@ -4,6 +4,7 @@
 
 use App\Controllers\AuthController;
 use App\Controllers\Test\DashboardController;
+use App\Controllers\Student\StudentDashboardController;
 use App\Core\Router;
 
 $router = new Router();
@@ -13,12 +14,13 @@ $router = new Router();
 $router->get('/', [AuthController::class, 'showLoginForm']);
 
 $router->get('/login', [AuthController::class, 'showLoginForm']);
+$router->post('/register', [AuthController::class, 'register']);
 $router->post('/login', [AuthController::class, 'login']);
 $router->get('/logout', [AuthController::class, 'logout']);
 
 // private routes
 $router->group('auth:student', function (Router $router) {
-    $router->get('/test/dashboard', [DashboardController::class, 'index']);
+    $router->get('/student/dashboard', [StudentDashboardController::class, 'index']);
 });
 
 // Use the stripped URI set by index.php (handles subdirectory installations)

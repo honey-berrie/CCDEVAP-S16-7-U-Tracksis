@@ -32,7 +32,7 @@ SET FOREIGN_KEY_CHECKS = 1;
 
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    role ENUM('student','adviser','coordinator','admin') NOT NULL,
+    role ENUM('student','adviser','admin','faculty') NOT NULL,
     firstname VARCHAR(50) NOT NULL,
     lastname VARCHAR(50) NOT NULL,
     email VARCHAR(150) NOT NULL UNIQUE,
@@ -347,3 +347,10 @@ INSERT INTO announcements (sender_id, course_id, group_id, is_broadcast, is_pinn
 (1, NULL, NULL, 1, 0, 'Submission Deadline Reminder', 'Chapter 3 submissions are due within two weeks. Late submissions will need adviser approval for an extension.', NOW() - INTERVAL 1 DAY),
 (1, NULL, NULL, 1, 0, 'Portal Maintenance Notice', 'The submission portal will be briefly unavailable for maintenance next weekend. Draft content will not be affected.', NOW() - INTERVAL 7 DAY),
 (2, 1, NULL, 0, 1, 'Thesis 1 Defense Guidelines', 'Please check the uploaded PDF for details on the presentation format.', NOW() - INTERVAL 2 DAY);
+
+
+INSERT INTO feedback (group_id, submission_id, given_by, author_role, message, created_at) VALUES
+(1, 3, 4, 'adviser', 'Please expand the related studies section and fix citations.', NOW() - INTERVAL 14 DAY)
+
+INSERT INTO activities (group_id, user_id, type, description, created_at) VALUES
+(1, 9, 'submission', 'Submitted Chapter 2 for review.', NOW() - INTERVAL 6 DAY),
