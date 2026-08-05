@@ -48,7 +48,7 @@ $router->group('auth:adviser', function (Router $router) {
 
 // admin routes
 $router->group('auth:admin', function (Router $router) {
-    $router->get('/admin/dashboard', [AdminDashboardController::class, 'index']);
+    $router->get('/admin/adm-dashboard', [AdminDashboardController::class, 'index']);
 });
 
 // Use the stripped URI set by index.php (handles subdirectory installations)
