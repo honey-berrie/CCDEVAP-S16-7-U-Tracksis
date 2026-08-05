@@ -52,8 +52,8 @@ function renderUsersTable(users) {
             <td><span class="status-badge status-${u.isActive ? "active" : "inactive"}">${u.isActive ? "Active" : "Inactive"}</span></td>
             <td>${formatDate(u.createdAt)}</td>
             <td>
-                <button type="button" class="btn-secondary-admin" onclick="openEditUserModal(${u.id})">Edit</button>
-                <button type="button" class="btn-danger-admin" onclick="deleteUser(${u.id}, '${escapeHtml(u.firstname)} ${escapeHtml(u.lastname)}')">Delete</button>
+              <button type="button" class="btn btn-sm btn-outline-primary me-1" onclick="openEditUserModal(${u.id})">Edit</button>
+              <button type="button" class="btn btn-sm btn-outline-danger" onclick="deleteUser(${u.id}, '${escapeHtml(u.firstname)} ${escapeHtml(u.lastname)}')">Delete</button>
             </td>
         </tr>
     `,
@@ -291,6 +291,130 @@ function openViewUserDrawer(id) {
           window.bootstrap.Offcanvas.getInstance(offEl) ||
           new window.bootstrap.Offcanvas(offEl);
         inst.show();
+
+        // Ensure offcanvas header/body follow current CSS variables (theme)
+        const applyOffcanvasTheme = () => {
+          try {
+            const cs = getComputedStyle(document.documentElement);
+            const headerBg = cs
+              .getPropertyValue("--offcanvas-header-bg")
+              .trim();
+            const headerColor = cs
+              .getPropertyValue("--offcanvas-header-color")
+              .trim();
+            const bodyBg = cs.getPropertyValue("--offcanvas-body-bg").trim();
+            const bodyColor = cs
+              .getPropertyValue("--offcanvas-body-color")
+              .trim();
+            const header = offEl.querySelector(".offcanvas-header");
+            const body = offEl.querySelector(".offcanvas-body");
+            const closeBtn = offEl.querySelector(".btn-close");
+
+            // Set CSS variables on the offcanvas element itself so var() resolves locally
+            if (headerBg)
+              offEl.style.setProperty("--offcanvas-header-bg", headerBg);
+            if (headerColor)
+              offEl.style.setProperty("--offcanvas-header-color", headerColor);
+            if (bodyBg) offEl.style.setProperty("--offcanvas-body-bg", bodyBg);
+            if (bodyColor)
+              offEl.style.setProperty("--offcanvas-body-color", bodyColor);
+
+            // Also set inline styles with priority to override Bootstrap rules
+            if (header) {
+              if (headerBg) {
+                header.style.setProperty("background", headerBg, "important");
+                header.style.setProperty(
+                  "background-image",
+                  "none",
+                  "important",
+                );
+                header.style.setProperty(
+                  "background-color",
+                  headerBg,
+                  "important",
+                );
+              }
+              if (headerColor)
+                header.style.setProperty("color", headerColor, "important");
+            }
+            if (body) {
+              if (bodyBg) {
+                body.style.setProperty("background", bodyBg, "important");
+                body.style.setProperty("background-image", "none", "important");
+                body.style.setProperty("background-color", bodyBg, "important");
+              }
+              if (bodyColor)
+                body.style.setProperty("color", bodyColor, "important");
+            }
+            if (closeBtn) {
+              const theme = document.documentElement.getAttribute("data-theme");
+              if (theme === "dark")
+                closeBtn.style.setProperty(
+                  "filter",
+                  "invert(1) brightness(1.2)",
+                );
+              else closeBtn.style.removeProperty("filter");
+            }
+            // Also set styles on the offcanvas root as a last resort
+            if (bodyBg)
+              offEl.style.setProperty("background-color", bodyBg, "important");
+            if (bodyColor)
+              offEl.style.setProperty("color", bodyColor, "important");
+
+            // Diagnostic logging to help debug why styles might be overridden
+            try {
+              const headerCs = header ? getComputedStyle(header) : null;
+              const bodyCs = body ? getComputedStyle(body) : null;
+              console.debug(
+                "[Offcanvas Theme] header inline:",
+                header ? header.style.cssText : null,
+              );
+              console.debug(
+                "[Offcanvas Theme] header computed background:",
+                headerCs ? headerCs.backgroundColor : null,
+              );
+              console.debug(
+                "[Offcanvas Theme] body inline:",
+                body ? body.style.cssText : null,
+              );
+              console.debug(
+                "[Offcanvas Theme] body computed background:",
+                bodyCs ? bodyCs.backgroundColor : null,
+              );
+            } catch (e) {
+              // ignore
+            }
+          } catch (e) {
+            // silent
+          }
+        };
+
+        // Apply immediately and also when offcanvas is fully shown
+        applyOffcanvasTheme();
+        offEl.addEventListener("shown.bs.offcanvas", applyOffcanvasTheme);
+        offEl.addEventListener("show.bs.offcanvas", applyOffcanvasTheme);
+        offEl.addEventListener("hidden.bs.offcanvas", () => {
+          // cleanup inline styles so CSS can take over next time
+          const header = offEl.querySelector(".offcanvas-header");
+          const body = offEl.querySelector(".offcanvas-body");
+          const closeBtn = offEl.querySelector(".btn-close");
+          if (header) {
+            header.style.removeProperty("background-color");
+            header.style.removeProperty("color");
+          }
+          if (body) {
+            body.style.removeProperty("background-color");
+            body.style.removeProperty("color");
+          }
+          if (closeBtn) {
+            closeBtn.style.removeProperty("filter");
+          }
+          // remove local CSS variables
+          offEl.style.removeProperty("--offcanvas-header-bg");
+          offEl.style.removeProperty("--offcanvas-header-color");
+          offEl.style.removeProperty("--offcanvas-body-bg");
+          offEl.style.removeProperty("--offcanvas-body-color");
+        });
       }
     })
     .catch((err) => {
@@ -308,18 +432,59 @@ function populateDrawer(data) {
 
   nameEl.textContent = `${data.user.firstname} ${data.user.lastname}`;
 
+  // compute accent hue per role or group name
+  function stringToHue(s) {
+    if (!s) return 220;
+    let h = 0;
+    for (let i = 0; i < s.length; i++) h = (h << 5) - h + s.charCodeAt(i);
+    h = Math.abs(h) % 360;
+    return h;
+  }
+
+  function roleDefaultHue(role) {
+    switch (role) {
+      case "student":
+        return 200;
+      case "adviser":
+        return 140;
+      case "admin":
+        return 260;
+      default:
+        return 220;
+    }
+  }
+
+  const groupName =
+    data.extra && data.extra.student && data.extra.student.group
+      ? data.extra.student.group.name
+      : null;
+
   const kpis = [
-    { label: "Last Active", value: data.user.lastLogin || "--" },
-    { label: "Submissions", value: data.kpis.submissions },
-    { label: "Milestones Done", value: data.kpis.milestonesCompleted },
-    { label: "Completion %", value: data.kpis.completionPercent + "%" },
+    {
+      label: "Last Active",
+      value: data.user.lastLogin || "--",
+      key: "lastActive",
+    },
+    { label: "Submissions", value: data.kpis.submissions, key: "submissions" },
+    {
+      label: "Milestones Done",
+      value: data.kpis.milestonesCompleted,
+      key: "milestones",
+    },
+    {
+      label: "Completion %",
+      value: data.kpis.completionPercent + "%",
+      key: "completion",
+    },
   ];
 
   kpiEl.innerHTML = kpis
-    .map(
-      (k) =>
-        `<div class="kpi-card"><div class="kpi-value"><strong>${k.value}</strong></div><div class="kpi-label">${k.label}</div></div>`,
-    )
+    .map((k) => {
+      const hue = groupName
+        ? stringToHue(groupName)
+        : roleDefaultHue(data.user.role);
+      return `<div class="kpi-card" style="--accent-h:${hue}"><div class="kpi-value"><strong>${k.value}</strong></div><div class="kpi-label">${k.label}</div></div>`;
+    })
     .join("");
 
   if (!data.recent || data.recent.length === 0) {
@@ -346,11 +511,14 @@ function populateDrawer(data) {
             : s.daysUntilDefense >= 0
               ? `${s.daysUntilDefense} days`
               : `${Math.abs(s.daysUntilDefense)} days ago`;
+        const hue = groupName
+          ? stringToHue(groupName)
+          : roleDefaultHue(data.user.role);
         roleEl.innerHTML = `
-          <div class="mb-2"><strong>Thesis Group:</strong> ${escapeHtml(s.group.name)}</div>
+          <div class="mb-2"><strong>Thesis Group:</strong> <span style="color:hsl(${hue} 70% 45%);">${escapeHtml(s.group.name)}</span></div>
           <div class="mb-2"><strong>Defense:</strong> ${s.group.defense_date ? new Date(s.group.defense_date).toLocaleDateString() : "TBD"} (${days})</div>
           <div class="mb-2"><strong>Thesis Progress:</strong>
-            <div class="progress" style="height:14px;"><div class="progress-bar" role="progressbar" style="width:${s.thesisProgress}%;" aria-valuenow="${s.thesisProgress}" aria-valuemin="0" aria-valuemax="100">${s.thesisProgress}%</div></div>
+            <div class="progress" style="height:14px;"><div class="progress-bar" role="progressbar" style="width:${s.thesisProgress}%; background-color: hsl(${hue} 70% 45%);" aria-valuenow="${s.thesisProgress}" aria-valuemin="0" aria-valuemax="100">${s.thesisProgress}%</div></div>
           </div>
           <div class="mt-3"><strong>Milestones</strong>
             <ul class="recent-activity">${s.milestones.length === 0 ? '<li class="empty-state">No milestones.</li>' : s.milestones.map((m) => `<li><div><strong>${escapeHtml(m.name)}</strong> — ${m.progress}% — <em>${escapeHtml(m.status)}</em></div></li>`).join("")}</ul>
@@ -363,7 +531,7 @@ function populateDrawer(data) {
       const a = extra.adviser;
       roleEl.innerHTML = `
         <div class="mb-2"><strong>Assigned Groups</strong>
-          <ul class="recent-activity">${a.assignedGroups.length === 0 ? '<li class="empty-state">No assigned groups.</li>' : a.assignedGroups.map((g) => `<li><div><strong>${escapeHtml(g.name)}</strong> — <em>${escapeHtml(g.progress_status)}</em></div></li>`).join("")}</ul>
+          <ul class="recent-activity">${a.assignedGroups.length === 0 ? '<li class="empty-state">No assigned groups.</li>' : a.assignedGroups.map((g) => `<li><div><strong style="color:hsl(${stringToHue(g.name)} 70% 45%);">${escapeHtml(g.name)}</strong> — <em>${escapeHtml(g.progress_status)}</em></div></li>`).join("")}</ul>
         </div>
         <div class="mt-3"><strong>Upcoming Consultations</strong>
           <ul class="recent-activity">${a.consultations.length === 0 ? '<li class="empty-state">No consultations.</li>' : a.consultations.map((c) => `<li><div>${c.proposed_schedule ? new Date(c.proposed_schedule).toLocaleString() : "TBD"} — ${escapeHtml(c.topic)} — <em>${escapeHtml(c.status)}</em></div></li>`).join("")}</ul>

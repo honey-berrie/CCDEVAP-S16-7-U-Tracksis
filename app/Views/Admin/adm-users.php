@@ -146,12 +146,26 @@ requireAdminAuth();
                 <!-- message button removed for admin view -->
             </div>
 
-            <div id="drawerKpis" class="kpi-row">
-                <!-- KPI cards inserted here -->
+            <div class="stat-card mb-3">
+                <div class="stat-card-header d-flex justify-content-between align-items-center">
+                    <h6 class="mb-0">Overview</h6>
+                </div>
+                <div class="stat-card-body">
+                    <div id="drawerKpis" class="kpi-row">
+                        <!-- KPI cards inserted here -->
+                    </div>
+                </div>
             </div>
 
-            <div id="drawerRoleDetails" class="mt-3">
-                <!-- role-specific details inserted here -->
+            <div id="drawerRoleDetailsCard" class="stat-card">
+                <div class="stat-card-header d-flex justify-content-between align-items-center">
+                    <h6 class="mb-0">Details</h6>
+                </div>
+                <div class="stat-card-body">
+                    <div id="drawerRoleDetails" class="mt-2">
+                        <!-- role-specific details inserted here -->
+                    </div>
+                </div>
             </div>
 
             <h5 class="mt-3">Recent Activity</h5>
@@ -161,13 +175,7 @@ requireAdminAuth();
         </div>
     </div>
 
-    <style>
-    .kpi-row { display:flex; gap:8px; flex-wrap:wrap; }
-    .kpi-card { flex:1 1 120px; background:#f8f9fa; padding:10px; border-radius:6px; text-align:center; }
-    .recent-activity { list-style:none; padding:0; margin:0; }
-    .recent-activity li { padding:8px 0; border-bottom:1px solid #f1f1f1; }
-    .link-button { background:none; border:0; color:#0d6efd; cursor:pointer; padding:0; font:inherit; }
-    </style>
+    <!-- visual styles for KPI and recent activity live in app/CSS/Admin/adm-users.css -->
 
     <script src="../../../JS/bootstrap.bundle.min.js"></script>
     <script src="../../JS/Admin/adm-global.js"></script>
