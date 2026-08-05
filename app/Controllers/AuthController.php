@@ -62,21 +62,7 @@ class AuthController extends Controller
         // log the user in via middleware
         AuthMiddleware::login($user);
 
-        // redirect based on role
-        switch ($user['role']) {
-            case 'admin':
-                $this->redirect('/test/dashboard');
-                break;
-            case 'student':
-                $this->redirect('/student/dashboard');
-                break;
-            case 'adviser':
-                $this->redirect('/adviser/dashboard');
-                break;
-            default:
-                $this->redirect('/');
-                break;
-        }
+        $this->roleRedirect($user['role']);
     }
 
     public function register(): void
