@@ -62,9 +62,7 @@ CREATE TABLE system_settings (
 CREATE TABLE courses (
     id INT AUTO_INCREMENT PRIMARY KEY,
     course_code VARCHAR(20) NOT NULL UNIQUE, 
-    course_name VARCHAR(100) NOT NULL,       
-    admin_id INT NULL,
-    CONSTRAINT fk_courses_admin FOREIGN KEY (coordinator_id) REFERENCES users(id) ON DELETE SET NULL
+    course_name VARCHAR(100) NOT NULL      
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE sections (
@@ -205,10 +203,10 @@ CREATE TABLE consultations (
 -- 5. ANNOUNCEMENTS, READS & SYSTEM ACTIVITIES
 -- ============================================================================
 
--- Unified Announcements Schema (handles both course-level/coordinator and global/group structures)
+-- Unified Announcements Schema (handles both course-level and global/group structures)
 CREATE TABLE announcements (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    sender_id INT NOT NULL,                                                                           -- Maps to author (coordinator/admin)
+    sender_id INT NOT NULL,                                                                           -- Maps to author (admin)
     course_id INT NULL,                                                                               -- Nullable for non-course specific/global
     group_id INT NULL,                                                                                -- Nullable for broad/course specific announcements
     is_broadcast TINYINT(1) NOT NULL DEFAULT 0,
@@ -278,9 +276,9 @@ INSERT INTO users (role, firstname, lastname, email, password_hash, is_active, l
 ('student',     'Joshua Daniel', 'Fernandez',   'joshua.fernandez@dlsu.edu.ph', '$2a$10$0.XHbs6GVOmHwXnu0uy25.KvAn.RQQdTFdXQW19CZUeVJUILxV3HK', 1, NOW() - INTERVAL 10 DAY, 0, 0, 0);
 
 -- Insert Demo Courses (Needed for Sections)
-INSERT INTO courses (course_code, course_name, coordinator_id) VALUES
-('THESIS1', 'Thesis Writing 1', 2),
-('THESIS2', 'Thesis Writing 2', 3);
+INSERT INTO courses (course_code, course_name) VALUES
+('THESIS1', 'Thesis Writing 1'),
+('THESIS2', 'Thesis Writing 2');
 
 -- Insert Demo Sections (Needed for Teams)
 INSERT INTO sections (section_code, course_id) VALUES
