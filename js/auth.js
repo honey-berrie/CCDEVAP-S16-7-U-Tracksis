@@ -59,15 +59,22 @@ async function login() {
       return;
     }
 
-    alert("Login successful!");
-    // redirect based on role
+    // === CHANGED: Lines 52-68 replaced with modal + setTimeout ===
+    const successModal = new bootstrap.Modal(
+      document.getElementById("loginSuccessModal"),
+    );
+    successModal.show();
+
     const role = data.user.role;
-    if (role === "admin")
-      window.location.href = "../../app/views/Admin/adm-dashboard.php";
-    else if (role === "adviser")
-      window.location.href =
-        "../../phase2-page-based-adviser/adviserhtml/thesis-adviser-overview.php";
-    else window.location.href = "../../pages/student/dashboard.html";
+    setTimeout(() => {
+      if (role === "admin")
+        window.location.href = "../../app/views/Admin/adm-dashboard.php";
+      else if (role === "adviser")
+        window.location.href =
+          "../../phase2-page-based-adviser/adviserhtml/thesis-adviser-overview.php";
+      else window.location.href = "../../pages/student/dashboard.html";
+    }, 1500);
+    // === END CHANGED ===
   } catch (err) {
     alert("Network error: " + err.message);
   }
