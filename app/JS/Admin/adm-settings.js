@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
     loadSettings();
     bindProfileForm();
-    bindMaintenanceForm();
+    bindMaintenanceToggle();
 });
 
 function loadSettings() {
@@ -58,13 +58,14 @@ function bindProfileForm() {
     });
 }
 
-function bindMaintenanceForm() {
-    document.getElementById("saveMaintenanceBtn").addEventListener("click", () => {
+function bindMaintenanceToggle() {
+    document.getElementById("maintenanceMode").addEventListener("change", (e) => {
         const errorEl = document.getElementById("maintenanceFormError");
+        const isChecked = e.target.checked;
 
         const formData = new FormData();
         formData.append("action", "update_settings");
-        if (document.getElementById("maintenanceMode").checked) {
+        if (isChecked) {
             formData.append("maintenance_mode", "1");
         }
 
@@ -72,6 +73,7 @@ function bindMaintenanceForm() {
             .then(res => res.json())
             .then(data => {
                 if (!data.success) {
+                    e.target.checked = !isChecked;
                     errorEl.textContent = data.error || "Could not save this setting.";
                     errorEl.classList.add("show");
                     return;
@@ -80,6 +82,7 @@ function bindMaintenanceForm() {
                 flashConfirm("maintenanceSaveConfirm");
             })
             .catch(() => {
+                e.target.checked = !isChecked;
                 errorEl.textContent = "Network error. Please try again.";
                 errorEl.classList.add("show");
             });

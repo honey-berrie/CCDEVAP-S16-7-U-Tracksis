@@ -59,17 +59,15 @@ requireAdminAuth();
                     <h2 class="panel-title">Maintenance Mode</h2>
                 </div>
                 <p class="panel-subtitle">When enabled, students and advisers see a maintenance notice instead of the app.</p>
-                <form id="maintenanceForm">
-                    <div class="form-group pin-toggle">
-                        <label>
-                            <input type="checkbox" id="maintenanceMode">
-                            Enable maintenance mode
-                        </label>
-                    </div>
-                    <p class="form-error" id="maintenanceFormError"></p>
-                    <button type="button" class="btn-primary-admin" id="saveMaintenanceBtn">Save</button>
-                    <span class="save-confirm" id="maintenanceSaveConfirm"></span>
-                </form>
+                <div class="form-group pin-toggle">
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="maintenanceMode">
+                        <span class="toggle-slider"></span>
+                    </label>
+                    <span class="toggle-label">Enable maintenance mode</span>
+                </div>
+                <p class="form-error" id="maintenanceFormError"></p>
+                <span class="save-confirm" id="maintenanceSaveConfirm"></span>
             </div>
         </div>
     </div>
