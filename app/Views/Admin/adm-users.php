@@ -9,8 +9,8 @@ requireAdminAuth();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin - User Management</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-    <link rel="stylesheet" href="../../CSS/Admin/adm-links.css">
-    <link rel="stylesheet" href="../../CSS/Admin/adm-users.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/css/Admin/adm-links.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/css/Admin/adm-users.css">
 </head>
 <body>
     <div id="sidebar_placeholder"></div>
@@ -24,7 +24,7 @@ requireAdminAuth();
             </div>
             <div class="quick-actions">
                 <button type="button" class="btn-quick-action" id="openCreateUserModal">
-                    <img src="../../../assets/icons/grid-1x2-fill.svg" alt="" class="nav-icon">
+                    <img src="<?= BASE_URL ?>/assets/icons/grid-1x2-fill.svg" alt="" class="nav-icon">
                     Add Account
                 </button>
             </div>
@@ -169,8 +169,9 @@ requireAdminAuth();
     .link-button { background:none; border:0; color:#0d6efd; cursor:pointer; padding:0; font:inherit; }
     </style>
 
-    <script src="../../../JS/bootstrap.bundle.min.js"></script>
-    <script src="../../JS/Admin/adm-global.js"></script>
-    <script src="../../JS/Admin/adm-users.js"></script>
+    <script src="<?= BASE_URL ?>/js/bootstrap.bundle.min.js"></script>
+    <script>window.BASE_URL = "<?= BASE_URL ?>";</script>
+    <script src="<?= BASE_URL ?>/js/Admin/adm-global.js"></script>
+    <script src="<?= BASE_URL ?>/js/Admin/adm-users.js"></script>
 </body>
 </html>

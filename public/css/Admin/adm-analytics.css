@@ -1,0 +1,38 @@
+.main-container {
+    margin-left: 240px;
+    min-height: 100vh;
+    padding: 2rem;
+}
+
+.page-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--navy-accent);
+    margin: 0;
+}
+
+.page-subtitle {
+    color: var(--text-light);
+    font-size: 0.85rem;
+    margin: 0.2rem 0 0;
+}
+
+.stat-grid {
+  margin: 1rem 0;
+}
+
+#submissionsOverTimeChart,
+#statusBreakdownChart {
+    max-height: 300px;
+}
+
+#groupProgressChart {
+    max-height: 340px;
+}
+
+@media (max-width: 991.98px) {
+    .main-container {
+        margin-left: 0;
+        padding: 1.25rem;
+    }
+}

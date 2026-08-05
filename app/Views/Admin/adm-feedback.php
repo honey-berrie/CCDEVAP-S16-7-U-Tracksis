@@ -9,8 +9,8 @@ requireAdminAuth();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin - Feedback History</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-    <link rel="stylesheet" href="../../CSS/Admin/adm-links.css">
-    <link rel="stylesheet" href="../../CSS/Admin/adm-feedback.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/css/Admin/adm-links.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/css/Admin/adm-feedback.css">
 </head>
 <body>
     <div id="sidebar_placeholder"></div>
@@ -101,7 +101,8 @@ requireAdminAuth();
         </div>
     </div>
 
-    <script src="../../JS/Admin/adm-global.js"></script>
-    <script src="../../JS/Admin/adm-feedback.js"></script>
+    <script>window.BASE_URL = "<?= BASE_URL ?>";</script>
+    <script src="<?= BASE_URL ?>/js/Admin/adm-global.js"></script>
+    <script src="<?= BASE_URL ?>/js/Admin/adm-feedback.js"></script>
 </body>
 </html>
