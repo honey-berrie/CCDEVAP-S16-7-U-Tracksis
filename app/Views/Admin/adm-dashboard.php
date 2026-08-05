@@ -16,13 +16,13 @@ requireAdminAuth();
     <div id="sidebar_placeholder"></div>
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
     <div class="main-container">
-
-        <div class="page-header">
-            <div class="time-Header">
+        <div class="time-Header">
                 <span id="currentDay"></span>
                 <span>,</span>
                 <span id="currentDate"></span>
-            </div>
+        </div>
+        <div class="page-header">
+            
             <div class="greeting-Header">
                 <div id="partDay"></div>
                 <div id="namePerson"></div>
