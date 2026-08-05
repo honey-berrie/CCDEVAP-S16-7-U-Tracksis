@@ -382,4 +382,123 @@ class Team extends Model
 
         return $announcements;
     }
+
+    public static function getTeamConsultations(int $groupId): array
+    {
+        /*
+CREATE TABLE consultations (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    group_id INT NOT NULL,
+    user_id INT NOT NULL,
+    recipient_id INT NOT NULL,
+    topic VARCHAR(255) NOT NULL,
+    agenda TEXT NULL,
+    proposed_schedule DATETIME NULL,
+    consultation_end DATETIME NULL,
+    meeting_link VARCHAR(500) NULL,
+    status ENUM('pending','approved','completed','cancelled') NOT NULL DEFAULT 'pending',
+    adviser_notes TEXT NULL,
+    reschedule_reason TEXT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX idx_cons_group (group_id),
+    INDEX idx_cons_user (user_id),
+    INDEX idx_cons_recipient (recipient_id),
+    INDEX idx_cons_status (status),
+    INDEX idx_cons_created (created_at),
+    CONSTRAINT fk_cons_group FOREIGN KEY (group_id) REFERENCES teams(id) ON DELETE CASCADE,
+    CONSTRAINT fk_cons_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    CONSTRAINT fk_cons_recipient FOREIGN KEY (recipient_id) REFERENCES users(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+        */
+
+        // above is the table for consultations
+        $stmt = static::db()->prepare(
+            "SELECT c.id, c.group_id, c.user_id, c.recipient_id, c.topic, c.agenda,
+                    c.proposed_schedule, c.consultation_end, c.meeting_link,
+                    c.status, c.adviser_notes, c.reschedule_reason,
+                    c.created_at, c.updated_at,
+                    u.firstname, u.lastname
+            FROM consultations c
+            LEFT JOIN users u ON u.id = c.user_id
+            WHERE c.group_id = ?
+            ORDER BY c.created_at DESC"
+        );
+
+        $stmt->execute([$groupId]);
+        $consultations = $stmt->fetchAll();
+
+        //date_formatted, time_formatted, topic, recipient_name, agenda, status_class, status_label
+        foreach ($consultations as &$c) {
+            $c['author'] = trim(($c['firstname'] ?? '') . ' ' . ($c['lastname'] ?? ''));
+            $c['initials'] = Helpers::initialsOf($c['firstname'] ?? '', $c['lastname'] ?? '');
+            $c['time_ago'] = Helpers::timeAgo(strtotime($c['created_at']));
+            $c['date_formatted'] = date('M j, Y', strtotime($c['created_at']));
+            $c['proposed_schedule_formatted'] = $c['proposed_schedule'] ? date('M j, Y g:i A', strtotime($c['proposed_schedule'])) : null;
+            $c['consultation_end_formatted'] = $c['consultation_end'] ? date('M j, Y g:i A', strtotime($c['consultation_end'])) : null;
+            $c['status_label'] = Helpers::statusLabel($c['status']);
+            $c['status_class'] = Helpers::statusClass($c['status']);
+            unset($c['firstname'], $c['lastname']);
+        }
+        unset($c);
+
+        return $consultations;
+    }
+
+    public static function createConsultationRequest(
+        int $groupId,
+        int $userId,
+        int $recipientId,
+        string $topic,
+        ?string $agenda,
+        ?string $proposedSchedule
+    ): ?array {
+        $stmt = static::db()->prepare(
+            "INSERT INTO consultations (group_id, user_id, recipient_id, topic, agenda, proposed_schedule, status)
+             VALUES (?, ?, ?, ?, ?, ?, 'pending')"
+        );
+
+        $ok = $stmt->execute([
+            $groupId,
+            $userId,
+            $recipientId,
+            $topic,
+            $agenda !== '' ? $agenda : null,
+            $proposedSchedule,
+        ]);
+
+        if (!$ok) {
+            return null;
+        }
+
+        $id = (int) static::db()->lastInsertId();
+
+        $stmt = static::db()->prepare(
+            "SELECT c.id, c.group_id, c.user_id, c.recipient_id, c.topic, c.agenda,
+                    c.proposed_schedule, c.consultation_end, c.meeting_link,
+                    c.status, c.adviser_notes, c.reschedule_reason,
+                    c.created_at, c.updated_at,
+                    r.firstname AS recipient_firstname, r.lastname AS recipient_lastname
+            FROM consultations c
+            LEFT JOIN users r ON r.id = c.recipient_id
+            WHERE c.id = ?"
+        );
+        $stmt->execute([$id]);
+        $c = $stmt->fetch();
+
+        if (!$c) {
+            return null;
+        }
+
+        $c['recipient_name'] = trim(($c['recipient_firstname'] ?? '') . ' ' . ($c['recipient_lastname'] ?? '')) ?: 'Unassigned';
+        $c['date_formatted'] = date('M j, Y', strtotime($c['created_at']));
+        $c['time_formatted'] = $c['proposed_schedule'] ? date('g:i A', strtotime($c['proposed_schedule'])) : 'Unscheduled';
+        $c['status_label'] = Helpers::statusLabel($c['status']);
+        $c['status_class'] = Helpers::statusClass($c['status']);
+        unset($c['recipient_firstname'], $c['recipient_lastname']);
+
+        return $c;
+    }
 }

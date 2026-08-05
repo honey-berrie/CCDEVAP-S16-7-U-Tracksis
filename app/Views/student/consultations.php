@@ -1,0 +1,205 @@
+<?php
+/**
+ * @var string      $userName
+ * @var string      $firstname
+ * @var string      $lastname
+ * @var array       $consultations
+ * @var array       $availableAdvisers
+ */
+
+require_once __DIR__ . '/../../../config/session.php';
+
+
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Consultations | U-Tracksis</title>
+
+  <!-- Apply theme immediately -->
+  <script>
+    (function() {
+      var t = localStorage.getItem('theme');
+      var d = t || (window.matchMedia('(prefers-color-scheme:dark)').matches ? 'dark' : 'light');
+      if (d === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+    })();
+  </script>
+
+  <!-- bootstrap css -->
+  <link rel="stylesheet" href="<?= BASE_URL ?>/css/bootstrap.min.css">
+
+  <!-- local bootstrap icons -->
+  <link rel="stylesheet" href="<?= BASE_URL ?>/css/bootstrap-icons.css">
+
+  <!-- custom css -->
+  <link rel="stylesheet" href="<?= BASE_URL ?>/css/student/dashboard.css">
+
+  <!-- consultations specific css -->
+  <link rel="stylesheet" href="<?= BASE_URL ?>/css/student/consultations.css">
+</head>
+<body>
+  <script src="<?= BASE_URL ?>/js/maintenance-check.js"></script>
+
+  <div class="dashboard-wrapper">
+
+    <!-- sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <img src="<?= BASE_URL ?>/assets/images/logo.png" alt="U-Tracksis" class="sidebar-logo">
+        <div>
+          <h6 class="sidebar-title">U-Tracksis</h6>
+          <p class="sidebar-subtitle">STUDENT</p>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <a class="nav-link" href="<?= BASE_URL ?>/student/dashboard">
+          <img src="<?= BASE_URL ?>/assets/icons/grid-1x2-fill.svg" alt="" class="bi"> Dashboard
+        </a>
+        <a class="nav-link" href="<?= BASE_URL ?>/student/group-profile">
+          <img src="<?= BASE_URL ?>/assets/icons/people-fill.svg" alt="" class="bi"> Group Profile
+        </a>
+        <a class="nav-link" href="<?= BASE_URL ?>/student/milestones">
+          <img src="<?= BASE_URL ?>/assets/icons/flag-fill.svg" alt="" class="bi"> Milestones
+        </a>
+        <a class="nav-link" href="<?= BASE_URL ?>/student/submissions">
+          <img src="<?= BASE_URL ?>/assets/icons/cloud-upload-fill.svg" alt="" class="bi"> Submissions
+        </a>
+        <a class="nav-link" href="<?= BASE_URL ?>/student/feedback">
+          <img src="<?= BASE_URL ?>/assets/icons/chat-left-text-fill.svg" alt="" class="bi"> Feedbacks
+        </a>
+        <a class="nav-link active" href="<?= BASE_URL ?>/student/consultations">
+          <img src="<?= BASE_URL ?>/assets/icons/chat-dots-fill.svg" alt="" class="bi"> Consultations
+        </a>
+        <a class="nav-link" href="<?= BASE_URL ?>/student/announcements">
+          <img src="<?= BASE_URL ?>/assets/icons/megaphone-fill.svg" alt="" class="bi"> Announcements
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <span>Theme</span>
+        <button class="theme-toggle" id="themeToggle" type="button" title="Toggle theme">
+          <img src="<?= BASE_URL ?>/assets/icons/moon-stars-fill.svg" alt="" class="bi" id="themeIcon">
+        </button>
+      </div>
+    </aside>
+
+    <!-- mobile overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- main content -->
+    <main class="main-content">
+
+      <!-- top bar -->
+      <div class="top-bar">
+        <button class="mobile-menu-btn" id="menuBtn" type="button">
+          <img src="<?= BASE_URL ?>/assets/icons/list.svg" alt="" class="bi">
+        </button>
+
+        <div class="topbar-actions">
+          <span class="topbar-user" id="topbar-user"><?= $userName ?></span>
+          <form action="<?= BASE_URL ?>/logout" method="get">
+            <button class="btn-logout" type="submit">
+              <img src="<?= BASE_URL ?>/assets/icons/box-arrow-left.svg" alt="" class="bi">
+              <span>Logout</span>
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <div class="page-header">
+        <p class="page-eyebrow">SCHEDULE</p>
+        <h1 class="page-title">Request a Consultation</h1>
+        <p class="page-subtitle">Comments and revisions from your adviser and panel members.</p>
+      </div>
+
+      <!-- recipient field -->
+      <div class="to-field">
+        <p class="form-label-sm">To:</p>
+        <div class="to-input">
+          <img src="<?= BASE_URL ?>/assets/icons/person-circle.svg" alt="" class="to-avatar bi">
+          <select class="form-control" id="recipientSelect">
+            <option value="" disabled selected>Select adviser or panel member</option>
+            <?php foreach ($availableAdvisers as $adviser): ?>
+              <option value="<?= $adviser['id'] ?>"><?= htmlspecialchars($adviser['full_name'] . ' - ' . $adviser['role']) ?></option>
+            <?php endforeach; ?>
+          </select>
+        </div>
+      </div>
+
+      <div class="row g-3 mb-3">
+
+        <!-- schedule picker box -->
+        <div class="col-lg-6">
+          <div class="box h-100">
+            <p class="box-label">Schedule</p>
+            <div class="mb-3">
+              <label class="form-label-sm">Date</label>
+              <input type="date" id="scheduledDate" class="form-control">
+            </div>
+            <div class="mb-3">
+              <label class="form-label-sm">Time</label>
+              <input type="time" id="scheduledTime" class="form-control">
+            </div>
+          </div>
+        </div>
+
+        <!-- request details box -->
+        <div class="col-lg-6">
+          <div class="box h-100">
+            <p class="box-label">Request Details</p>
+            <form id="consultationForm">
+              <div class="mb-3">
+                <label class="form-label-sm">Topic</label>
+                <input type="text" class="form-control" id="topicInput" placeholder="Enter consultation topic">
+              </div>
+              <div class="mb-3">
+                <label class="form-label-sm">Agenda</label>
+                <textarea class="form-control agenda-textarea" id="agendaInput" rows="3" placeholder="List items to discuss..."></textarea>
+              </div>
+              <div class="d-flex justify-content-end">
+                <button type="submit" class="btn-action-primary">Send Request</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- consultation history box -->
+      <div class="box" id="historyBox">
+        <p class="box-label">Consultation History</p>
+        <div id="historyList"></div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- notice modal (replaces alert() for form errors/feedback) -->
+  <div class="notice-overlay" id="noticeOverlay">
+    <div class="notice-modal">
+      <div class="notice-header">
+        <p class="notice-eyebrow" id="noticeEyebrow">NOTICE</p>
+        <h3 class="notice-title" id="noticeTitle">Heads up</h3>
+      </div>
+      <div class="notice-body">
+        <p id="noticeMessage"></p>
+      </div>
+      <div class="notice-footer">
+        <button type="button" class="btn-action-primary" id="noticeCloseBtn">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const BASE_URL = '<?= BASE_URL ?>';
+    const consultationsData = <?= json_encode($consultations) ?>;
+  </script>
+  <script src="<?= BASE_URL ?>/js/bootstrap.bundle.min.js"></script>
+  <script src="<?= BASE_URL ?>/js/student/theme.js"></script>
+  <script src="<?= BASE_URL ?>/js/student/sidebar.js"></script>
+  <script src="<?= BASE_URL ?>/js/student/consultations.js"></script>
+</body>
+</html>

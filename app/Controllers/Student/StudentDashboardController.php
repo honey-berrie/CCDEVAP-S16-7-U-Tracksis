@@ -5,6 +5,7 @@ namespace App\Controllers\Student;
 use App\Core\Controller;
 use App\Models\User;
 use App\Models\Team;
+use App\Models\Adviser;
 
 class StudentDashboardController extends Controller
 {
@@ -369,4 +370,88 @@ class StudentDashboardController extends Controller
         }
     }
 
+
+    public function consultations(): void
+    {
+        $userName = $_SESSION['user_name'] ?? 'Username failed to retrieve!';
+        $firstname = $_SESSION['firstname'] ?? '<Failed to retrieve>';
+        $lastname = $_SESSION['lastname'] ?? '<Failed to retrieve>';
+
+        $userGroupId = User::getUserGroupId($_SESSION['user_id']);
+
+        if (!$userGroupId) {
+            $this->renderPlain('student/consultations', [
+                'userName' => $userName,
+                'firstname' => $firstname,
+                'lastname' => $lastname,
+                'consultations' => [],
+            ]);
+            return;
+        }
+
+        $consultations = Team::getTeamConsultations($userGroupId['group_id']);
+        $availableAdvisers = Adviser::getAllAdvisers();
+
+        echo "<script>console.log('Consultations:', " . json_encode($consultations) . ");</script>";
+        echo "<script>console.log('Available Advisers:', " . json_encode($availableAdvisers) . ");</script>";
+
+        $this->renderPlain('student/consultations', [
+            'userName' => $userName,
+            'firstname' => $firstname,
+            'lastname' => $lastname,
+            'consultations' => $consultations,
+            'availableAdvisers' => $availableAdvisers,
+        ]);
+    }
+
+    public function requestConsultation(): void
+    {
+        $userId = $_SESSION['user_id'] ?? null;
+
+        if (!$userId) {
+            http_response_code(401);
+            $this->redirect('/logout');
+            return;
+        }
+
+        $userGroupId = User::getUserGroupId($userId);
+
+        if (!$userGroupId) {
+            $this->json(['error' => 'You are not part of any group.'], 422);
+            return;
+        }
+
+        $input = json_decode(file_get_contents('php://input'), true) ?? [];
+
+        $recipientId = (int) ($input['recipient_id'] ?? 0);
+        $topic = trim($input['topic'] ?? '');
+        $agenda = trim($input['agenda'] ?? '');
+        $date = trim($input['date'] ?? '');
+        $time = trim($input['time'] ?? '');
+
+        if (!$recipientId || $topic === '') {
+            $this->json(['error' => 'Please select a recipient and enter a topic.'], 422);
+            return;
+        }
+
+        $proposedSchedule = null;
+        if ($date !== '') {
+            $proposedSchedule = $date . ' ' . ($time !== '' ? $time . ':00' : '00:00:00');
+        }
+
+        $consultation = Team::createConsultationRequest(
+            $userGroupId['group_id'],
+            $userId,
+            $recipientId,
+            $topic,
+            $agenda,
+            $proposedSchedule
+        );
+
+        if ($consultation) {
+            $this->json(['success' => true, 'consultation' => $consultation]);
+        } else {
+            $this->json(['error' => 'Failed to send the consultation request. Please try again.'], 500);
+        }
+    }
 }

@@ -1,216 +1,63 @@
-/* Stat-card: grouped sections inside offcanvas */
-.stat-card {
-  border-radius: 8px;
-  border: 1px solid var(--border);
-  background: var(--card-bg, #ffffff);
-  padding: 0;
-  overflow: hidden;
-}
-.root-offcanvas-vars {
-}
-
-/* Offcanvas color variables (defaults for light theme) */
-:root {
-  --offcanvas-header-bg: #f8f9fa;
-  --offcanvas-header-color: #0b1a2b;
-  --offcanvas-body-bg: #ffffff;
-  --offcanvas-body-color: #0b1a2b;
-}
-.stat-card-header {
-  padding: 10px 12px;
-  border-bottom: 1px solid var(--border);
-  background: var(--card-header-bg, rgba(0, 0, 0, 0.02));
-}
-.stat-card-body {
-  padding: 12px;
-}
-/* dark theme overrides */
-html[data-theme="dark"] .stat-card {
-  background: #071226;
-  border-color: rgba(255, 255, 255, 0.06);
-}
-html[data-theme="dark"] .stat-card-header {
-  background: rgba(255, 255, 255, 0.02);
-  border-color: rgba(255, 255, 255, 0.04);
-}
-
-/* Offcanvas background adapts to theme */
-/* Offcanvas uses variables so it follows theme */
-#userOffcanvas .offcanvas-body {
-  background-color: var(--offcanvas-body-bg);
-  color: var(--offcanvas-body-color);
-}
-#userOffcanvas .offcanvas-header {
-  background-color: var(--offcanvas-header-bg);
-  color: var(--offcanvas-header-color);
-}
-
-/* Dark theme variable overrides */
-html[data-theme="dark"] {
-  --offcanvas-header-bg: rgba(255, 255, 255, 0.02);
-  --offcanvas-header-color: #e6eef8;
-  --offcanvas-body-bg: #071226;
-  --offcanvas-body-color: #e6eef8;
-}
-
-/* Button tweaks for dark mode to keep contrast */
-html[data-theme="dark"] .btn-outline-primary {
-  color: hsl(220 90% 70%);
-  border-color: hsl(220 90% 40%);
-}
-html[data-theme="dark"] .btn-outline-primary:hover {
-  background-color: rgba(30, 120, 255, 0.12);
-}
-html[data-theme="dark"] .btn-outline-danger {
-  color: hsl(350 80% 70%);
-  border-color: hsl(350 80% 45%);
-}
-html[data-theme="dark"] .btn-outline-danger:hover {
-  background-color: rgba(255, 60, 85, 0.08);
-}
-
-/* small spacing for stat lists */
-.stat-card .recent-activity li {
-  padding: 6px 0;
-}
 .main-container {
-  margin-left: 240px;
-  min-height: 100vh;
-  padding: 2rem;
+    margin-left: 240px;
+    min-height: 100vh;
+    padding: 2rem;
 }
 
 .page-title {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--navy-accent);
-  margin: 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--navy-accent);
+    margin: 0;
 }
 
 .page-subtitle {
-  color: var(--text-light);
-  font-size: 0.85rem;
-  margin: 0.2rem 0 0;
+    color: var(--text-light);
+    font-size: 0.85rem;
+    margin: 0.2rem 0 0;
 }
 
 .member-checklist {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-  gap: 0.5rem;
-  max-height: 180px;
-  overflow-y: auto;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 0.75rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 0.5rem;
+    max-height: 180px;
+    overflow-y: auto;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.75rem;
 }
 
 .member-checklist label {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  font-size: 0.82rem;
-  font-weight: 500;
-}
-
-/* KPI card styling */
-.kpi-row {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-.kpi-card {
-  --accent-h: 220;
-  --kpi-bg: #f8f9fa;
-  --kpi-text: #0b1a2b;
-  flex: 1 1 140px;
-  padding: 12px;
-  border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
-  border-left: 4px solid hsl(var(--accent-h) 70% 45%);
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.6), var(--kpi-bg));
-}
-.kpi-card .kpi-value {
-  font-size: 1.15rem;
-  margin-bottom: 6px;
-  color: var(--kpi-text);
-}
-.kpi-card .kpi-label {
-  font-size: 0.8rem;
-  color: var(--kpi-text);
-  opacity: 0.8;
-}
-
-/* Role badge small visual */
-.role-badge {
-  display: inline-block;
-  padding: 2px 8px;
-  border-radius: 999px;
-  font-size: 0.75rem;
-  font-weight: 600;
-}
-
-/* Theme aware overrides */
-html[data-theme="dark"] .kpi-card {
-  --kpi-bg: #0b1220;
-  --kpi-text: #e6eef8;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
-}
-html[data-theme="dark"] .kpi-card {
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), var(--kpi-bg));
-}
-
-/* small responsive tweaks */
-@media (max-width: 575.98px) {
-  .kpi-card {
-    flex: 1 1 100%;
-  }
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.82rem;
+    font-weight: 500;
 }
 
 @media (max-width: 991.98px) {
-  .main-container {
-    margin-left: 0;
-    padding: 1.25rem;
-  }
+    .main-container {
+        margin-left: 0;
+        padding: 1.25rem;
+    }
 
-  .page-header {
-    flex-direction: column;
-    align-items: flex-start;
-  }
+    .page-header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
 
-  .quick-actions {
-    width: 100%;
-  }
+    .quick-actions {
+      width: 100%;
+    }
 
-  .btn-quick-action {
-    flex: 1 1 auto;
-    justify-content: center;
-  }
+    .btn-quick-action {
+      flex: 1 1 auto;
+      justify-content: center;
+    }
 
-  .toolbar {
-    flex-direction: column;
-    align-items: stretch;
-  }
-}
-
-.link-button {
-  background: none;
-  border: 0;
-  color: var(--link-color, #0d6efd);
-  cursor: pointer;
-  padding: 0;
-  font: inherit;
-}
-
-/* Stronger specificity to override Bootstrap defaults when necessary */
-#userOffcanvas.offcanvas.show .offcanvas-header {
-  background-color: var(--offcanvas-header-bg) !important;
-  color: var(--offcanvas-header-color) !important;
-}
-#userOffcanvas.offcanvas.show .offcanvas-body {
-  background-color: var(--offcanvas-body-bg) !important;
-  color: var(--offcanvas-body-color) !important;
-}
-
-/* Close button visibility in dark mode */
-html[data-theme="dark"] #userOffcanvas .btn-close {
-  filter: invert(1) brightness(1.2);
+    .toolbar {
+      flex-direction: column;
+      align-items: stretch;
+    }
 }
