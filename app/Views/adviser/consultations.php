@@ -3,7 +3,8 @@
  * @var string      $userName
  * @var string      $firstname
  * @var string      $lastname
- * @var array       $groups
+ * @var array       $upcoming
+ * @var array       $history
  */
 
 require_once __DIR__ . '/../../../config/session.php';
@@ -14,7 +15,7 @@ require_once __DIR__ . '/../../../config/session.php';
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Thesis Groups | U-Tracksis</title>
+  <title>Consultations | U-Tracksis</title>
 
   <!-- Apply theme immediately -->
   <script>
@@ -33,7 +34,7 @@ require_once __DIR__ . '/../../../config/session.php';
 
   <!-- custom css -->
   <link rel="stylesheet" href="<?= BASE_URL ?>/css/adviser/dashboard.css">
-  <link rel="stylesheet" href="<?= BASE_URL ?>/css/adviser/groups.css">
+  <link rel="stylesheet" href="<?= BASE_URL ?>/css/adviser/consultations.css">
 </head>
 <body>
   <script src="<?= BASE_URL ?>/js/maintenance-check.js"></script>
@@ -54,7 +55,7 @@ require_once __DIR__ . '/../../../config/session.php';
         <a class="nav-link" href="<?= BASE_URL ?>/adviser/dashboard">
           <img src="<?= BASE_URL ?>/assets/icons/grid-1x2-fill.svg" alt="" class="bi"> Dashboard
         </a>
-        <a class="nav-link active" href="<?= BASE_URL ?>/adviser/groups">
+        <a class="nav-link" href="<?= BASE_URL ?>/adviser/groups">
           <img src="<?= BASE_URL ?>/assets/icons/people-fill.svg" alt="" class="bi"> Thesis Groups
         </a>
         <a class="nav-link" href="<?= BASE_URL ?>/adviser/milestones">
@@ -63,7 +64,7 @@ require_once __DIR__ . '/../../../config/session.php';
         <a class="nav-link" href="<?= BASE_URL ?>/adviser/submissions">
           <img src="<?= BASE_URL ?>/assets/icons/cloud-upload-fill.svg" alt="" class="bi"> Submissions
         </a>
-        <a class="nav-link" href="<?= BASE_URL ?>/adviser/consultations">
+        <a class="nav-link active" href="<?= BASE_URL ?>/adviser/consultations">
           <img src="<?= BASE_URL ?>/assets/icons/chat-dots-fill.svg" alt="" class="bi"> Consultations
         </a>
       </nav>
@@ -100,49 +101,71 @@ require_once __DIR__ . '/../../../config/session.php';
       </div>
 
       <div class="page-header">
-        <p class="page-eyebrow">THESIS</p>
-        <h1 class="page-title">Thesis Groups</h1>
-        <p class="page-subtitle">Assigned groups and their milestone progress.</p>
+        <p class="page-eyebrow">SCHEDULE</p>
+        <h1 class="page-title">Consultations</h1>
+        <p class="page-subtitle">View upcoming consultation requests and review history.</p>
       </div>
 
-      <!-- group cards -->
-      <div class="group-cards-grid">
-        <?php if (empty($groups)): ?>
-          <p class="text-muted">No thesis groups assigned yet.</p>
+      <!-- upcoming consultations -->
+      <div class="consultation-section">
+        <p class="box-label">UPCOMING</p>
+        <?php if (empty($upcoming)): ?>
+          <div class="box">
+            <p class="text-muted small mb-0">No upcoming consultations.</p>
+          </div>
         <?php endif; ?>
 
-        <?php foreach ($groups as $group): ?>
-          <?php
-            $progress = (int) $group['progress_percent'];
-            if ($group['progress_status'] === 'falling behind') {
-                $statusLabel = 'Behind';
-                $statusClass = 'behind';
-            } elseif ($progress < 50) {
-                $statusLabel = 'At Risk';
-                $statusClass = 'at-risk';
-            } else {
-                $statusLabel = 'On Track';
-                $statusClass = 'on-track';
-            }
-          ?>
-          <div class="group-card">
-            <div class="card-header">
-              <h3><?= htmlspecialchars($group['group_name']) ?></h3>
-              <span class="badge-status badge-<?= $statusClass ?>"><?= $statusLabel ?></span>
+        <?php foreach ($upcoming as $c): ?>
+          <div class="consultation-card">
+            <div class="consultation-date">
+              <span class="cons-month"><?= htmlspecialchars($c['month']) ?></span>
+              <strong class="cons-day"><?= htmlspecialchars($c['day']) ?></strong>
             </div>
-            <p class="project-title"><?= htmlspecialchars($group['thesis_title']) ?></p>
-            <p class="program"><?= htmlspecialchars($group['member_count']) ?> members</p>
-
-            <div class="card-progress">
-              <div class="progress flex-grow-1" style="height: 8px;">
-                <div class="progress-bar <?= $statusClass === 'behind' ? 'progress-behind' : '' ?>" style="width: <?= $progress ?>%;"></div>
-              </div>
-              <span class="progress-text"><?= $progress ?>%</span>
+            <div class="consultation-details">
+              <h4><?= htmlspecialchars($c['topic'] ?: 'Consultation') ?></h4>
+              <p class="cons-group"><?= htmlspecialchars($c['group_name']) ?></p>
+              <p class="cons-time"><?= htmlspecialchars($c['time_range']) ?></p>
+              <?php if ($c['meeting_link']): ?>
+                <p class="cons-link">Via: <?= htmlspecialchars($c['meeting_link']) ?></p>
+              <?php endif; ?>
+              <?php if ($c['agenda']): ?>
+                <p class="cons-agenda"><?= htmlspecialchars($c['agenda']) ?></p>
+              <?php endif; ?>
             </div>
+            <div class="consultation-side">
+              <span class="badge-status <?= $c['status_class'] ?>"><?= htmlspecialchars($c['status_label']) ?></span>
+            </div>
+          </div>
+        <?php endforeach; ?>
+      </div>
 
-            <div class="card-footer">
-              <span class="milestone-info"><?= htmlspecialchars((string) $group['completed_milestones']) ?> of <?= htmlspecialchars((string) $group['total_milestones']) ?> milestones done</span>
-              <span class="next-milestone">Next: <?= htmlspecialchars($group['next_milestone']) ?></span>
+      <!-- consultation history -->
+      <div class="consultation-section mt-4">
+        <p class="box-label">HISTORY</p>
+        <?php if (empty($history)): ?>
+          <div class="box">
+            <p class="text-muted small mb-0">No completed consultations.</p>
+          </div>
+        <?php endif; ?>
+
+        <?php foreach ($history as $c): ?>
+          <div class="history-card">
+            <div class="history-avatar">
+              <img src="<?= BASE_URL ?>/assets/icons/chat-dots-fill.svg" alt="" class="bi">
+            </div>
+            <div class="history-meta">
+              <h4><?= htmlspecialchars($c['topic'] ?: 'Consultation') ?></h4>
+              <p><?= htmlspecialchars($c['group_name']) ?> &middot; <?= htmlspecialchars($c['time_range']) ?></p>
+              <?php if ($c['requester_name']): ?>
+                <p class="history-requester">Requested by: <?= htmlspecialchars($c['requester_name']) ?></p>
+              <?php endif; ?>
+            </div>
+            <div class="history-notes">
+              <span class="history-notes-label">Notes</span>
+              <p><?= htmlspecialchars($c['adviser_notes'] ?: $c['agenda'] ?: 'No notes recorded.') ?></p>
+            </div>
+            <div class="history-side">
+              <span class="badge-status <?= $c['status_class'] ?>"><?= htmlspecialchars($c['status_label']) ?></span>
             </div>
           </div>
         <?php endforeach; ?>

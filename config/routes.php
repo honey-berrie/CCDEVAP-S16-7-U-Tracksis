@@ -6,7 +6,6 @@ use App\Controllers\AuthController;
 use App\Controllers\Test\DashboardController;
 use App\Controllers\Student\StudentDashboardController;
 use App\Controllers\Adviser\AdviserDashboardController;
-use App\Controllers\Admin\AdminDashboardController;
 use App\Core\Router;
 
 $router = new Router();
@@ -32,8 +31,6 @@ $router->group('auth:student', function (Router $router) {
     $router->get('/student/feedback', [StudentDashboardController::class, 'feedback']);
     $router->get('/student/consultations', [StudentDashboardController::class, 'consultations']);
     $router->post('/student/consultations-request', [StudentDashboardController::class, 'requestConsultation']);
-    $router->get('/student/announcements', [StudentDashboardController::class, 'announcements']);
-    $router->post('/student/announcements-mark-read', [StudentDashboardController::class, 'markAnnouncementRead']);
 });
 
 // adviser routes
@@ -44,29 +41,7 @@ $router->group('auth:adviser', function (Router $router) {
     $router->get('/adviser/submissions', [AdviserDashboardController::class, 'submissions']);
     $router->post('/adviser/submissions-update', [AdviserDashboardController::class, 'updateSubmission']);
     $router->get('/adviser/submissions-file', [AdviserDashboardController::class, 'serveSubmissionFile']);
-});
-
-// admin routes
-$router->group('auth:admin', function (Router $router) {
-
-    $router->get('/admin/adm-dashboard', [AdminDashboardController::class, 'index']);
-
-    $router->get('/admin/adm-users', [AdminDashboardController::class, 'users']);
-
-    $router->get('/admin/adm-records', [AdminDashboardController::class, 'records']);
-
-    $router->get('/admin/adm-announcements', [AdminDashboardController::class, 'announcements']);
-
-    $router->get('/admin/adm-analytics', [AdminDashboardController::class, 'analytics']);
-
-    $router->get('/admin/adm-archive', [AdminDashboardController::class, 'archive']);
-
-    $router->get('/admin/adm-feedback', [AdminDashboardController::class, 'feedback']);
-
-    $router->get('/admin/adm-files', [AdminDashboardController::class, 'files']);
-
-    $router->get('/admin/adm-settings', [AdminDashboardController::class, 'settings']);
-
+    $router->get('/adviser/consultations', [AdviserDashboardController::class, 'consultations']);
 });
 
 // Use the stripped URI set by index.php (handles subdirectory installations)

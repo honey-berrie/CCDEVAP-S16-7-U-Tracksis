@@ -224,10 +224,14 @@ class StudentDashboardController extends Controller
 
         $result = Team::uploadSubmission($userGroupId['group_id'], $documentType, $file, $_SESSION['user_id']);
 
-        if ($result) {
+        if ($result === true) {
             $_SESSION['success_message'] = 'Submission uploaded successfully!';
+        } elseif ($result === 'not_pdf') {
+            $_SESSION['error_message'] = 'Only PDF files are accepted.';
+        } elseif ($result === 'too_large') {
+            $_SESSION['error_message'] = 'File exceeds the 25MB size limit.';
         } else {
-            $_SESSION['error_message'] = 'Failed to upload submission. Ensure the file is a PDF under 25MB.';
+            $_SESSION['error_message'] = 'Failed to upload submission. Please try again.';
         }
         $this->redirect('/student/submissions');
     }
@@ -297,79 +301,6 @@ class StudentDashboardController extends Controller
             'feedbacks' => $feedbacks,
         ]);
     }
-
-    public function announcements(): void
-    {
-        $userName = $_SESSION['user_name'] ?? 'Username failed to retrieve!';
-        $firstname = $_SESSION['firstname'] ?? '<Failed to retrieve>';
-        $lastname = $_SESSION['lastname'] ?? '<Failed to retrieve>';
-
-        $userGroupId = User::getUserGroupId($_SESSION['user_id']);
-
-        $globalAnnouncements = User::getGlobalAnnouncements($_SESSION['user_id']);
-
-        if (!$userGroupId) {
-            $this->renderPlain('student/announcements', [
-                'userName' => $userName,
-                'firstname' => $firstname,
-                'lastname' => $lastname,
-                'announcements' => $globalAnnouncements,
-            ]);
-            return;
-        }
-
-        $announcements = Team::getTeamAnnouncements($_SESSION['user_id'], $userGroupId['group_id']);
-
-        // sort all announcements including global announcements by created_at descending
-        $allAnnouncements = array_merge($announcements, $globalAnnouncements);
-        usort($allAnnouncements, function ($a, $b) {
-            return strtotime($b['created_at']) - strtotime($a['created_at']);
-        });
-
-
-        echo "<script>console.log('Announcements:', " . json_encode($announcements) . ");</script>";
-        echo "<script>console.log('Global Announcements:', " . json_encode($globalAnnouncements) . ");</script>";
-        echo "<script>console.log('All Announcements:', " . json_encode($allAnnouncements) . ");</script>";
-
-        $this->renderPlain('student/announcements', [
-            'userName' => $userName,
-            'firstname' => $firstname,
-            'lastname' => $lastname,
-            'announcements' => $allAnnouncements,
-        ]);
-    }
-
-    public function markAnnouncementRead(): void
-    {
-        $input = json_decode(file_get_contents('php://input'), true);
-        $announcementId = $input['id'] ?? null;
-
-        if (!$announcementId) {
-            http_response_code(400);
-            echo json_encode(['error' => 'Missing announcement ID']);
-            return;
-        }
-
-        $userId = $_SESSION['user_id'] ?? null;
-
-        if (!$userId) {
-            http_response_code(401);
-            $this->redirect('/logout');
-            return;
-        }
-
-        $result = User::markAnnouncementAsRead($userId, $announcementId);
-
-        echo "<script>console.log('Mark Announcement Read Result:', " . json_encode($result) . ");</script>";
-
-        if ($result) {
-            echo json_encode(['success' => true]);
-        } else {
-            http_response_code(500);
-            echo json_encode(['error' => 'Failed to mark announcement as read']);
-        }
-    }
-
 
     public function consultations(): void
     {

@@ -8,16 +8,77 @@ use App\Models\Helpers;
 // handles all user related database queries
 class Team extends Model
 {
+    // fixed document type order for milestone display
+    private static function getDocumentTypeOrder(): array
+    {
+        return [
+            'title-proposal' => 'Title Proposal',
+            'chapter-1'      => 'Chapter 1',
+            'chapter-2'      => 'Chapter 2',
+            'chapter-3'      => 'Chapter 3',
+            'chapter-4'      => 'Chapter 4',
+            'chapter-5'      => 'Chapter 5',
+            'final-thesis'   => 'Final Thesis',
+        ];
+    }
+
     public static function getTeamMilestones($groupId): array
     {
-        $stmt = static::db()->prepare(
-            "SELECT id, name, description, due_date, progress, status, display_order
-            FROM milestones
-            WHERE group_id = :group_id
-            ORDER BY display_order ASC"
-        );
-        $stmt->execute(['group_id' => $groupId]);
-        $milestones = $stmt->fetchAll();
+        // derive milestones purely from submissions
+        $docTypes = static::getDocumentTypeOrder();
+        $order = 1;
+        $milestones = [];
+
+        foreach ($docTypes as $docType => $label) {
+            // check submission statuses for this doc type
+            $stmt = static::db()->prepare(
+                "SELECT s.status, s.uploaded_at, s.review_notes
+                 FROM submissions s
+                 WHERE s.group_id = ? AND s.document_type = ?
+                 ORDER BY s.uploaded_at DESC"
+            );
+            $stmt->execute([$groupId, $docType]);
+            $subs = $stmt->fetchAll();
+
+            $hasApproved = false;
+            $hasInReview = false;
+            $hasRejected = false;
+            $latestUploadedAt = null;
+
+            foreach ($subs as $sub) {
+                if ($sub['status'] === 'approved') $hasApproved = true;
+                if (in_array($sub['status'], ['in-review', 'revision-requested'])) $hasInReview = true;
+                if ($sub['status'] === 'rejected') $hasRejected = true;
+                if (!$latestUploadedAt) $latestUploadedAt = $sub['uploaded_at'];
+            }
+
+            if ($hasApproved) {
+                $status = 'approved';
+                $progress = 100;
+            } elseif ($hasInReview) {
+                $status = 'in-review';
+                $progress = 50;
+            } elseif ($hasRejected) {
+                $status = 'rejected';
+                $progress = 0;
+            } elseif (!empty($subs)) {
+                $status = 'in-progress';
+                $progress = 25;
+            } else {
+                $status = 'in-progress';
+                $progress = 0;
+            }
+
+            $milestones[] = [
+                'id' => 0,
+                'name' => $label,
+                'description' => $label,
+                'due_date' => null,
+                'display_order' => $order++,
+                'progress' => $progress,
+                'status' => $status,
+            ];
+        }
 
         $totalCount = count($milestones);
         $doneCount = 0;
@@ -241,18 +302,26 @@ class Team extends Model
         return $row ?: null;
     }
 
-    public static function uploadSubmission(int $groupId, string $documentType, array $file, int $uploadedBy): bool
+    public static function uploadSubmission(int $groupId, string $documentType, array $file, int $uploadedBy): bool|string
     {
         if ($file['error'] !== UPLOAD_ERR_OK) {
             return false;
         }
 
-        if (mime_content_type($file['tmp_name']) !== 'application/pdf') {
-            return false;
+        // validate PDF: check extension and MIME type (with fallback)
+        $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+        if ($ext !== 'pdf') {
+            return 'not_pdf';
+        }
+        if (function_exists('mime_content_type')) {
+            $mime = mime_content_type($file['tmp_name']);
+            if ($mime !== 'application/pdf') {
+                return 'not_pdf';
+            }
         }
 
         if ($file['size'] > 25 * 1024 * 1024) {
-            return false;
+            return 'too_large';
         }
 
         $uploadDir = __DIR__ . '/../../uploads/';
@@ -595,6 +664,9 @@ CREATE TABLE consultations (
 
     public static function updateSubmissionStatus(int $submissionId, string $status, string $feedback): bool
     {
+        $adviserId = $_SESSION['user_id'] ?? 0;
+
+        // update the submission
         $stmt = static::db()->prepare(
             "UPDATE submissions
              SET status = :status,
@@ -603,91 +675,193 @@ CREATE TABLE consultations (
                  reviewed_at = NOW()
              WHERE id = :submission_id"
         );
-        return $stmt->execute([
+        $ok = $stmt->execute([
             'status' => $status,
             'feedback' => $feedback,
-            'reviewed_by' => $_SESSION['user_id'] ?? 0,
+            'reviewed_by' => $adviserId,
             'submission_id' => $submissionId,
         ]);
+
+        if (!$ok) return false;
+
+        // fetch submission info for feedback
+        $sub = static::db()->prepare(
+            "SELECT s.group_id, s.title, t.group_name
+             FROM submissions s
+             JOIN teams t ON t.id = s.group_id
+             WHERE s.id = ?"
+        );
+        $sub->execute([$submissionId]);
+        $subRow = $sub->fetch();
+
+        if (!$subRow) return true;
+
+        // insert feedback record so it appears on student's feedback page
+        $fbStmt = static::db()->prepare(
+            "INSERT INTO feedback (group_id, submission_id, given_by, author_role, message)
+             VALUES (?, ?, ?, 'adviser', ?)"
+        );
+        $fbStmt->execute([
+            $subRow['group_id'],
+            $submissionId,
+            $adviserId,
+            $feedback,
+        ]);
+
+        // insert activity
+        $actStmt = static::db()->prepare(
+            "INSERT INTO activities (group_id, user_id, type, description)
+             VALUES (?, ?, ?, ?)"
+        );
+        $actStmt->execute([
+            $subRow['group_id'],
+            $adviserId,
+            'feedback_added',
+            $_SESSION['user_name'] . ' ' . $status . ' ' . $subRow['title'] . ' for ' . $subRow['group_name'],
+        ]);
+
+        return true;
     }
 
     public static function getAdviserMilestoneGroups(int $adviserId): array
     {
-        $stmt = static::db()->prepare(
-            "SELECT t.id AS group_id, t.group_name, t.thesis_title,
-                    m.id AS milestone_id,
-                    m.name AS milestone_name,
-                    m.status,
-                    m.due_date,
-                    DATE(m.completed_at) AS submitted_at,
-                    m.description AS comments
-             FROM teams t
-             LEFT JOIN milestones m ON t.id = m.group_id
-             WHERE t.adviser_id = ? AND t.status = 'active'
-             ORDER BY t.group_name ASC, m.due_date ASC, m.display_order ASC, m.id ASC"
-        );
-        $stmt->execute([$adviserId]);
-        $rows = $stmt->fetchAll();
+        // derive milestones purely from submissions, grouped by team
+        $groups = static::getAdviserGroups($adviserId);
+        $docTypes = static::getDocumentTypeOrder();
+        $result = [];
 
-        $groups = [];
-        foreach ($rows as $row) {
-            $groupId = (int) $row['group_id'];
-            if (!isset($groups[$groupId])) {
-                $groups[$groupId] = [
-                    'group_id' => $groupId,
-                    'group_name' => $row['group_name'],
-                    'thesis_title' => $row['thesis_title'],
-                    'milestones' => [],
+        foreach ($groups as $g) {
+            $groupId = $g['id'];
+            $milestones = [];
+            $order = 1;
+
+            foreach ($docTypes as $docType => $label) {
+                $stmt = static::db()->prepare(
+                    "SELECT s.status, s.uploaded_at, s.review_notes
+                     FROM submissions s
+                     WHERE s.group_id = ? AND s.document_type = ?
+                     ORDER BY s.uploaded_at DESC"
+                );
+                $stmt->execute([$groupId, $docType]);
+                $subs = $stmt->fetchAll();
+
+                $hasApproved = false;
+                $hasInReview = false;
+                $hasRejected = false;
+                $latestUploadedAt = null;
+
+                foreach ($subs as $sub) {
+                    if ($sub['status'] === 'approved') $hasApproved = true;
+                    if (in_array($sub['status'], ['in-review', 'revision-requested'])) $hasInReview = true;
+                    if ($sub['status'] === 'rejected') $hasRejected = true;
+                    if (!$latestUploadedAt) $latestUploadedAt = $sub['uploaded_at'];
+                }
+
+                if ($hasApproved) {
+                    $status = 'approved';
+                } elseif ($hasInReview) {
+                    $status = 'in-review';
+                } elseif ($hasRejected) {
+                    $status = 'rejected';
+                } elseif (!empty($subs)) {
+                    $status = 'in-progress';
+                } else {
+                    $status = 'in-progress';
+                }
+
+                $milestones[] = [
+                    'milestone_id' => 0,
+                    'milestone_name' => $label,
+                    'status' => $status,
+                    'status_label' => Helpers::statusLabel($status),
+                    'status_class' => Helpers::statusClass($status),
+                    'due_date' => null,
+                    'due_date_formatted' => null,
+                    'submitted_at' => $latestUploadedAt,
+                    'submitted_at_formatted' => $latestUploadedAt ? date('M j, Y', strtotime($latestUploadedAt)) : null,
+                    'comments' => null,
                 ];
             }
-            if ($row['milestone_id'] !== null) {
-                $groups[$groupId]['milestones'][] = [
-                    'milestone_id' => (int) $row['milestone_id'],
-                    'milestone_name' => $row['milestone_name'],
-                    'status' => $row['status'],
-                    'status_label' => Helpers::statusLabel($row['status']),
-                    'status_class' => Helpers::statusClass($row['status']),
-                    'due_date' => $row['due_date'],
-                    'due_date_formatted' => $row['due_date'] ? date('M j, Y', strtotime($row['due_date'])) : null,
-                    'submitted_at' => $row['submitted_at'],
-                    'submitted_at_formatted' => $row['submitted_at'] ? date('M j, Y', strtotime($row['submitted_at'])) : null,
-                    'comments' => $row['comments'],
-                ];
-            }
+
+            $result[] = [
+                'group_id' => $groupId,
+                'group_name' => $g['group_name'],
+                'thesis_title' => $g['thesis_title'],
+                'milestones' => $milestones,
+            ];
         }
 
-        return array_values($groups);
+        return $result;
+    }
+
+    public static function getAdviserConsultations(int $adviserId): array
+    {
+        $stmt = static::db()->prepare(
+            "SELECT c.id, c.group_id, c.user_id, c.recipient_id, c.topic, c.agenda,
+                    c.proposed_schedule, c.consultation_end, c.meeting_link,
+                    c.status, c.adviser_notes, c.reschedule_reason,
+                    c.created_at, c.updated_at,
+                    t.group_name,
+                    u.firstname, u.lastname
+             FROM consultations c
+             INNER JOIN teams t ON c.group_id = t.id
+             LEFT JOIN users u ON u.id = c.user_id
+             WHERE c.recipient_id = ?
+             ORDER BY c.proposed_schedule DESC"
+        );
+        $stmt->execute([$adviserId]);
+        $consultations = $stmt->fetchAll();
+
+        foreach ($consultations as &$c) {
+            $c['requester_name'] = trim(($c['firstname'] ?? '') . ' ' . ($c['lastname'] ?? ''));
+            $c['status_label'] = Helpers::statusLabel($c['status']);
+            $c['status_class'] = Helpers::statusClass($c['status']);
+            $c['proposed_schedule_formatted'] = $c['proposed_schedule'] ? date('M j, Y g:i A', strtotime($c['proposed_schedule'])) : null;
+            $c['consultation_end_formatted'] = $c['consultation_end'] ? date('M j, Y g:i A', strtotime($c['consultation_end'])) : null;
+            $c['month'] = $c['proposed_schedule'] ? date('M', strtotime($c['proposed_schedule'])) : '--';
+            $c['day'] = $c['proposed_schedule'] ? date('d', strtotime($c['proposed_schedule'])) : '--';
+            $c['time_range'] = $c['proposed_schedule']
+                ? date('g:i A', strtotime($c['proposed_schedule']))
+                  . ($c['consultation_end'] ? ' - ' . date('g:i A', strtotime($c['consultation_end'])) : '')
+                : 'Unscheduled';
+            unset($c['firstname'], $c['lastname']);
+        }
+        unset($c);
+
+        return $consultations;
     }
 
     public static function getAdviserGroupSummaries(int $adviserId): array
     {
-        $stmt = static::db()->prepare(
-            "SELECT t.id AS group_id, t.group_name, t.thesis_title, t.progress_status,
-                    COUNT(m.id) AS total_milestones,
-                    SUM(CASE WHEN m.status = 'approved' THEN 1 ELSE 0 END) AS completed_milestones,
-                    (
-                        SELECT m2.name
-                        FROM milestones m2
-                        WHERE m2.group_id = t.id
-                          AND m2.status <> 'approved'
-                        ORDER BY m2.due_date ASC, m2.display_order ASC, m2.id ASC
-                        LIMIT 1
-                    ) AS next_milestone
-             FROM teams t
-             LEFT JOIN milestones m ON t.id = m.group_id
-             WHERE t.adviser_id = ? AND t.status = 'active'
-             GROUP BY t.id, t.group_name, t.thesis_title, t.progress_status
-             ORDER BY t.group_name ASC"
-        );
-        $stmt->execute([$adviserId]);
-        $groups = $stmt->fetchAll();
+        // derive group summaries purely from submissions
+        $groups = static::getAdviserGroups($adviserId);
+        $docTypes = static::getDocumentTypeOrder();
+        $totalTypes = count($docTypes);
 
         foreach ($groups as &$g) {
-            $total = (int) $g['total_milestones'];
-            $completed = (int) $g['completed_milestones'];
-            $g['progress_percent'] = $total > 0 ? (int) round(($completed / $total) * 100) : 0;
-            $g['next_milestone'] = $g['next_milestone'] ?: 'All milestones completed';
-            $g['member_count'] = static::getGroupMemberCount($g['group_id']);
+            $groupId = $g['id'];
+            $completed = 0;
+            $nextMilestone = null;
+
+            foreach ($docTypes as $docType => $label) {
+                $stmt = static::db()->prepare(
+                    "SELECT 1 FROM submissions
+                     WHERE group_id = ? AND document_type = ? AND status = 'approved'
+                     LIMIT 1"
+                );
+                $stmt->execute([$groupId, $docType]);
+                if ($stmt->fetch()) {
+                    $completed++;
+                } elseif ($nextMilestone === null) {
+                    $nextMilestone = $label;
+                }
+            }
+
+            $g['total_milestones'] = $totalTypes;
+            $g['completed_milestones'] = $completed;
+            $g['progress_percent'] = $totalTypes > 0 ? (int) round(($completed / $totalTypes) * 100) : 0;
+            $g['next_milestone'] = $nextMilestone ?: 'All milestones completed';
+            $g['member_count'] = static::getGroupMemberCount($groupId);
         }
         unset($g);
 
@@ -706,19 +880,25 @@ CREATE TABLE consultations (
 
     private static function getGroupOverallProgress(int $groupId): int
     {
-        $stmt = static::db()->prepare(
-            "SELECT progress FROM milestones WHERE group_id = ?"
-        );
-        $stmt->execute([$groupId]);
-        $rows = $stmt->fetchAll();
-        if (empty($rows)) {
-            return 0;
+        // derive progress purely from submissions: each doc type with >=1 approved = 100%
+        $docTypes = static::getDocumentTypeOrder();
+        $totalTypes = count($docTypes);
+        if ($totalTypes === 0) return 0;
+
+        $approvedCount = 0;
+        foreach ($docTypes as $docType => $label) {
+            $stmt = static::db()->prepare(
+                "SELECT 1 FROM submissions
+                 WHERE group_id = ? AND document_type = ? AND status = 'approved'
+                 LIMIT 1"
+            );
+            $stmt->execute([$groupId, $docType]);
+            if ($stmt->fetch()) {
+                $approvedCount++;
+            }
         }
-        $sum = 0;
-        foreach ($rows as $r) {
-            $sum += (int) $r['progress'];
-        }
-        return (int) round($sum / count($rows));
+
+        return (int) round(($approvedCount / $totalTypes) * 100);
     }
 
     public static function createConsultationRequest(

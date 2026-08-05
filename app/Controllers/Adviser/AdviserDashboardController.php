@@ -96,6 +96,25 @@ class AdviserDashboardController extends Controller
         exit;
     }
 
+    public function consultations(): void
+    {
+        $adviserId = $_SESSION['user_id'] ?? 0;
+
+        $consultations = Team::getAdviserConsultations($adviserId);
+
+        // split into upcoming and history
+        $upcoming = array_filter($consultations, fn($c) => in_array($c['status'], ['pending', 'approved']));
+        $history = array_filter($consultations, fn($c) => in_array($c['status'], ['completed', 'cancelled']));
+
+        $this->renderPlain('adviser/consultations', [
+            'userName' => $_SESSION['user_name'] ?? 'Adviser',
+            'firstname' => $_SESSION['firstname'] ?? '',
+            'lastname' => $_SESSION['lastname'] ?? '',
+            'upcoming' => array_values($upcoming),
+            'history' => array_values($history),
+        ]);
+    }
+
     public function updateSubmission(): void
     {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
