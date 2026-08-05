@@ -8,8 +8,8 @@ require_once __DIR__ . "/connect.php";
 
 function getCurrentAdmin($conn)
 {
-    if (!empty($_SESSION['user']['id'])) {
-        $userId = (int) $_SESSION['user']['id'];
+    if (!empty($_SESSION['user_id'])) {
+        $userId = (int) $_SESSION['user_id'];
         $stmt = $conn->prepare(
             "SELECT id, role, firstname, lastname, email
              FROM users
@@ -35,13 +35,13 @@ function getCurrentAdmin($conn)
 
 function isAdminLoggedIn(): bool
 {
-    return !empty($_SESSION['user']['id']) && ($_SESSION['user']['role'] ?? '') === 'admin';
+    return !empty($_SESSION['user_id']) && ($_SESSION['user_role'] ?? '') === 'admin';
 }
 
 function requireAdminAuth(): void
 {
     if (!isAdminLoggedIn()) {
-        header("Location: ../../../pages/auth/auth.html");
+        header("Location: " . (defined('BASE_URL') ? BASE_URL : '') . "/login");
         exit;
     }
 

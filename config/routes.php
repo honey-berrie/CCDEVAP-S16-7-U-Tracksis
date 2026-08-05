@@ -6,6 +6,7 @@ use App\Controllers\AuthController;
 use App\Controllers\Test\DashboardController;
 use App\Controllers\Student\StudentDashboardController;
 use App\Controllers\Adviser\AdviserDashboardController;
+use App\Controllers\Admin\AdminDashboardController;
 use App\Core\Router;
 
 $router = new Router();
@@ -39,6 +40,11 @@ $router->group('auth:student', function (Router $router) {
 // adviser routes
 $router->group('auth:adviser', function (Router $router) {
     $router->get('/adviser/dashboard', [AdviserDashboardController::class, 'index']);
+});
+
+// admin routes
+$router->group('auth:admin', function (Router $router) {
+    $router->get('/admin/dashboard', [AdminDashboardController::class, 'index']);
 });
 
 // Use the stripped URI set by index.php (handles subdirectory installations)
