@@ -254,6 +254,81 @@
   flex-shrink: 0;
 }
 
+/* notice modal overlay */
+.notice-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1055;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+
+.notice-overlay.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.notice-modal {
+  background: var(--bg-box);
+  border-radius: 14px;
+  width: 90%;
+  max-width: 420px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  transform: translateY(12px);
+  transition: transform 0.25s ease;
+}
+
+.notice-overlay.show .notice-modal {
+  transform: translateY(0);
+}
+
+.notice-header {
+  padding: 1.25rem 1.5rem 0.5rem;
+}
+
+.notice-eyebrow {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin: 0 0 0.25rem 0;
+  color: var(--navy-accent);
+}
+
+.notice-eyebrow.is-error {
+  color: #dc3545;
+}
+
+.notice-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0;
+}
+
+.notice-body {
+  padding: 0.75rem 1.5rem 1.25rem;
+}
+
+.notice-body p {
+  font-size: 0.9rem;
+  color: var(--text-light);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.notice-footer {
+  padding: 0.75rem 1.5rem 1.25rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
 /* responsive */
 @media (max-width: 575.98px) {
   .to-field {
