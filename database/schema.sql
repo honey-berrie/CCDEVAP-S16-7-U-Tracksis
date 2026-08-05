@@ -351,4 +351,4 @@ INSERT INTO feedback (group_id, submission_id, given_by, author_role, message, c
 (1, 3, 4, 'adviser', 'Please expand the related studies section and fix citations.', NOW() - INTERVAL 14 DAY);
 
 INSERT INTO activities (group_id, user_id, type, description, created_at) VALUES
-(1, 9, 'submission', 'Submitted Chapter 2 for review.', NOW() - INTERVAL 6 DAY),
+(1, 9, 'submission', 'Submitted Chapter 2 for review.', NOW() - INTERVAL 6 DAY);
