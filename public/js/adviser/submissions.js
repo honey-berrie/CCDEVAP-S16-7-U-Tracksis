@@ -88,24 +88,27 @@ document.addEventListener('DOMContentLoaded', function () {
         if (action === 'cancel') {
             closeModal();
         } else if (action === 'confirm-approve') {
+            var subId = pendingAction ? pendingAction.submissionId : null;
             closeModal();
-            updateSubmission(pendingAction.submissionId, 'approved', 'Approved by adviser.');
+            if (subId) updateSubmission(subId, 'approved', 'Approved by adviser.');
         } else if (action === 'confirm-revise') {
+            var subId = pendingAction ? pendingAction.submissionId : null;
             var feedback = document.getElementById('modalFeedbackInput').value.trim();
             if (!feedback) {
                 showInlineError('modalFeedbackInput', 'Please enter revision feedback.');
                 return;
             }
             closeModal();
-            updateSubmission(pendingAction.submissionId, 'revision-requested', feedback);
+            if (subId) updateSubmission(subId, 'revision-requested', feedback);
         } else if (action === 'confirm-reject') {
+            var subId = pendingAction ? pendingAction.submissionId : null;
             var reason = document.getElementById('modalFeedbackInput').value.trim();
             if (!reason) {
                 showInlineError('modalFeedbackInput', 'Please enter a rejection reason.');
                 return;
             }
             closeModal();
-            updateSubmission(pendingAction.submissionId, 'rejected', reason);
+            if (subId) updateSubmission(subId, 'rejected', reason);
         }
     });
 
