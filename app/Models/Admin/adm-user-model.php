@@ -173,6 +173,14 @@ class UserModel
         return $stmt->execute();
     }
 
+    public function getDefaultSectionId(): ?int
+    {
+        $result = $this->conn->query("SELECT id FROM sections ORDER BY id ASC LIMIT 1");
+        $row = $result ? $result->fetch_assoc() : null;
+
+        return $row ? (int) $row['id'] : null;
+    }
+
     public function createTeamWithMembers(
         string $groupName,
         string $thesisTitle,
@@ -182,18 +190,25 @@ class UserModel
         ?string $defenseDate,
         array $memberIds
     ) {
+        $sectionId = $this->getDefaultSectionId();
+
+        if ($sectionId === null) {
+            throw new \Exception("No section is available to assign this thesis group to. Please ask an admin to create a section first.");
+        }
+
         $this->conn->begin_transaction();
         try {
             $stmt = $this->conn->prepare(
-                "INSERT INTO teams (group_name, thesis_title, abstract, adviser_id, academic_year, defense_date)
-                 VALUES (?, ?, ?, ?, ?, ?)"
+                "INSERT INTO teams (group_name, thesis_title, abstract, adviser_id, section_id, academic_year, defense_date)
+                 VALUES (?, ?, ?, ?, ?, ?, ?)"
             );
             $stmt->bind_param(
-                "sssiss",
+                "sssiiss",
                 $groupName,
                 $thesisTitle,
                 $abstract,
                 $adviserId,
+                $sectionId,
                 $academicYear,
                 $defenseDate
             );
