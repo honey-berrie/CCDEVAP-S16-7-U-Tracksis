@@ -2,7 +2,6 @@ const API = "../../api";
 
 // check if user is already logged in
 async function checkLoginStatus() {
-  // check if user is already logged in
   try {
     const checkRes = await fetch(`${API}/auth/user.php`, {
       method: "GET",
@@ -12,7 +11,6 @@ async function checkLoginStatus() {
     const checkData = await checkRes.json();
 
     if (checkRes.ok && checkData.user) {
-      // redirect based on role
       const role = checkData.user.role;
       if (role === "admin")
         window.location.href = "../../adminpages/adm-dashboard.php";
@@ -32,12 +30,22 @@ async function checkLoginStatus() {
 
 document.addEventListener("DOMContentLoaded", checkLoginStatus);
 
+// === NEW: Helper function to show error modal ===
+function showErrorModal(message) {
+  const modalBody = document.querySelector("#loginErrorModal .modal-body p");
+  if (modalBody) modalBody.textContent = message;
+  const errorModal = new bootstrap.Modal(
+    document.getElementById("loginErrorModal"),
+  );
+  errorModal.show();
+}
+
 async function login() {
   const email = document.getElementById("login-email").value.trim();
   const password = document.getElementById("login-password").value;
 
   if (!email || !password) {
-    alert("Please enter your email and password.");
+    showErrorModal("Please enter your email and password.");
     return;
   }
 
@@ -55,11 +63,14 @@ async function login() {
         window.location.href = "../../maintenance.html";
         return;
       }
-      alert(data.error || "Login failed");
+      showErrorModal(
+        data.error ||
+          "Login failed. Please check your credentials and try again.",
+      );
       return;
     }
 
-    // === CHANGED: Lines 52-68 replaced with modal + setTimeout ===
+    // Show success modal
     const successModal = new bootstrap.Modal(
       document.getElementById("loginSuccessModal"),
     );
@@ -74,9 +85,8 @@ async function login() {
           "../../phase2-page-based-adviser/adviserhtml/thesis-adviser-overview.php";
       else window.location.href = "../../pages/student/dashboard.html";
     }, 1500);
-    // === END CHANGED ===
   } catch (err) {
-    alert("Network error: " + err.message);
+    showErrorModal("Network error: " + err.message);
   }
 }
 
