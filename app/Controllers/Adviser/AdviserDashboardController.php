@@ -9,39 +9,116 @@ class AdviserDashboardController extends Controller
 {
     public function index(): void
     {
-        $userName = $_SESSION['user_name'] ?? 'Adviser';
-        $firstname = $_SESSION['firstname'] ?? '';
-        $lastname = $_SESSION['lastname'] ?? '';
         $adviserId = $_SESSION['user_id'] ?? 0;
 
-        // fetch adviser's assigned groups
-        $assignedGroups = Team::getAdviserGroups($adviserId);
-
-        // fetch pending reviews (submissions in-review for adviser's groups)
-        $pendingReviews = Team::getAdviserPendingReviews($adviserId);
-
-        // fetch upcoming consultations where adviser is recipient
-        $upcomingConsultations = Team::getAdviserUpcomingConsultations($adviserId);
-
-        // fetch unread notifications count
-        $unreadAlerts = Team::getAdviserUnreadAlerts($adviserId);
-
-        // fetch group progress data
-        $groupProgress = Team::getAdviserGroupProgress($adviserId);
-
-        // fetch recent activity
-        $recentActivities = Team::getAdviserRecentActivities($adviserId);
-
         $this->renderPlain('adviser/dashboard', [
-            'userName' => $userName,
-            'firstname' => $firstname,
-            'lastname' => $lastname,
-            'assignedGroups' => $assignedGroups,
-            'pendingReviews' => $pendingReviews,
-            'upcomingConsultations' => $upcomingConsultations,
-            'unreadAlerts' => $unreadAlerts,
-            'groupProgress' => $groupProgress,
-            'recentActivities' => $recentActivities,
+            'userName' => $_SESSION['user_name'] ?? 'Adviser',
+            'firstname' => $_SESSION['firstname'] ?? '',
+            'lastname' => $_SESSION['lastname'] ?? '',
+            'assignedGroups' => Team::getAdviserGroups($adviserId),
+            'pendingReviews' => Team::getAdviserPendingReviews($adviserId),
+            'upcomingConsultations' => Team::getAdviserUpcomingConsultations($adviserId),
+            'unreadAlerts' => Team::getAdviserUnreadAlerts($adviserId),
+            'groupProgress' => Team::getAdviserGroupProgress($adviserId),
+            'recentActivities' => Team::getAdviserRecentActivities($adviserId),
         ]);
+    }
+
+    public function groups(): void
+    {
+        $adviserId = $_SESSION['user_id'] ?? 0;
+
+        $this->renderPlain('adviser/groups', [
+            'userName' => $_SESSION['user_name'] ?? 'Adviser',
+            'firstname' => $_SESSION['firstname'] ?? '',
+            'lastname' => $_SESSION['lastname'] ?? '',
+            'groups' => Team::getAdviserGroupSummaries($adviserId),
+        ]);
+    }
+
+    public function milestones(): void
+    {
+        $adviserId = $_SESSION['user_id'] ?? 0;
+
+        $this->renderPlain('adviser/milestones', [
+            'userName' => $_SESSION['user_name'] ?? 'Adviser',
+            'firstname' => $_SESSION['firstname'] ?? '',
+            'lastname' => $_SESSION['lastname'] ?? '',
+            'groups' => Team::getAdviserMilestoneGroups($adviserId),
+        ]);
+    }
+
+    public function submissions(): void
+    {
+        $adviserId = $_SESSION['user_id'] ?? 0;
+
+        $this->renderPlain('adviser/submissions', [
+            'userName' => $_SESSION['user_name'] ?? 'Adviser',
+            'firstname' => $_SESSION['firstname'] ?? '',
+            'lastname' => $_SESSION['lastname'] ?? '',
+            'submissions' => Team::getAdviserSubmissions($adviserId),
+        ]);
+    }
+
+    public function serveSubmissionFile(): void
+    {
+        $id = (int) ($_GET['id'] ?? 0);
+        $download = !empty($_GET['download']);
+
+        if (!$id) {
+            http_response_code(422);
+            echo 'Missing file ID';
+            return;
+        }
+
+        $file = Team::getSubmissionFile($id);
+
+        if (!$file) {
+            http_response_code(404);
+            echo 'File not found';
+            return;
+        }
+
+        $path = __DIR__ . '/../../../uploads/' . $file['file_path'];
+        if (!file_exists($path)) {
+            http_response_code(404);
+            echo 'File missing on disk';
+            return;
+        }
+
+        $disposition = $download ? 'attachment' : 'inline';
+
+        header('Content-Type: ' . ($file['mime_type'] ?: 'application/pdf'));
+        header('Content-Disposition: ' . $disposition . '; filename="' . basename($file['file_name']) . '"');
+        header('Content-Length: ' . filesize($path));
+        header('Cache-Control: private, max-age=3600');
+        readfile($path);
+        exit;
+    }
+
+    public function updateSubmission(): void
+    {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            $this->json(['error' => 'Method not allowed'], 405);
+            return;
+        }
+
+        $input = json_decode(file_get_contents('php://input'), true);
+        $submissionId = (int) ($input['submission_id'] ?? 0);
+        $status = $input['status'] ?? '';
+        $feedback = trim($input['feedback'] ?? '');
+
+        if ($submissionId <= 0 || !in_array($status, ['approved', 'rejected', 'revision-requested', 'in-review'])) {
+            $this->json(['error' => 'Invalid submission data.'], 400);
+            return;
+        }
+
+        $ok = Team::updateSubmissionStatus($submissionId, $status, $feedback);
+
+        if ($ok) {
+            $this->json(['success' => true]);
+        } else {
+            $this->json(['error' => 'Failed to update submission status.'], 500);
+        }
     }
 }
