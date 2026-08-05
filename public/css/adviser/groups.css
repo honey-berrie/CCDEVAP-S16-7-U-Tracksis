@@ -1,0 +1,133 @@
+/* group cards grid */
+.group-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 1.25rem;
+}
+
+/* group card */
+.group-card {
+  background: var(--bg-box);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.25rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+  display: flex;
+  flex-direction: column;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.card-header h3 {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.project-title {
+  font-size: 0.85rem;
+  color: var(--text);
+  margin: 0 0 0.35rem;
+  line-height: 1.4;
+}
+
+.program {
+  font-size: 0.78rem;
+  color: var(--text-light);
+  margin: 0 0 1rem;
+}
+
+/* card progress */
+.card-progress {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.card-progress .progress {
+  flex: 1;
+  height: 8px;
+  background: #e5e7eb;
+  border-radius: 999px;
+  overflow: hidden;
+  margin: 0;
+}
+
+.card-progress .progress-bar {
+  background: var(--success);
+  height: 100%;
+  border-radius: 999px;
+}
+
+.card-progress .progress-bar.progress-behind {
+  background: var(--danger);
+}
+
+.card-progress .progress-text {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--navy-accent);
+  min-width: 38px;
+  text-align: right;
+}
+
+/* card footer */
+.card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: auto;
+  padding-top: 0.85rem;
+  border-top: 1px solid var(--border);
+  font-size: 0.78rem;
+  color: var(--text-light);
+}
+
+.milestone-info {
+  font-weight: 600;
+}
+
+.next-milestone {
+  text-align: right;
+}
+
+/* status badges */
+.badge-status {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.badge-on-track {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.badge-at-risk {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.badge-behind {
+  background: #fdebea;
+  color: #9f2a20;
+}
+
+/* responsive */
+@media (max-width: 575.98px) {
+  .group-cards-grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -447,7 +447,6 @@ CREATE TABLE consultations (
         return $consultations;
     }
 
-    // ─── Adviser Dashboard Methods ───────────────────────────────────────
 
     public static function getAdviserGroups(int $adviserId): array
     {
@@ -553,7 +552,148 @@ CREATE TABLE consultations (
         return $activities;
     }
 
-    // ─── Helpers ──────────────────────────────────────────────────────────
+    public static function getAdviserSubmissions(int $adviserId): array
+    {
+        $stmt = static::db()->prepare(
+            "SELECT s.id AS submission_id,
+                    s.group_id,
+                    s.document_type,
+                    s.title,
+                    s.file_name,
+                    s.file_path,
+                    s.file_size,
+                    s.mime_type,
+                    s.status,
+                    s.uploaded_at,
+                    s.review_notes,
+                    s.uploaded_by,
+                    t.group_name,
+                    u.firstname AS uploader_firstname,
+                    u.lastname AS uploader_lastname
+             FROM submissions s
+             INNER JOIN teams t ON s.group_id = t.id
+             LEFT JOIN users u ON u.id = s.uploaded_by
+             WHERE t.adviser_id = ?
+             ORDER BY s.uploaded_at DESC"
+        );
+        $stmt->execute([$adviserId]);
+        $submissions = $stmt->fetchAll();
+
+        foreach ($submissions as &$s) {
+            $s['status_label'] = Helpers::statusLabel($s['status']);
+            $s['status_class'] = Helpers::statusClass($s['status']);
+            $s['document_type_label'] = Helpers::getSubmissionDocumentType($s['document_type']);
+            $s['uploaded_at_formatted'] = $s['uploaded_at'] ? date('M j, Y', strtotime($s['uploaded_at'])) : null;
+            $s['uploader_name'] = trim(($s['uploader_firstname'] ?? '') . ' ' . ($s['uploader_lastname'] ?? ''));
+            $s['file_size_formatted'] = $s['file_size'] ? round($s['file_size'] / 1048576, 1) . ' MB' : '0 MB';
+            unset($s['uploader_firstname'], $s['uploader_lastname']);
+        }
+        unset($s);
+
+        return $submissions;
+    }
+
+    public static function updateSubmissionStatus(int $submissionId, string $status, string $feedback): bool
+    {
+        $stmt = static::db()->prepare(
+            "UPDATE submissions
+             SET status = :status,
+                 review_notes = :feedback,
+                 reviewed_by = :reviewed_by,
+                 reviewed_at = NOW()
+             WHERE id = :submission_id"
+        );
+        return $stmt->execute([
+            'status' => $status,
+            'feedback' => $feedback,
+            'reviewed_by' => $_SESSION['user_id'] ?? 0,
+            'submission_id' => $submissionId,
+        ]);
+    }
+
+    public static function getAdviserMilestoneGroups(int $adviserId): array
+    {
+        $stmt = static::db()->prepare(
+            "SELECT t.id AS group_id, t.group_name, t.thesis_title,
+                    m.id AS milestone_id,
+                    m.name AS milestone_name,
+                    m.status,
+                    m.due_date,
+                    DATE(m.completed_at) AS submitted_at,
+                    m.description AS comments
+             FROM teams t
+             LEFT JOIN milestones m ON t.id = m.group_id
+             WHERE t.adviser_id = ? AND t.status = 'active'
+             ORDER BY t.group_name ASC, m.due_date ASC, m.display_order ASC, m.id ASC"
+        );
+        $stmt->execute([$adviserId]);
+        $rows = $stmt->fetchAll();
+
+        $groups = [];
+        foreach ($rows as $row) {
+            $groupId = (int) $row['group_id'];
+            if (!isset($groups[$groupId])) {
+                $groups[$groupId] = [
+                    'group_id' => $groupId,
+                    'group_name' => $row['group_name'],
+                    'thesis_title' => $row['thesis_title'],
+                    'milestones' => [],
+                ];
+            }
+            if ($row['milestone_id'] !== null) {
+                $groups[$groupId]['milestones'][] = [
+                    'milestone_id' => (int) $row['milestone_id'],
+                    'milestone_name' => $row['milestone_name'],
+                    'status' => $row['status'],
+                    'status_label' => Helpers::statusLabel($row['status']),
+                    'status_class' => Helpers::statusClass($row['status']),
+                    'due_date' => $row['due_date'],
+                    'due_date_formatted' => $row['due_date'] ? date('M j, Y', strtotime($row['due_date'])) : null,
+                    'submitted_at' => $row['submitted_at'],
+                    'submitted_at_formatted' => $row['submitted_at'] ? date('M j, Y', strtotime($row['submitted_at'])) : null,
+                    'comments' => $row['comments'],
+                ];
+            }
+        }
+
+        return array_values($groups);
+    }
+
+    public static function getAdviserGroupSummaries(int $adviserId): array
+    {
+        $stmt = static::db()->prepare(
+            "SELECT t.id AS group_id, t.group_name, t.thesis_title, t.progress_status,
+                    COUNT(m.id) AS total_milestones,
+                    SUM(CASE WHEN m.status = 'approved' THEN 1 ELSE 0 END) AS completed_milestones,
+                    (
+                        SELECT m2.name
+                        FROM milestones m2
+                        WHERE m2.group_id = t.id
+                          AND m2.status <> 'approved'
+                        ORDER BY m2.due_date ASC, m2.display_order ASC, m2.id ASC
+                        LIMIT 1
+                    ) AS next_milestone
+             FROM teams t
+             LEFT JOIN milestones m ON t.id = m.group_id
+             WHERE t.adviser_id = ? AND t.status = 'active'
+             GROUP BY t.id, t.group_name, t.thesis_title, t.progress_status
+             ORDER BY t.group_name ASC"
+        );
+        $stmt->execute([$adviserId]);
+        $groups = $stmt->fetchAll();
+
+        foreach ($groups as &$g) {
+            $total = (int) $g['total_milestones'];
+            $completed = (int) $g['completed_milestones'];
+            $g['progress_percent'] = $total > 0 ? (int) round(($completed / $total) * 100) : 0;
+            $g['next_milestone'] = $g['next_milestone'] ?: 'All milestones completed';
+            $g['member_count'] = static::getGroupMemberCount($g['group_id']);
+        }
+        unset($g);
+
+        return $groups;
+    }
+
 
     private static function getGroupMemberCount(int $groupId): int
     {

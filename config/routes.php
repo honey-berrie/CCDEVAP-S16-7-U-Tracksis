@@ -11,7 +11,6 @@ use App\Core\Router;
 $router = new Router();
 
 // public routes (no auth required)
-// Root → redirect to login (or dashboard if already logged in)
 $router->get('/', [AuthController::class, 'showLoginForm']);
 
 $router->get('/login', [AuthController::class, 'showLoginForm']);
@@ -39,6 +38,11 @@ $router->group('auth:student', function (Router $router) {
 // adviser routes
 $router->group('auth:adviser', function (Router $router) {
     $router->get('/adviser/dashboard', [AdviserDashboardController::class, 'index']);
+    $router->get('/adviser/groups', [AdviserDashboardController::class, 'groups']);
+    $router->get('/adviser/milestones', [AdviserDashboardController::class, 'milestones']);
+    $router->get('/adviser/submissions', [AdviserDashboardController::class, 'submissions']);
+    $router->post('/adviser/submissions-update', [AdviserDashboardController::class, 'updateSubmission']);
+    $router->get('/adviser/submissions-file', [AdviserDashboardController::class, 'serveSubmissionFile']);
 });
 
 // Use the stripped URI set by index.php (handles subdirectory installations)
