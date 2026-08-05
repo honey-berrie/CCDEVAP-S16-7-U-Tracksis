@@ -31,6 +31,10 @@
         <img src="../../../assets/icons/file-earmark-text-fill.svg" alt="" class="nav-icon">
         Uploaded Files
         </a>
+        <a href="adm-feedback.php" class="nav-link">
+        <img src="../../../assets/icons/chat-left-text-fill.svg" alt="" class="nav-icon">
+        Feedback History
+        </a>
         <a href="adm-archive.php" class="nav-link">
         <img src="../../../assets/icons/archive-fill.svg" alt="" class="nav-icon">
         Archive
