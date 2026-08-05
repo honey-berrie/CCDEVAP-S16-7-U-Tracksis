@@ -28,6 +28,11 @@
       align-items: flex-start;
     }
 
+    .greeting-Header {
+      flex: none;
+      width: 100%;
+    }
+
     .quick-actions {
       width: 100%;
     }

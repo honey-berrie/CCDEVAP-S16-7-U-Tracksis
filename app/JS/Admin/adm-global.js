@@ -37,8 +37,46 @@ function renderAdminTopBar() {
 
     mainContainer.prepend(topBar);
 
-    document.getElementById("adminLogoutBtn").addEventListener("click", logoutAdmin);
+    document.getElementById("adminLogoutBtn").addEventListener("click", openLogoutModal);
     setupMobileSidebarToggle();
+    renderLogoutModal();
+}
+
+function renderLogoutModal() {
+    if (document.getElementById("logoutModalOverlay")) return;
+
+    const modal = document.createElement("div");
+    modal.className = "modal-overlay";
+    modal.id = "logoutModalOverlay";
+    modal.innerHTML = `
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3 class="modal-title">Log Out</h3>
+                <button type="button" class="modal-close" id="logoutModalCloseBtn">&times;</button>
+            </div>
+            <p>Are you sure you want to log out?</p>
+            <div class="modal-footer">
+                <button type="button" class="btn-secondary-admin" id="logoutCancelBtn">Cancel</button>
+                <button type="button" class="btn-danger-admin" id="logoutConfirmBtn">Logout</button>
+            </div>
+        </div>
+    `;
+
+    document.body.appendChild(modal);
+
+    document.getElementById("logoutModalCloseBtn").addEventListener("click", closeLogoutModal);
+    document.getElementById("logoutCancelBtn").addEventListener("click", closeLogoutModal);
+    document.getElementById("logoutConfirmBtn").addEventListener("click", logoutAdmin);
+}
+
+function openLogoutModal() {
+    const modal = document.getElementById("logoutModalOverlay");
+    if (modal) modal.classList.add("show");
+}
+
+function closeLogoutModal() {
+    const modal = document.getElementById("logoutModalOverlay");
+    if (modal) modal.classList.remove("show");
 }
 
 function openMobileSidebar() {
@@ -78,6 +116,12 @@ function setupMobileSidebarToggle() {
             closeMobileSidebar();
         }
     });
+
+    document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+            closeMobileSidebar();
+        }
+    });
 }
 
 function setupSidebarCloseButton() {
@@ -86,6 +130,10 @@ function setupSidebarCloseButton() {
     if (closeBtn) {
         closeBtn.addEventListener("click", closeMobileSidebar);
     }
+
+    document.querySelectorAll(".sidebar-nav .nav-link").forEach(link => {
+        link.addEventListener("click", closeMobileSidebar);
+    });
 }
 
 async function logoutAdmin() {
@@ -163,18 +211,22 @@ function setActiveSidebarLink() {
 
 function getTime (){
     const now = new Date();
+    const currentDay = document.getElementById("currentDay");
+    const currentDate = document.getElementById("currentDate");
 
-    document.getElementById("currentDay").textContent = 
-        now.toLocaleDateString("en-US", {
+    if (currentDay) {
+        currentDay.textContent = now.toLocaleDateString("en-US", {
             weekday: "long"
-        })
-        
-    document.getElementById("currentDate").textContent = 
-        now.toLocaleDateString("en-US", {
+        });
+    }
+
+    if (currentDate) {
+        currentDate.textContent = now.toLocaleDateString("en-US", {
             year: "numeric",
             month: "long",
             day: "numeric"
-        })
+        });
+    }
 }
 
 loadAdmSideBar();
