@@ -20,7 +20,7 @@ class AuthController extends Controller
                 $this->redirect('/student/dashboard');
                 break;
             case 'adviser':
-                $this->redirect('/test/dashboard');
+                $this->redirect('/adviser/dashboard');
                 break;
             default:
                 $this->redirect('/');
@@ -71,7 +71,7 @@ class AuthController extends Controller
                 $this->redirect('/student/dashboard');
                 break;
             case 'adviser':
-                $this->redirect('/test/dashboard');
+                $this->redirect('/adviser/dashboard');
                 break;
             default:
                 $this->redirect('/');

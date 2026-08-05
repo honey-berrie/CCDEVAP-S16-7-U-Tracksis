@@ -447,6 +447,140 @@ CREATE TABLE consultations (
         return $consultations;
     }
 
+    // ─── Adviser Dashboard Methods ───────────────────────────────────────
+
+    public static function getAdviserGroups(int $adviserId): array
+    {
+        $stmt = static::db()->prepare(
+            "SELECT t.id, t.group_name, t.thesis_title, t.progress_status, t.status,
+                    t.defense_date, t.created_at,
+                    s.section_code,
+                    c.course_code
+             FROM teams t
+             LEFT JOIN sections s ON s.id = t.section_id
+             LEFT JOIN courses c ON c.id = s.course_id
+             WHERE t.adviser_id = ? AND t.status = 'active'
+             ORDER BY t.group_name ASC"
+        );
+        $stmt->execute([$adviserId]);
+        $groups = $stmt->fetchAll();
+
+        foreach ($groups as &$g) {
+            $g['member_count'] = static::getGroupMemberCount($g['id']);
+            $g['overall_progress'] = static::getGroupOverallProgress($g['id']);
+            $g['defense_date_formatted'] = $g['defense_date'] ? date('M j, Y', strtotime($g['defense_date'])) : null;
+        }
+        unset($g);
+
+        return $groups;
+    }
+
+    public static function getAdviserPendingReviews(int $adviserId): int
+    {
+        $stmt = static::db()->prepare(
+            "SELECT COUNT(*) FROM submissions s
+             JOIN teams t ON t.id = s.group_id
+             WHERE t.adviser_id = ? AND s.status = 'in-review'"
+        );
+        $stmt->execute([$adviserId]);
+        return (int) $stmt->fetchColumn();
+    }
+
+    public static function getAdviserUpcomingConsultations(int $adviserId): int
+    {
+        $stmt = static::db()->prepare(
+            "SELECT COUNT(*) FROM consultations c
+             WHERE c.recipient_id = ? AND c.status IN ('pending', 'approved')
+               AND c.proposed_schedule >= NOW()"
+        );
+        $stmt->execute([$adviserId]);
+        return (int) $stmt->fetchColumn();
+    }
+
+    public static function getAdviserUnreadAlerts(int $adviserId): int
+    {
+        // count unread announcements for the adviser
+        $stmt = static::db()->prepare(
+            "SELECT COUNT(*) FROM announcements a
+             WHERE a.sender_id != ?
+               AND NOT EXISTS (
+                   SELECT 1 FROM announcement_reads ar
+                   WHERE ar.announcement_id = a.id AND ar.user_id = ?
+               )"
+        );
+        $stmt->execute([$adviserId, $adviserId]);
+        return (int) $stmt->fetchColumn();
+    }
+
+    public static function getAdviserGroupProgress(int $adviserId): array
+    {
+        $groups = static::getAdviserGroups($adviserId);
+        $progress = [];
+
+        foreach ($groups as $g) {
+            $progress[] = [
+                'group_name' => $g['group_name'],
+                'progress' => $g['overall_progress'],
+            ];
+        }
+
+        return $progress;
+    }
+
+    public static function getAdviserRecentActivities(int $adviserId, int $limit = 5): array
+    {
+        $stmt = static::db()->prepare(
+            "SELECT a.id, a.group_id, a.user_id, a.type, a.description, a.created_at,
+                    u.firstname, u.lastname,
+                    t.group_name
+             FROM activities a
+             LEFT JOIN users u ON u.id = a.user_id
+             LEFT JOIN teams t ON t.id = a.group_id
+             WHERE t.adviser_id = ?
+             ORDER BY a.created_at DESC
+             LIMIT ?"
+        );
+        $stmt->execute([$adviserId, $limit]);
+        $activities = $stmt->fetchAll();
+
+        foreach ($activities as &$activity) {
+            $activity['actor'] = trim(($activity['firstname'] ?? '') . ' ' . ($activity['lastname'] ?? ''));
+            $activity['icon'] = Helpers::iconForType($activity['type']);
+            unset($activity['firstname'], $activity['lastname']);
+        }
+        unset($activity);
+
+        return $activities;
+    }
+
+    // ─── Helpers ──────────────────────────────────────────────────────────
+
+    private static function getGroupMemberCount(int $groupId): int
+    {
+        $stmt = static::db()->prepare(
+            "SELECT COUNT(*) FROM group_members WHERE group_id = ?"
+        );
+        $stmt->execute([$groupId]);
+        return (int) $stmt->fetchColumn();
+    }
+
+    private static function getGroupOverallProgress(int $groupId): int
+    {
+        $stmt = static::db()->prepare(
+            "SELECT progress FROM milestones WHERE group_id = ?"
+        );
+        $stmt->execute([$groupId]);
+        $rows = $stmt->fetchAll();
+        if (empty($rows)) {
+            return 0;
+        }
+        $sum = 0;
+        foreach ($rows as $r) {
+            $sum += (int) $r['progress'];
+        }
+        return (int) round($sum / count($rows));
+    }
+
     public static function createConsultationRequest(
         int $groupId,
         int $userId,

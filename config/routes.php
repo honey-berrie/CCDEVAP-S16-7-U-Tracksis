@@ -5,6 +5,7 @@
 use App\Controllers\AuthController;
 use App\Controllers\Test\DashboardController;
 use App\Controllers\Student\StudentDashboardController;
+use App\Controllers\Adviser\AdviserDashboardController;
 use App\Core\Router;
 
 $router = new Router();
@@ -33,6 +34,11 @@ $router->group('auth:student', function (Router $router) {
     $router->post('/student/consultations-request', [StudentDashboardController::class, 'requestConsultation']);
     $router->get('/student/announcements', [StudentDashboardController::class, 'announcements']);
     $router->post('/student/announcements-mark-read', [StudentDashboardController::class, 'markAnnouncementRead']);
+});
+
+// adviser routes
+$router->group('auth:adviser', function (Router $router) {
+    $router->get('/adviser/dashboard', [AdviserDashboardController::class, 'index']);
 });
 
 // Use the stripped URI set by index.php (handles subdirectory installations)
