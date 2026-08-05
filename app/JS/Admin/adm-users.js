@@ -65,7 +65,6 @@ function renderRoleCounts(counts) {
     if (!counts) return;
     document.getElementById("countStudent").textContent = `(${counts.student})`;
     document.getElementById("countAdviser").textContent = `(${counts.adviser})`;
-    document.getElementById("countCoordinator").textContent = `(${counts.coordinator})`;
     document.getElementById("countAdmin").textContent = `(${counts.admin})`;
 }
 

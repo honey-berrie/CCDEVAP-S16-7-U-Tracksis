@@ -13,9 +13,9 @@ class UserModel
 
     public function getPaginated(string $search, string $role, string $status, int $perPage, int $offset): array
     {
-        $allowedRoles = ['student', 'adviser', 'coordinator', 'admin'];
+        $allowedRoles = ['student', 'adviser', 'admin'];
 
-        $where = [];
+        $where = ["role != 'coordinator'"];
         $params = [];
         $types = "";
 
@@ -81,8 +81,8 @@ class UserModel
 
     public function getRoleCounts(): array
     {
-        $roleCounts = ["student" => 0, "adviser" => 0, "coordinator" => 0, "admin" => 0];
-        $rcResult = $this->conn->query("SELECT role, COUNT(*) c FROM users GROUP BY role");
+        $roleCounts = ["student" => 0, "adviser" => 0, "admin" => 0];
+        $rcResult = $this->conn->query("SELECT role, COUNT(*) c FROM users WHERE role != 'coordinator' GROUP BY role");
         while ($row = $rcResult->fetch_assoc()) {
             $roleCounts[$row['role']] = (int) $row['c'];
         }

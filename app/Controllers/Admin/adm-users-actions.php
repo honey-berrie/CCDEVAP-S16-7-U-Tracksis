@@ -43,7 +43,7 @@ switch ($action) {
         if ($firstname === "" || $lastname === "" || $email === "" || $password === "") {
             fail("First name, last name, email, and password are required.");
         }
-        if (!in_array($role, ['student', 'adviser', 'coordinator', 'admin'], true)) {
+        if (!in_array($role, ['student', 'adviser', 'admin'], true)) {
             fail("Invalid role.");
         }
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -75,7 +75,7 @@ switch ($action) {
         if ($id <= 0 || $firstname === "" || $lastname === "" || $email === "") {
             fail("Missing required fields.");
         }
-        if (!in_array($role, ['student', 'adviser', 'coordinator', 'admin'], true)) {
+        if (!in_array($role, ['student', 'adviser', 'admin'], true)) {
             fail("Invalid role.");
         }
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {

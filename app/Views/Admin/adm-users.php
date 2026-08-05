@@ -20,7 +20,7 @@ requireAdminAuth();
         <div class="page-header">
             <div>
                 <h1 class="page-title">User Management</h1>
-                <p class="page-subtitle">Create, edit, and manage student, adviser, coordinator, and admin accounts.</p>
+                <p class="page-subtitle">Create, edit, and manage student, adviser, and admin accounts.</p>
             </div>
             <div class="quick-actions">
                 <button type="button" class="btn-quick-action" id="openCreateUserModal">
@@ -36,7 +36,6 @@ requireAdminAuth();
                     <button type="button" class="filter-chip active" data-role="">All</button>
                     <button type="button" class="filter-chip" data-role="student">Students <span id="countStudent">(0)</span></button>
                     <button type="button" class="filter-chip" data-role="adviser">Advisers <span id="countAdviser">(0)</span></button>
-                    <button type="button" class="filter-chip" data-role="coordinator">Coordinators <span id="countCoordinator">(0)</span></button>
                     <button type="button" class="filter-chip" data-role="admin">Admins <span id="countAdmin">(0)</span></button>
                 </div>
                 <div class="toolbar-filters">
@@ -112,7 +111,6 @@ requireAdminAuth();
                         <select class="form-select-admin" id="userRole" required>
                             <option value="student">Student</option>
                             <option value="adviser">Adviser</option>
-                            <option value="coordinator">Coordinator</option>
                             <option value="admin">Admin</option>
                         </select>
                     </div>
