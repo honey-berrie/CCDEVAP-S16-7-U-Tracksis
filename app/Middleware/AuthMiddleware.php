@@ -29,6 +29,8 @@ class AuthMiddleware
         $_SESSION['user_name'] = $user['firstname'] . ' ' . $user['lastname'];
         $_SESSION['firstname'] = $user['firstname'];
         $_SESSION['lastname'] = $user['lastname'];
+
+        $_SESSION['last_activity'] = time();
     }
 
     // logout

@@ -22,6 +22,7 @@ class Helpers extends Model
             'in-review' => 'In Review',
             'approved' => 'Approved',
             'rejected' => 'Rejected',
+            'revision-requested' => 'Revision Requested',
         ][$status];
     }
 
@@ -58,6 +59,19 @@ class Helpers extends Model
             'consultation_approved' => 'calendar-check',
             'announcement_posted' => 'megaphone-fill'
         ][$type] ?? 'activity';
+    }
+
+    public static function getSubmissionDocumentType($documentType) {
+        return [
+            'title-proposal' => 'Title Proposal',
+            'chapter-1' => 'Chapter 1',
+            'chapter-2' => 'Chapter 2',
+            'chapter-3' => 'Chapter 3',
+            'chapter-4' => 'Chapter 4',
+            'chapter-5' => 'Chapter 5',
+            'final-thesis' => 'Final Thesis',
+            'revision' => 'Revision',
+        ][$documentType] ?? 'Unknown';
     }
 
 }
