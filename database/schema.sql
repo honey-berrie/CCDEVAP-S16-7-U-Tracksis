@@ -63,8 +63,8 @@ CREATE TABLE courses (
     id INT AUTO_INCREMENT PRIMARY KEY,
     course_code VARCHAR(20) NOT NULL UNIQUE, 
     course_name VARCHAR(100) NOT NULL,       
-    coordinator_id INT NULL,
-    CONSTRAINT fk_courses_coordinator FOREIGN KEY (coordinator_id) REFERENCES users(id) ON DELETE SET NULL
+    admin_id INT NULL,
+    CONSTRAINT fk_courses_admin FOREIGN KEY (coordinator_id) REFERENCES users(id) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE sections (
@@ -85,7 +85,7 @@ CREATE TABLE teams (
     abstract TEXT NULL,
     adviser_id INT NULL,
     section_id INT NOT NULL,                                                                           -- Merged from query.sql
-    approval_status ENUM('pending', 'approved', 'rejected', 'coordinator-created') NOT NULL DEFAULT 'pending', -- Merged from query.sql
+    approval_status ENUM('pending', 'approved', 'rejected', 'created') NOT NULL DEFAULT 'pending', -- Merged from query.sql
     progress_status ENUM('on track', 'falling behind') NOT NULL DEFAULT 'on track',                    -- Merged from query.sql
     status ENUM('active','archived') NOT NULL DEFAULT 'active',
     defense_date DATE NULL,
@@ -262,8 +262,8 @@ INSERT INTO system_settings (setting_key, setting_value) VALUES
 
 INSERT INTO users (role, firstname, lastname, email, password_hash, is_active, last_login_at, adviser_thesis_load, adviser_lecture_load, adviser_research_load) VALUES
 ('admin',       'Maria Corazon', 'Reyes',       'maria.reyes@dlsu.edu.ph',       '$2a$10$g86TLJk8OCTC6FUfmQ/kButsTfpCXqRHQbLreqM131F4qgF8qhKS2', 1, NOW() - INTERVAL 1 DAY, 0, 0, 0),
-('coordinator', 'Ramon',         'Villanueva',  'ramon.villanueva@dlsu.edu.ph',  '$2a$10$BQ48TEdpbZj4xzYoGdiwKe4EROyAfxUH1QV/q/qIZ.YnLTYLKhooO', 1, NOW() - INTERVAL 2 DAY, 0, 0, 0),
-('coordinator', 'Angelica',      'Bautista',    'angelica.bautista@dlsu.edu.ph','$2a$10$nwO2HVEbLFCAhnCh.Ls3PenmjBh6EmFuxuX9L1s/WGMm4cve9hLDS', 1, NOW() - INTERVAL 5 DAY, 0, 0, 0),
+('admin', 'Ramon',         'Villanueva',  'ramon.villanueva@dlsu.edu.ph',  '$2a$10$BQ48TEdpbZj4xzYoGdiwKe4EROyAfxUH1QV/q/qIZ.YnLTYLKhooO', 1, NOW() - INTERVAL 2 DAY, 0, 0, 0),
+('admin', 'Angelica',      'Bautista',    'angelica.bautista@dlsu.edu.ph','$2a$10$nwO2HVEbLFCAhnCh.Ls3PenmjBh6EmFuxuX9L1s/WGMm4cve9hLDS', 1, NOW() - INTERVAL 5 DAY, 0, 0, 0),
 ('adviser',     'Ferdinand',     'Santos',      'ferdinand.santos@dlsu.edu.ph', '$2a$10$0OnS.BkvfffaSvE575he/u15wKg1Mq17V1sfB1TNpK9BAd49B1/jq', 1, NOW() - INTERVAL 1 DAY, 3, 6, 2),
 ('adviser',     'Liza',          'Mendoza',     'liza.mendoza@dlsu.edu.ph',     '$2a$10$0OnS.BkvfffaSvE575he/u15wKg1Mq17V1sfB1TNpK9BAd49B1/jq', 1, NOW() - INTERVAL 3 DAY, 2, 9, 0),
 ('adviser',     'Antonio',       'Cruz',        'antonio.cruz@dlsu.edu.ph',     '$2a$10$0R8vYDgPLif3rHYvpo847OfdpZ9KJ.rXW1tA42y.c9nzErdqky75i', 1, NOW() - INTERVAL 7 DAY, 4, 3, 4),
@@ -343,14 +343,14 @@ INSERT INTO submissions (group_id, milestone_id, document_type, title, file_name
 
 -- Insert Demo Announcements (Using the unified course/group announcement schema)
 INSERT INTO announcements (sender_id, course_id, group_id, is_broadcast, is_pinned, title, message, created_at) VALUES
-(1, NULL, NULL, 1, 0, 'Final Defense Schedule', 'All groups with an approved final chapter must confirm their defense slot with the coordinator by the end of the month.', NOW() - INTERVAL 3 DAY),
+(1, NULL, NULL, 1, 0, 'Final Defense Schedule', 'All groups with an approved final chapter must confirm their defense slot with the assigned adviser by the end of the month.', NOW() - INTERVAL 3 DAY),
 (1, NULL, NULL, 1, 0, 'Submission Deadline Reminder', 'Chapter 3 submissions are due within two weeks. Late submissions will need adviser approval for an extension.', NOW() - INTERVAL 1 DAY),
 (1, NULL, NULL, 1, 0, 'Portal Maintenance Notice', 'The submission portal will be briefly unavailable for maintenance next weekend. Draft content will not be affected.', NOW() - INTERVAL 7 DAY),
 (2, 1, NULL, 0, 1, 'Thesis 1 Defense Guidelines', 'Please check the uploaded PDF for details on the presentation format.', NOW() - INTERVAL 2 DAY);
 
 
 INSERT INTO feedback (group_id, submission_id, given_by, author_role, message, created_at) VALUES
-(1, 3, 4, 'adviser', 'Please expand the related studies section and fix citations.', NOW() - INTERVAL 14 DAY)
+(1, 3, 4, 'adviser', 'Please expand the related studies section and fix citations.', NOW() - INTERVAL 14 DAY);
 
 INSERT INTO activities (group_id, user_id, type, description, created_at) VALUES
 (1, 9, 'submission', 'Submitted Chapter 2 for review.', NOW() - INTERVAL 6 DAY),
