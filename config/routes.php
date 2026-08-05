@@ -17,10 +17,21 @@ $router->get('/login', [AuthController::class, 'showLoginForm']);
 $router->post('/register', [AuthController::class, 'register']);
 $router->post('/login', [AuthController::class, 'login']);
 $router->get('/logout', [AuthController::class, 'logout']);
+$router->get('/timeout', [AuthController::class, 'timeout']);
 
 // private routes
 $router->group('auth:student', function (Router $router) {
     $router->get('/student/dashboard', [StudentDashboardController::class, 'index']);
+    $router->get('/student/group-profile', [StudentDashboardController::class, 'groupProfile']);
+    $router->post('/student/group-profile-update', [StudentDashboardController::class, 'updateGroupProfile']);
+    $router->get('/student/milestones', [StudentDashboardController::class, 'milestones']);
+    $router->get('/student/submissions', [StudentDashboardController::class, 'submissions']);
+    $router->post('/student/submissions-upload', [StudentDashboardController::class, 'uploadSubmission']);
+    $router->get('/student/submissions-file', [StudentDashboardController::class, 'serveSubmissionFile']);
+    $router->get('/student/feedback', [StudentDashboardController::class, 'feedback']);
+
+    $router->get('/student/announcements', [StudentDashboardController::class, 'announcements']);
+    $router->post('/student/announcements-mark-read', [StudentDashboardController::class, 'markAnnouncementRead']);
 });
 
 // Use the stripped URI set by index.php (handles subdirectory installations)

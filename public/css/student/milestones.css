@@ -1,0 +1,121 @@
+/* page eyebrow label */
+.page-eyebrow {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--text-light);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin: 0 0 0.25rem 0;
+}
+
+/* timeline item */
+.timeline-item {
+  display: grid;
+  grid-template-columns: 56px 1fr auto;
+  gap: 1rem;
+  align-items: center;
+  padding: 1rem 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.timeline-item:last-child {
+  border-bottom: none;
+}
+
+.timeline-item:first-child {
+  padding-top: 0.25rem;
+}
+
+/* number circle */
+.timeline-number {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1.5px solid var(--text);
+  background: var(--bg-box);
+  color: var(--text);
+  font-size: 1rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* body section (chapter name + date + progress) */
+.timeline-body {
+  min-width: 0;
+}
+
+.timeline-name {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text);
+  margin: 0 0 0.15rem 0;
+  line-height: 1.3;
+}
+
+.timeline-name span {
+  color: var(--text-light);
+  font-weight: 400;
+}
+
+.timeline-date {
+  font-size: 0.75rem;
+  color: var(--text-light);
+  margin: 0 0 0.5rem 0;
+  line-height: 1.3;
+}
+
+.timeline-progress {
+  height: 6px;
+  margin-top: 0;
+  background: #e5e7eb;
+  max-width: 100%;
+}
+
+/* side section (badge + details link) */
+.timeline-side {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.timeline-details {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text);
+  text-decoration: none;
+  transition: color 0.2s;
+  white-space: nowrap;
+}
+
+.timeline-details:hover {
+  color: var(--navy-accent);
+}
+
+/* responsive */
+@media (max-width: 575.98px) {
+  .timeline-item {
+    grid-template-columns: 40px 1fr;
+    gap: 0.75rem;
+    padding: 0.85rem 0.25rem;
+  }
+
+  .timeline-number {
+    width: 32px;
+    height: 32px;
+    font-size: 0.9rem;
+  }
+
+  .timeline-side {
+    grid-column: 2 / -1;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-top: 0.25rem;
+  }
+}

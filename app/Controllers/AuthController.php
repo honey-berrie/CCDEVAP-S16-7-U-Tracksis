@@ -138,4 +138,10 @@ class AuthController extends Controller
         AuthMiddleware::logout();
         $this->redirect('/login');
     }
+
+    public function timeout(): void
+    {
+        AuthMiddleware::logout();
+        $this->redirect('/login?timeout=1');
+    }
 }

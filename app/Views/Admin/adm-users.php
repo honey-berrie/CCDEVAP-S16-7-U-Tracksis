@@ -135,6 +135,41 @@ requireAdminAuth();
         </div>
     </div>
 
+    <!-- User Offcanvas (Bootstrap) -->
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="userOffcanvas" aria-labelledby="userOffcanvasLabel">
+        <div class="offcanvas-header">
+            <h5 id="userOffcanvasLabel"><span id="drawerUserName">User</span></h5>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <div class="d-flex justify-content-end mb-2">
+                <!-- message button removed for admin view -->
+            </div>
+
+            <div id="drawerKpis" class="kpi-row">
+                <!-- KPI cards inserted here -->
+            </div>
+
+            <div id="drawerRoleDetails" class="mt-3">
+                <!-- role-specific details inserted here -->
+            </div>
+
+            <h5 class="mt-3">Recent Activity</h5>
+            <ul id="drawerRecentActivity" class="recent-activity">
+                <li class="empty-state">No recent activity.</li>
+            </ul>
+        </div>
+    </div>
+
+    <style>
+    .kpi-row { display:flex; gap:8px; flex-wrap:wrap; }
+    .kpi-card { flex:1 1 120px; background:#f8f9fa; padding:10px; border-radius:6px; text-align:center; }
+    .recent-activity { list-style:none; padding:0; margin:0; }
+    .recent-activity li { padding:8px 0; border-bottom:1px solid #f1f1f1; }
+    .link-button { background:none; border:0; color:#0d6efd; cursor:pointer; padding:0; font:inherit; }
+    </style>
+
+    <script src="../../../JS/bootstrap.bundle.min.js"></script>
     <script src="../../JS/Admin/adm-global.js"></script>
     <script src="../../JS/Admin/adm-users.js"></script>
 </body>
