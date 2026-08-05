@@ -13,6 +13,7 @@ function loadAdmSideBar() {
             setupThemeToggle();
             setActiveSidebarLink();
             getTime();
+            setupSidebarCloseButton();
         });
 }
 
@@ -23,18 +24,68 @@ function renderAdminTopBar() {
     const topBar = document.createElement("div");
     topBar.className = "top-bar";
     topBar.innerHTML = `
+        <button class="mobile-menu-btn" type="button" id="mobileMenuBtn" aria-label="Open menu">
+            <img src="../../../assets/icons/list.svg" alt="" class="bi">
+        </button>
         <div class="topbar-actions">
             <button class="btn-logout" type="button" id="adminLogoutBtn">
                 <img src="../../../assets/icons/box-arrow-left.svg" alt="" class="bi">
                 <span>Logout</span>
             </button>
-            <img src="../../../assets/images/logo.png" alt="Profile" class="topbar-avatar">
         </div>
     `;
 
     mainContainer.prepend(topBar);
 
     document.getElementById("adminLogoutBtn").addEventListener("click", logoutAdmin);
+    setupMobileSidebarToggle();
+}
+
+function openMobileSidebar() {
+    const sidebar = document.querySelector(".sidebar");
+    const overlay = document.getElementById("sidebarOverlay");
+
+    if (!sidebar || !overlay) return;
+
+    sidebar.classList.add("show");
+    overlay.classList.add("show");
+    document.body.classList.add("sidebar-open");
+}
+
+function closeMobileSidebar() {
+    const sidebar = document.querySelector(".sidebar");
+    const overlay = document.getElementById("sidebarOverlay");
+
+    if (sidebar) sidebar.classList.remove("show");
+    if (overlay) overlay.classList.remove("show");
+    document.body.classList.remove("sidebar-open");
+}
+
+function setupMobileSidebarToggle() {
+    const menuBtn = document.getElementById("mobileMenuBtn");
+    const overlay = document.getElementById("sidebarOverlay");
+
+    if (menuBtn) {
+        menuBtn.addEventListener("click", openMobileSidebar);
+    }
+
+    if (overlay) {
+        overlay.addEventListener("click", closeMobileSidebar);
+    }
+
+    window.addEventListener("resize", () => {
+        if (window.innerWidth > 991) {
+            closeMobileSidebar();
+        }
+    });
+}
+
+function setupSidebarCloseButton() {
+    const closeBtn = document.getElementById("sidebarCloseBtn");
+
+    if (closeBtn) {
+        closeBtn.addEventListener("click", closeMobileSidebar);
+    }
 }
 
 async function logoutAdmin() {

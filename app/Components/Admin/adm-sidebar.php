@@ -5,6 +5,9 @@
             <p class="sidebar-title">U-Tracksis</p>
             <p class="sidebar-subtitle">ADMIN</p>
         </div>
+        <button class="sidebar-close-btn" id="sidebarCloseBtn" type="button" aria-label="Close menu">
+          <img src="../../../assets/icons/x-lg.svg" alt="" class="bi">
+        </button>
     </div>
 
     <nav class="sidebar-nav">

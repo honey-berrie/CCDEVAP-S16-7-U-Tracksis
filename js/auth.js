@@ -63,13 +63,10 @@ async function login() {
     // redirect based on role
     const role = data.user.role;
     if (role === "admin")
-      window.location.href = "../../adminpages/adm-dashboard.php";
+      window.location.href = "../../app/views/Admin/adm-dashboard.php";
     else if (role === "adviser")
       window.location.href =
         "../../phase2-page-based-adviser/adviserhtml/thesis-adviser-overview.php";
-    else if (role === "coordinator")
-      window.location.href =
-        "../../coordinator/coordinator-html/coordinator-overview.php";
     else window.location.href = "../../pages/student/dashboard.html";
   } catch (err) {
     alert("Network error: " + err.message);

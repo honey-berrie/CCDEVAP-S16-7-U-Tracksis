@@ -77,6 +77,28 @@ body {
   margin-bottom: 1.25rem;
 }
 
+.mobile-menu-btn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--bg-box);
+  color: var(--text);
+  cursor: pointer;
+}
+
+.mobile-menu-btn .bi {
+  width: 20px;
+  height: 20px;
+}
+
+body.sidebar-open {
+  overflow: hidden;
+}
+
 .topbar-actions {
   display: flex;
   align-items: center;
@@ -112,16 +134,6 @@ body {
 
 .btn-logout:hover .bi {
   filter: brightness(0) invert(1);
-}
-
-.topbar-avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  object-fit: contain;
-  padding: 4px;
-  border: 1px solid var(--border);
-  background: var(--bg-box);
 }
 
 /* --- Page header ---- */

@@ -27,6 +27,7 @@ requireAdminAuth();
                 <div id="partDay"></div>
                 <div id="namePerson"></div>
             </div>
+            
             <div class="quick-actions" id="quickActions">
                 <a href="adm-announcements.php" class="btn-quick-action">
                     <img src="../../../assets/icons/megaphone-fill.svg" alt="" class="nav-icon">
