@@ -934,9 +934,14 @@ CREATE TABLE consultations (
                     c.proposed_schedule, c.consultation_end, c.meeting_link,
                     c.status, c.adviser_notes, c.reschedule_reason,
                     c.created_at, c.updated_at,
-                    r.firstname AS recipient_firstname, r.lastname AS recipient_lastname
+                    r.firstname AS recipient_firstname, r.lastname AS recipient_lastname,
+                    r.email AS recipient_email,
+                    u.firstname AS requester_firstname, u.lastname AS requester_lastname,
+                    t.group_name
             FROM consultations c
             LEFT JOIN users r ON r.id = c.recipient_id
+            LEFT JOIN users u ON u.id = c.user_id
+            LEFT JOIN teams t ON t.id = c.group_id
             WHERE c.id = ?"
         );
         $stmt->execute([$id]);
@@ -951,7 +956,55 @@ CREATE TABLE consultations (
         $c['time_formatted'] = $c['proposed_schedule'] ? date('g:i A', strtotime($c['proposed_schedule'])) : 'Unscheduled';
         $c['status_label'] = Helpers::statusLabel($c['status']);
         $c['status_class'] = Helpers::statusClass($c['status']);
-        unset($c['recipient_firstname'], $c['recipient_lastname']);
+
+        // Send email notification to the recipient
+        $recipientEmail = $c['recipient_email'] ?? null;
+        $recipientName = $c['recipient_name'];
+        $requesterName = trim(($c['requester_firstname'] ?? '') . ' ' . ($c['requester_lastname'] ?? ''));
+        $groupName = $c['group_name'] ?? 'Unknown Group';
+        $scheduleFormatted = $c['proposed_schedule']
+            ? date('F j, Y \a\t g:i A', strtotime($c['proposed_schedule']))
+            : 'Not specified';
+
+        if ($recipientEmail && filter_var($recipientEmail, FILTER_VALIDATE_EMAIL)) {
+            $mailerPath = __DIR__ . '/../../api/mailer.php';
+            if (file_exists($mailerPath)) {
+                require_once $mailerPath;
+
+                $subject = "New Consultation Request from {$groupName}";
+                $bodyHtml = "
+                    <div style='font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 8px;'>
+                        <h2 style='color: #2c3e50;'>New Consultation Request</h2>
+                        <p>Hello <strong>{$recipientName}</strong>,</p>
+                        <p>You have received a new consultation request from <strong>{$requesterName}</strong> of <strong>{$groupName}</strong>.</p>
+                        <table style='width: 100%; border-collapse: collapse; margin: 20px 0;'>
+                            <tr>
+                                <td style='padding: 10px; border: 1px solid #e0e0e0; background: #f8f9fa; font-weight: bold; width: 150px;'>Topic</td>
+                                <td style='padding: 10px; border: 1px solid #e0e0e0;'>{$topic}</td>
+                            </tr>
+                            <tr>
+                                <td style='padding: 10px; border: 1px solid #e0e0e0; background: #f8f9fa; font-weight: bold;'>Agenda</td>
+                                <td style='padding: 10px; border: 1px solid #e0e0e0;'>" . ($agenda ? nl2br(htmlspecialchars($agenda)) : 'No agenda provided') . "</td>
+                            </tr>
+                            <tr>
+                                <td style='padding: 10px; border: 1px solid #e0e0e0; background: #f8f9fa; font-weight: bold;'>Proposed Schedule</td>
+                                <td style='padding: 10px; border: 1px solid #e0e0e0;'>{$scheduleFormatted}</td>
+                            </tr>
+                            <tr>
+                                <td style='padding: 10px; border: 1px solid #e0e0e0; background: #f8f9fa; font-weight: bold;'>Group</td>
+                                <td style='padding: 10px; border: 1px solid #e0e0e0;'>{$groupName}</td>
+                            </tr>
+                        </table>
+                        <p style='color: #7f8c8d; font-size: 14px;'>Please log in to U-Tracksis to review and respond to this consultation request.</p>
+                        <p style='color: #7f8c8d; font-size: 12px; margin-top: 30px;'>This is an automated notification from U-Tracksis. Please do not reply to this email.</p>
+                    </div>
+                ";
+
+                sendEmail($recipientEmail, $recipientName, $subject, $bodyHtml);
+            }
+        }
+
+        unset($c['recipient_firstname'], $c['recipient_lastname'], $c['recipient_email'], $c['requester_firstname'], $c['requester_lastname'], $c['group_name']);
 
         return $c;
     }
