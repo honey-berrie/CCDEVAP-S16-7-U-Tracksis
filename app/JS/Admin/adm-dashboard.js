@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-    fetch("../../Controllers/Admin/adm-dashboard-data.php")
+    fetch("<?= BASE_URL ?>/Controllers/Admin/adm-dashboard-data.php")
         .then(res => {
             if (!res.ok) throw new Error("Failed to load dashboard data.");
             return res.json();

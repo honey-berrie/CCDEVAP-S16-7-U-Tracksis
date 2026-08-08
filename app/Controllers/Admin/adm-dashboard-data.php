@@ -1,9 +1,9 @@
 <?php
 
-require_once __DIR__ . "/../../Configuration/Admin/session.php";
+require_once __DIR__ . "<?= BASE_URL ?>/Configuration/Admin/session.php";
 requireAdminApi();
 
-require_once __DIR__ . "/../../Models/Admin/adm-dashboard-model.php";
+require_once __DIR__ . "<?= BASE_URL ?>/Models/Admin/adm-dashboard-model.php";
 
 use App\Models\Admin\DashboardModel;
 
