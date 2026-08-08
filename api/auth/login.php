@@ -28,6 +28,12 @@ $pdo->prepare("UPDATE users SET last_login_at = NOW() WHERE id = ?")
 
 unset($user['password_hash']);
 $_SESSION['user'] = $user;
+$_SESSION['user_id'] = $user['id'];
+$_SESSION['user_role'] = $user['role'];
+$_SESSION['user_name'] = $user['firstname'] . ' ' . $user['lastname'];
+$_SESSION['firstname'] = $user['firstname'];
+$_SESSION['lastname'] = $user['lastname'];
+$_SESSION['last_activity'] = time();
 
 json(['message' => 'Logged in', 'user' => $user]);
 
