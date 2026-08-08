@@ -14,7 +14,7 @@ class AuthController extends Controller
     {
         switch ($role) {
             case 'admin':
-                $this->redirect('/test/dashboard');
+                $this->redirect('/admin/adm-dashboard');
                 break;
             case 'student':
                 $this->redirect('/student/dashboard');
