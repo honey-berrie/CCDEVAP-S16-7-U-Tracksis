@@ -385,4 +385,41 @@ class StudentDashboardController extends Controller
             $this->json(['error' => 'Failed to send the consultation request. Please try again.'], 500);
         }
     }
+
+    public function announcements(): void
+    {
+        $userName = $_SESSION['user_name'] ?? 'Username failed to retrieve!';
+        $firstname = $_SESSION['firstname'] ?? '<Failed to retrieve>';
+        $lastname = $_SESSION['lastname'] ?? '<Failed to retrieve>';
+
+        $announcements = User::getGlobalAnnouncements($_SESSION['user_id']);
+
+        $this->renderPlain('student/announcements', [
+            'userName' => $userName,
+            'firstname' => $firstname,
+            'lastname' => $lastname,
+            'announcements' => $announcements,
+        ]);
+    }
+
+    public function markAnnouncementRead(): void
+    {
+        $userId = $_SESSION['user_id'] ?? null;
+
+        if (!$userId) {
+            $this->json(['error' => 'Not logged in'], 401);
+            return;
+        }
+
+        $input = json_decode(file_get_contents('php://input'), true) ?? [];
+        $announcementId = (int) ($input['id'] ?? 0);
+
+        if (!$announcementId) {
+            $this->json(['error' => 'Missing announcement id'], 422);
+            return;
+        }
+
+        $ok = User::markAnnouncementAsRead($userId, $announcementId);
+        $this->json(['success' => $ok]);
+    }
 }

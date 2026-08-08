@@ -33,6 +33,8 @@ $router->group('auth:student', function (Router $router) {
     $router->get('/student/feedback', [StudentDashboardController::class, 'feedback']);
     $router->get('/student/consultations', [StudentDashboardController::class, 'consultations']);
     $router->post('/student/consultations-request', [StudentDashboardController::class, 'requestConsultation']);
+    $router->get('/student/announcements', [StudentDashboardController::class, 'announcements']);
+    $router->post('/student/announcements-mark-read', [StudentDashboardController::class, 'markAnnouncementRead']);
 });
 
 // adviser routes
