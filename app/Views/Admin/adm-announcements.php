@@ -71,6 +71,7 @@ requireAdminAuth();
         </div>
     </div>
 
+    <script>window.BASE_URL = "<?= BASE_URL ?>";</script>
     <script src="<?= BASE_URL ?>/js/Admin/adm-global.js"></script>
     <script src="<?= BASE_URL ?>/js/Admin/adm-announcements.js"></script>
 </body>

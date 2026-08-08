@@ -18,6 +18,7 @@ $router->get('/login', [AuthController::class, 'showLoginForm']);
 $router->post('/register', [AuthController::class, 'register']);
 $router->post('/login', [AuthController::class, 'login']);
 $router->get('/logout', [AuthController::class, 'logout']);
+$router->post('/logout', [AuthController::class, 'logout']);;
 $router->get('/timeout', [AuthController::class, 'timeout']);
 
 // private routes

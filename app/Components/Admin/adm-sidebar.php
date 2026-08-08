@@ -11,39 +11,39 @@
     </div>
 
     <nav class="sidebar-nav">
-        <a href="adm-dashboard.php" class="nav-link">
+        <a href="<?= BASE_URL ?>/admin/adm-dashboard" class="nav-link">
         <img src="<?= BASE_URL ?>/assets/icons/grid-1x2-fill.svg" alt="" class="nav-icon">
         Dashboard
         </a>
-        <a href="adm-users.php" class="nav-link">
+        <a href="<?= BASE_URL ?>/admin/adm-users" class="nav-link">
         <img src="<?= BASE_URL ?>/assets/icons/people-fill.svg" alt="" class="nav-icon">
         User Management
         </a>
-        <a href="adm-analytics.php" class="nav-link">
+        <a href="<?= BASE_URL ?>/admin/adm-analytics" class="nav-link">
         <img src="<?= BASE_URL ?>/assets/icons/bar-chart-fill.svg" alt="" class="nav-icon">
         Analytics & Reports
         </a>
-        <a href="adm-records.php" class="nav-link">
+        <a href="<?= BASE_URL ?>/admin/adm-records" class="nav-link">
         <img src="<?= BASE_URL ?>/assets/icons/card-text.svg" alt="" class="nav-icon">
         Thesis Records
         </a>
-        <a href="adm-files.php" class="nav-link">
+        <a href="<?= BASE_URL ?>/admin/adm-files" class="nav-link">
         <img src="<?= BASE_URL ?>/assets/icons/file-earmark-text-fill.svg" alt="" class="nav-icon">
         Uploaded Files
         </a>
-        <a href="adm-feedback.php" class="nav-link">
+        <a href="<?= BASE_URL ?>/admin/adm-feedback" class="nav-link">
         <img src="<?= BASE_URL ?>/assets/icons/chat-left-text-fill.svg" alt="" class="nav-icon">
         Feedback History
         </a>
-        <a href="adm-archive.php" class="nav-link">
+        <a href="<?= BASE_URL ?>/admin/adm-archive" class="nav-link">
         <img src="<?= BASE_URL ?>/assets/icons/archive-fill.svg" alt="" class="nav-icon">
         Archive
         </a>
-        <a href="adm-announcements.php" class="nav-link">
+        <a href="<?= BASE_URL ?>/admin/adm-announcements" class="nav-link">
         <img src="<?= BASE_URL ?>/assets/icons/megaphone-fill.svg" alt="" class="nav-icon">
         Announcements
         </a>
-        <a href="adm-settings.php" class="nav-link">
+        <a href="<?= BASE_URL ?>/admin/adm-settings" class="nav-link">
         <img src="<?= BASE_URL ?>/assets/icons/sliders.svg" alt="" class="nav-icon">
         Settings
         </a>

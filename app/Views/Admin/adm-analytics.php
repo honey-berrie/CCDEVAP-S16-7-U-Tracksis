@@ -89,6 +89,7 @@ requireAdminAuth();
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>window.BASE_URL = "<?= BASE_URL ?>";</script>
     <script src="<?= BASE_URL ?>/js/Admin/adm-global.js"></script>
     <script src="<?= BASE_URL ?>/js/Admin/adm-analytics.js"></script>
 </body>

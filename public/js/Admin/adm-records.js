@@ -284,7 +284,7 @@ function saveTeam() {
     formData.append("defense_date", document.getElementById("teamDefenseDate").value);
     memberIds.forEach(id => formData.append("member_ids[]", id));
 
-    fetch("../../Controllers/Admin/adm-users-actions.php", { method: "POST", body: formData })
+    fetch("/admin/data/records-actions", { method: "POST", body: formData })
         .then(res => res.json())
         .then(data => {
             if (!data.success) {

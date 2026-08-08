@@ -170,6 +170,7 @@ requireAdminAuth();
     </style>
 
     <script src="<?= BASE_URL ?>/js/bootstrap.bundle.min.js"></script>
+    <script>window.BASE_URL = "<?= BASE_URL ?>";</script>
     <script src="<?= BASE_URL ?>/js/Admin/adm-global.js"></script>
     <script src="<?= BASE_URL ?>/js/Admin/adm-users.js"></script>
 </body>
