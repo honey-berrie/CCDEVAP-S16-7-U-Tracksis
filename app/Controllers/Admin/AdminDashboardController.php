@@ -3,6 +3,7 @@
 namespace App\Controllers\Admin;
 
 use App\Core\Controller;
+use App\Models\Team;
 
 class AdminDashboardController extends Controller
 {
@@ -124,5 +125,41 @@ class AdminDashboardController extends Controller
     public function settingsActions(): void
     {
         require __DIR__ . '/adm-settings-actions.php';
+    }
+
+    public function serveSubmissionFile(): void
+    {
+        $id = (int) ($_GET['id'] ?? 0);
+        $download = !empty($_GET['download']);
+
+        if (!$id) {
+            http_response_code(422);
+            echo 'Missing file ID';
+            return;
+        }
+
+        $file = Team::getSubmissionFile($id);
+
+        if (!$file) {
+            http_response_code(404);
+            echo 'File not found';
+            return;
+        }
+
+        $path = __DIR__ . '/../../../uploads/' . $file['file_path'];
+        if (!file_exists($path)) {
+            http_response_code(404);
+            echo 'File missing on disk';
+            return;
+        }
+
+        $disposition = $download ? 'attachment' : 'inline';
+
+        header('Content-Type: ' . ($file['mime_type'] ?: 'application/pdf'));
+        header('Content-Disposition: ' . $disposition . '; filename="' . basename($file['file_name']) . '"');
+        header('Content-Length: ' . filesize($path));
+        header('Cache-Control: private, max-age=3600');
+        readfile($path);
+        exit;
     }
 }

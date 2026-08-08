@@ -64,8 +64,8 @@ function renderFilesTable(files) {
             <td>${escapeHtml(f.adviser || "--")}</td>
             <td>${formatDate(f.uploadedAt)}</td>
             <td>
-                <a class="btn-secondary-admin" href="../../../api/submissions_download.php?id=${f.id}" target="_blank" rel="noopener">View</a>
-                <a class="btn-primary-admin" href="../../../api/submissions_download.php?id=${f.id}&download=1">Download</a>
+                <a class="btn-secondary-admin" href="/admin/data/files-download?id=${f.id}" target="_blank" rel="noopener">View</a>
+                <a class="btn-primary-admin" href="/admin/data/files-download?id=${f.id}&download=1">Download</a>
             </td>
         </tr>
     `).join("");

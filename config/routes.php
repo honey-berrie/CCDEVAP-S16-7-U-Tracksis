@@ -84,6 +84,7 @@ $router->group('auth:admin', function (Router $router) {
     $router->get('/admin/data/feedback', [AdminDashboardController::class, 'feedbackData']);
     $router->get('/admin/data/files', [AdminDashboardController::class, 'filesData']);
     $router->get('/admin/data/settings', [AdminDashboardController::class, 'settingsData']);
+    $router->get('/admin/data/files-download', [AdminDashboardController::class, 'serveSubmissionFile']);
     $router->post('/admin/data/settings-actions', [AdminDashboardController::class, 'settingsActions']);
 });
 
