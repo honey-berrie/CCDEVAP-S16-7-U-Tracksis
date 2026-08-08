@@ -41,7 +41,7 @@ function isAdminLoggedIn(): bool
 function requireAdminAuth(): void
 {
     if (!isAdminLoggedIn()) {
-        header("Location: ../views/Admin/adm-dashboard.php");
+        header("Location: /admin/adm-dashboard");
         exit;
     }
 
