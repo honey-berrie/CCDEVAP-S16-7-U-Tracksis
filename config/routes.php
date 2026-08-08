@@ -66,6 +66,22 @@ $router->group('auth:admin', function (Router $router) {
 
     $router->get('/admin/adm-settings', [AdminDashboardController::class, 'settings']);
 
+    $router->get('/admin/component/sidebar', [AdminDashboardController::class, 'sidebarComponent']);
+
+    $router->get('/admin/data/dashboard', [AdminDashboardController::class, 'dashboardData']);
+    $router->get('/admin/data/users', [AdminDashboardController::class, 'usersData']);
+    $router->post('/admin/data/users-actions', [AdminDashboardController::class, 'usersActions']);
+    $router->get('/admin/data/user-stats', [AdminDashboardController::class, 'userStatsData']);
+    $router->get('/admin/data/records', [AdminDashboardController::class, 'recordsData']);
+    $router->get('/admin/data/announcements', [AdminDashboardController::class, 'announcementsData']);
+    $router->post('/admin/data/announcements-actions', [AdminDashboardController::class, 'announcementsActions']);
+    $router->get('/admin/data/archive', [AdminDashboardController::class, 'archiveData']);
+    $router->post('/admin/data/archive-actions', [AdminDashboardController::class, 'archiveActions']);
+    $router->get('/admin/data/analytics', [AdminDashboardController::class, 'analyticsData']);
+    $router->get('/admin/data/feedback', [AdminDashboardController::class, 'feedbackData']);
+    $router->get('/admin/data/files', [AdminDashboardController::class, 'filesData']);
+    $router->get('/admin/data/settings', [AdminDashboardController::class, 'settingsData']);
+    $router->post('/admin/data/settings-actions', [AdminDashboardController::class, 'settingsActions']);
 });
 
 // Use the stripped URI set by index.php (handles subdirectory installations)

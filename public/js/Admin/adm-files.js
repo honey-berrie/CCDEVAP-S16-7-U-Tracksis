@@ -34,7 +34,7 @@ function loadFiles() {
         perPage: filesState.perPage,
     });
 
-    fetch(`../../Controllers/Admin/adm-files-data.php?${params.toString()}`)
+    fetch(`/admin/data/files?${params.toString()}`)
         .then(res => res.json())
         .then(data => {
             renderFilesTable(data.files);

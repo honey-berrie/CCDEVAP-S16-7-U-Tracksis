@@ -50,4 +50,79 @@ class AdminDashboardController extends Controller
     {
         $this->renderPlain('Admin/adm-settings');
     }
+
+    public function sidebarComponent(): void
+    {
+        require __DIR__ . '/../../Components/Admin/adm-sidebar.php';
+    }
+
+    public function dashboardData(): void
+    {
+        require __DIR__ . '/adm-dashboard-data.php';
+    }
+
+    public function usersData(): void
+    {
+        require __DIR__ . '/adm-users-data.php';
+    }
+
+    public function usersActions(): void
+    {
+        require __DIR__ . '/adm-users-actions.php';
+    }
+
+    public function userStatsData(): void
+    {
+        require __DIR__ . '/adm-user-stats.php';
+    }
+
+    public function recordsData(): void
+    {
+        require __DIR__ . '/adm-records-data.php';
+    }
+
+    public function announcementsData(): void
+    {
+        require __DIR__ . '/adm-announcements-data.php';
+    }
+
+    public function announcementsActions(): void
+    {
+        require __DIR__ . '/adm-announcements-actions.php';
+    }
+
+    public function archiveData(): void
+    {
+        require __DIR__ . '/adm-archive-data.php';
+    }
+
+    public function archiveActions(): void
+    {
+        require __DIR__ . '/adm-archive-actions.php';
+    }
+
+    public function analyticsData(): void
+    {
+        require __DIR__ . '/adm-analytics-data.php';
+    }
+
+    public function feedbackData(): void
+    {
+        require __DIR__ . '/adm-feedback-data.php';
+    }
+
+    public function filesData(): void
+    {
+        require __DIR__ . '/adm-files-data.php';
+    }
+
+    public function settingsData(): void
+    {
+        require __DIR__ . '/adm-settings-data.php';
+    }
+
+    public function settingsActions(): void
+    {
+        require __DIR__ . '/adm-settings-actions.php';
+    }
 }

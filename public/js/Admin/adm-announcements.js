@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function loadAnnouncements() {
-    fetch("../../Controllers/Admin/adm-announcements-data.php")
+    fetch("/admin/data/announcements")
         .then(res => res.json())
         .then(data => {
             renderList(data.announcements);
@@ -69,7 +69,7 @@ function deleteAnnouncement(id) {
     formData.append("action", "delete");
     formData.append("id", id);
 
-    fetch("../../Controllers/Admin/adm-announcements-actions.php", { method: "POST", body: formData })
+    fetch("/admin/data/announcements-actions", { method: "POST", body: formData })
         .then(res => res.json())
         .then(data => {
             if (!data.success) {
@@ -104,7 +104,7 @@ function saveAnnouncement() {
     formData.append("title", title);
     formData.append("message", message);
 
-    fetch("../../Controllers/Admin/adm-announcements-actions.php", { method: "POST", body: formData })
+    fetch("/admin/data/announcements-actions", { method: "POST", body: formData })
         .then(res => res.json())
         .then(data => {
             if (!data.success) {

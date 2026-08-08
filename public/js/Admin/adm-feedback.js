@@ -33,7 +33,7 @@ function loadFeedback() {
         perPage: feedbackState.perPage,
     });
 
-    fetch(`../../Controllers/Admin/adm-feedback-data.php?${params.toString()}`)
+    fetch(`/admin/data/feedback?${params.toString()}`)
         .then(res => res.json())
         .then(data => {
             renderFeedbackTable(data.feedback);

@@ -21,7 +21,7 @@ function loadUsers() {
     perPage: usersState.perPage,
   });
 
-  fetch(`../../Controllers/Admin/adm-users-data.php?${params.toString()}`)
+  fetch(`/admin/data/users?${params.toString()}`)
     .then((res) => res.json())
     .then((data) => {
       renderUsersTable(data.users);
@@ -207,7 +207,7 @@ function saveUser() {
     formData.append("password", password);
   }
 
-  fetch("../../Controllers/Admin/adm-users-actions.php", {
+  fetch("/admin/data/users-actions", {
     method: "POST",
     body: formData,
   })
@@ -235,7 +235,7 @@ function deleteUser(id, name) {
   formData.append("action", "delete_user");
   formData.append("id", id);
 
-  fetch("../../Controllers/Admin/adm-users-actions.php", {
+  fetch("/admin/data/users-actions", {
     method: "POST",
     body: formData,
   })
@@ -276,7 +276,7 @@ function formatDate(dateStr) {
 
 /* ---- Drawer: view user details ---- */
 function openViewUserDrawer(id) {
-  const url = `../../Controllers/Admin/adm-user-stats.php?id=${encodeURIComponent(id)}`;
+  const url = `/admin/data/user-stats?id=${encodeURIComponent(id)}`;
   fetch(url)
     .then((res) => res.json())
     .then((data) => {

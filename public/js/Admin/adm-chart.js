@@ -9,7 +9,7 @@ const colors = {
     gridLine: "#e9e9e9"
 };
 
-fetch("../../Controllers/Admin/adm-dashboard-data.php")
+fetch("/admin/data/dashboard")
     .then(response => {
         if (!response.ok) {
             throw new Error("Failed to fetch dashboard data.");

@@ -30,7 +30,7 @@ function loadRecords() {
         perPage: recordsState.perPage,
     });
 
-    fetch(`../../Controllers/Admin/adm-records-data.php?${params.toString()}`)
+    fetch(`/admin/data/records?${params.toString()}`)
         .then(res => res.json())
         .then(data => {
             renderRecordsGrid(data.records);
@@ -143,7 +143,7 @@ function openRecordDetail(id) {
     body.innerHTML = `<p class="empty-state">Loading…</p>`;
     overlay.classList.add("show");
 
-    fetch(`../../Controllers/Admin/adm-records-data.php?detail=${id}`)
+    fetch(`/admin/data/records?detail=${id}`)
         .then(res => res.json())
         .then(data => {
             document.getElementById("recordModalTitle").textContent = data.groupName;
@@ -227,7 +227,7 @@ function openCreateTeamModal() {
 
 function loadTeamModalLookups() {
 
-    fetch("../../Controllers/Admin/adm-users-data.php?perPage=5")
+    fetch("/admin/data/users?perPage=5")
         .then(res => res.json())
         .then(data => {
             populateAdviserSelect(data.advisers);

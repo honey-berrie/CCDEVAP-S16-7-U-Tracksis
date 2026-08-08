@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function loadSettings() {
-    fetch("../../Controllers/Admin/adm-settings-data.php")
+    fetch("/admin/data/settings")
         .then(res => res.json())
         .then(data => {
             document.getElementById("profileFirstname").value = data.profile.firstname || "";
@@ -39,7 +39,7 @@ function bindProfileForm() {
             formData.append("password", password);
         }
 
-        fetch("../../Controllers/Admin/adm-settings-actions.php", { method: "POST", body: formData })
+        fetch("/admin/data/settings-actions", { method: "POST", body: formData })
             .then(res => res.json())
             .then(data => {
                 if (!data.success) {
@@ -69,7 +69,7 @@ function bindMaintenanceToggle() {
             formData.append("maintenance_mode", "1");
         }
 
-        fetch("../../Controllers/Admin/adm-settings-actions.php", { method: "POST", body: formData })
+        fetch("/admin/data/settings-actions", { method: "POST", body: formData })
             .then(res => res.json())
             .then(data => {
                 if (!data.success) {

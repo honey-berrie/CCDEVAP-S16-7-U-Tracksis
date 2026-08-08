@@ -38,7 +38,7 @@ function loadAnalytics(keepFilterOptions) {
         status: analyticsState.status,
     });
 
-    fetch(`../../Controllers/Admin/adm-analytics-data.php?${params.toString()}`)
+    fetch(`/admin/data/analytics?${params.toString()}`)
         .then(res => res.json())
         .then(data => {
             renderSummary(data.summary);

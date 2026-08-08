@@ -4,7 +4,7 @@ const ICON_MOON = window.BASE_URL + '/assets/icons/moon-stars-fill.svg';
 const ICON_SUN = window.BASE_URL + '/assets/icons/sun-fill.svg';
 
 function loadAdmSideBar() {
-    fetch("../../Components/Admin/adm-sidebar.php")
+    fetch("/admin/component/sidebar")
         .then(code => code.text())
         .then(data => {
             document.getElementById("sidebar_placeholder").innerHTML = data;
@@ -138,7 +138,7 @@ function setupSidebarCloseButton() {
 
 async function logoutAdmin() {
     try {
-        await fetch("../../../api/auth/logout.php", {
+        await fetch("/logout", {
             method: "POST",
             credentials: "include",
         });
@@ -150,7 +150,7 @@ async function logoutAdmin() {
 }
 
 function redirectToLogin() {
-    window.location.replace("../../../pages/auth/auth.html");
+    window.location.replace("/login");
 }
 
 renderAdminTopBar();

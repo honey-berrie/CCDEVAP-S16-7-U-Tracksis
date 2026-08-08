@@ -23,7 +23,7 @@ function bindArchiveToolbar() {
 }
 
 function loadReadyToArchive() {
-    fetch("../../Controllers/Admin/adm-archive-data.php?section=ready")
+    fetch("/admin/data/archive?section=ready")
         .then(res => res.json())
         .then(data => renderReadyToArchive(data.ready))
         .catch(err => console.error("Failed to load ready-to-archive groups:", err));
@@ -54,7 +54,7 @@ function archiveTeam(id) {
     formData.append("action", "archive");
     formData.append("id", id);
 
-    fetch("../../Controllers/Admin/adm-archive-actions.php", { method: "POST", body: formData })
+    fetch("/admin/data/archive-actions", { method: "POST", body: formData })
         .then(res => res.json())
         .then(data => {
             if (!data.success) {
@@ -74,7 +74,7 @@ function loadArchivedTeams() {
         perPage: archiveState.perPage,
     });
 
-    fetch(`../../Controllers/Admin/adm-archive-data.php?${params.toString()}`)
+    fetch(`/admin/data/archive?${params.toString()}`)
         .then(res => res.json())
         .then(data => {
             renderArchiveGrid(data.archived);
@@ -117,7 +117,7 @@ function restoreTeam(id) {
     formData.append("action", "restore");
     formData.append("id", id);
 
-    fetch("../../Controllers/Admin/adm-archive-actions.php", { method: "POST", body: formData })
+    fetch("/admin/data/archive-actions", { method: "POST", body: formData })
         .then(res => res.json())
         .then(data => {
             if (!data.success) {
@@ -157,7 +157,7 @@ function openArchiveDetail(id) {
     body.innerHTML = `<p class="empty-state">Loading…</p>`;
     overlay.classList.add("show");
 
-    fetch(`../../Controllers/Admin/adm-archive-data.php?detail=${id}`)
+    fetch(`/admin/data/archive?detail=${id}`)
         .then(res => res.json())
         .then(data => {
             document.getElementById("archiveModalTitle").textContent = data.groupName;
