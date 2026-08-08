@@ -9,8 +9,8 @@ requireAdminAuth();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-    <link rel="stylesheet" href="../../CSS/Admin/adm-links.css">
-    <link rel="stylesheet" href="../../CSS/Admin/adm-dashboard.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/css/Admin/adm-links.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/css/Admin/adm-dashboard.css">
 </head>
 <body>
     <div id="sidebar_placeholder"></div>
@@ -29,12 +29,12 @@ requireAdminAuth();
             </div>
             
             <div class="quick-actions" id="quickActions">
-                <a href="adm-announcements.php" class="btn-quick-action">
-                    <img src="../../../assets/icons/megaphone-fill.svg" alt="" class="nav-icon">
+                <a href="<?= BASE_URL ?>/admin/adm-announcements" class="btn-quick-action">
+                    <img src="<?= BASE_URL ?>/assets/icons/megaphone-fill.svg" alt="" class="nav-icon">
                     New Announcement
                 </a>
-                <a href="adm-records.php?action=create-group" class="btn-quick-action">
-                    <img src="../../../assets/icons/people-fill.svg" alt="" class="nav-icon">
+                <a href="<?= BASE_URL ?>/admin/adm-records?action=create-group" class="btn-quick-action">
+                    <img src="<?= BASE_URL ?>/assets/icons/people-fill.svg" alt="" class="nav-icon">
                     Create Thesis Group
                 </a>
             </div>
@@ -100,7 +100,7 @@ requireAdminAuth();
                 <div class="panel-card">
                     <div class="panel-header">
                         <h2 class="panel-title">Pending Approvals</h2>
-                        <a href="adm-records.php" class="panel-link">View all</a>
+                        <a href="<?= BASE_URL ?>/admin/adm-records" class="panel-link">View all</a>
                     </div>
                     <p class="panel-subtitle">Thesis groups awaiting admin review</p>
                     <div id="pendingApprovalsList" class="panel-list">
@@ -123,8 +123,8 @@ requireAdminAuth();
 
     </div>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="../../JS/Admin/adm-chart.js"></script>
-    <script src="../../JS/Admin/adm-global.js"></script>
-    <script src="../../JS/Admin/adm-dashboard.js"></script>
+    <script src="<?= BASE_URL ?>/js/Admin/adm-chart.js"></script>
+    <script src="<?= BASE_URL ?>/js/Admin/adm-global.js"></script>
+    <script src="<?= BASE_URL ?>/js/Admin/adm-dashboard.js"></script>
 </body>
 </html>
