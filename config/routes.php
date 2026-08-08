@@ -20,6 +20,8 @@ $router->post('/login', [AuthController::class, 'login']);
 $router->get('/logout', [AuthController::class, 'logout']);
 $router->post('/logout', [AuthController::class, 'logout']);;
 $router->get('/timeout', [AuthController::class, 'timeout']);
+$router->get('/maintenance-status', [AuthController::class, 'maintenanceStatus']);
+$router->get('/maintenance', [AuthController::class, 'maintenancePage']);
 
 // private routes
 $router->group('auth:student', function (Router $router) {

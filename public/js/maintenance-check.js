@@ -3,8 +3,8 @@
   // It is included from pages that are exactly two folders deep from the
   // project root (pages/student/*.html, phase2-page-based-adviser/adviserhtml/*.php,
   // coordinator/coordinator-html/*.html), so "../../" reaches the root from all of them.
-  const STATUS_URL = '../../api/maintenance_status.php';
-  const MAINTENANCE_PAGE = '../../maintenance.html';
+  const STATUS_URL = '/maintenance-status';
+  const MAINTENANCE_PAGE = '/maintenance';
 
   async function checkMaintenance() {
     try {

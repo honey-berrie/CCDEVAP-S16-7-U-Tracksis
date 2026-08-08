@@ -138,4 +138,22 @@ class AuthController extends Controller
         AuthMiddleware::logout();
         $this->redirect('/login?timeout=1');
     }
+
+    public function maintenanceStatus(): void
+    {
+        $maintenance = User::isMaintenanceModeOn();
+        $role = $_SESSION['user_role'] ?? null;
+        $exempt = $role === 'admin';
+
+        $this->json([
+            'maintenance' => $maintenance,
+            'exempt' => $exempt,
+            'role' => $role,
+        ]);
+    }
+
+    public function maintenancePage(): void
+    {
+        $this->renderPlain('auth/maintenance');
+    }
 }
