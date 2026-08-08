@@ -3,7 +3,7 @@
 // Route Definitions - centralized URL mapping
 
 use App\Controllers\AuthController;
-use App\Controllers\Test\DashboardController;
+//use App\Controllers\Test\DashboardController;
 use App\Controllers\Student\StudentDashboardController;
 use App\Controllers\Adviser\AdviserDashboardController;
 use App\Core\Router;
