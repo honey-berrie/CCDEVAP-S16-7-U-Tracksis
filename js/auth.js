@@ -13,7 +13,7 @@ async function checkLoginStatus() {
     if (checkRes.ok && checkData.user) {
       const role = checkData.user.role;
       if (role === "admin")
-        window.location.href = "/admin/dashboard";
+        window.location.href = "app\Models\Admin\adm-dashboard-model.php";
       else if (role === "adviser")
         window.location.href =
           "../../phase2-page-based-adviser/adviserhtml/thesis-adviser-overview.php";
@@ -79,7 +79,7 @@ async function login() {
     const role = data.user.role;
     setTimeout(() => {
       if (role === "admin")
-        window.location.href = "/admin/dashboard";
+        window.location.href = "../../app/views/admin/adm-dashboard.php";
       else if (role === "adviser")
         window.location.href =
           "../../phase2-page-based-adviser/adviserhtml/thesis-adviser-overview.php";
