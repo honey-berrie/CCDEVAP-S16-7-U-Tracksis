@@ -85,6 +85,9 @@ $turnAroundText = $next_deadline_days !== null
         <a class="nav-link" href="<?= BASE_URL ?>/student/consultations">
           <img src="<?= BASE_URL ?>/assets/icons/chat-dots-fill.svg" alt="" class="bi"> Consultations
         </a>
+        <a class="nav-link" href="<?= BASE_URL ?>/student/announcements">
+  <img src="<?= BASE_URL ?>/assets/icons/megaphone-fill.svg" alt="" class="bi"> Announcements
+</a>
       </nav>
 
       <div class="sidebar-footer">
