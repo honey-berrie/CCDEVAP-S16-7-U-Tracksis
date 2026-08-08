@@ -260,8 +260,8 @@ INSERT INTO system_settings (setting_key, setting_value) VALUES
 
 INSERT INTO users (role, firstname, lastname, email, password_hash, is_active, last_login_at, adviser_thesis_load, adviser_lecture_load, adviser_research_load) VALUES
 ('admin',       'Maria Corazon', 'Reyes',       'maria.reyes@dlsu.edu.ph',       '$2a$10$g86TLJk8OCTC6FUfmQ/kButsTfpCXqRHQbLreqM131F4qgF8qhKS2', 1, NOW() - INTERVAL 1 DAY, 0, 0, 0),
-('admin', 'Ramon',         'Villanueva',  'ramon.villanueva@dlsu.edu.ph',  '$2a$10$BQ48TEdpbZj4xzYoGdiwKe4EROyAfxUH1QV/q/qIZ.YnLTYLKhooO', 1, NOW() - INTERVAL 2 DAY, 0, 0, 0),
-('admin', 'Angelica',      'Bautista',    'angelica.bautista@dlsu.edu.ph','$2a$10$nwO2HVEbLFCAhnCh.Ls3PenmjBh6EmFuxuX9L1s/WGMm4cve9hLDS', 1, NOW() - INTERVAL 5 DAY, 0, 0, 0),
+('admin',       'Ramon',         'Villanueva',  'ramon.villanueva@dlsu.edu.ph',  '$2a$10$BQ48TEdpbZj4xzYoGdiwKe4EROyAfxUH1QV/q/qIZ.YnLTYLKhooO', 1, NOW() - INTERVAL 2 DAY, 0, 0, 0),
+('admin',       'Angelica',      'Bautista',    'angelica.bautista@dlsu.edu.ph','$2a$10$nwO2HVEbLFCAhnCh.Ls3PenmjBh6EmFuxuX9L1s/WGMm4cve9hLDS', 1, NOW() - INTERVAL 5 DAY, 0, 0, 0),
 ('adviser',     'Ferdinand',     'Santos',      'ferdinand.santos@dlsu.edu.ph', '$2a$10$0OnS.BkvfffaSvE575he/u15wKg1Mq17V1sfB1TNpK9BAd49B1/jq', 1, NOW() - INTERVAL 1 DAY, 3, 6, 2),
 ('adviser',     'Liza',          'Mendoza',     'liza.mendoza@dlsu.edu.ph',     '$2a$10$0OnS.BkvfffaSvE575he/u15wKg1Mq17V1sfB1TNpK9BAd49B1/jq', 1, NOW() - INTERVAL 3 DAY, 2, 9, 0),
 ('adviser',     'Antonio',       'Cruz',        'antonio.cruz@dlsu.edu.ph',     '$2a$10$0R8vYDgPLif3rHYvpo847OfdpZ9KJ.rXW1tA42y.c9nzErdqky75i', 1, NOW() - INTERVAL 7 DAY, 4, 3, 4),
