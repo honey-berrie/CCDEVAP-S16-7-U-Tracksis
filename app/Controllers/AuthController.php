@@ -59,6 +59,14 @@ class AuthController extends Controller
             return;
         }
 
+        if ($user['role'] !== 'admin' && User::isMaintenanceModeOn()) {
+            $this->renderPlain('auth/auth', [
+                'error' => 'U-Tracksis is currently under maintenance. Please try again later.',
+                'error_type' => 'login',
+            ]);
+            return;
+        }
+
         // log the user in via middleware
         AuthMiddleware::login($user);
 

@@ -96,4 +96,14 @@ class User extends Model
         return $stmt->execute(['user_id' => $userId, 'announcement_id' => $announcementId]);
     }
 
+    public static function isMaintenanceModeOn(): bool
+    {
+        $stmt = static::db()->prepare(
+            "SELECT setting_value FROM system_settings WHERE setting_key = 'maintenance_mode' LIMIT 1"
+        );
+        $stmt->execute();
+        $row = $stmt->fetch();
+
+        return $row && $row['setting_value'] === '1';
+    }
 }
